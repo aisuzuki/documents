@@ -1,0 +1,144 @@
+/*	file.c      									*/
+/*													*/
+/*				  Thu, 26 Sep 2002 06:07:04 +0900	*/
+/*			author: ai suzuki<spiral@soulhack.net>	*/
+
+/* code:           */
+#include <stdio.h>
+#include <stdlib.h>
+
+#include "field.h"
+#include "file.h"
+
+void
+outputFile(anElectron *e)
+{
+    FILE         *fp;
+    anElectron *etmp;
+
+    fp = fopen(filename[OUTPUT_FILE], "w");
+    if (!fp)
+        perror("fopen: file.c"), exit(EXIT_FAILURE);
+
+    fprintf(fp, "(nx %d) (ny %d) (t %d) (dt %f) (bn %d) \n", nx, ny, t, dt, bn);
+    fprintf(fp, "(e\n");
+    for (etmp = e; etmp != NULL; etmp = etmp->next) {
+        fprintf(fp, "((x %f) (y %f) (vx %f) (vy %f) (q %f) (m %d))\n",  etmp->x,  etmp->y,
+                                                                       etmp->vx, etmp->vy,
+                                                                        etmp->q,  etmp->m);
+    }
+    fprintf(fp, ")\n");
+    fclose(fp);
+}
+
+char *
+skipto(char *s, char token)
+{
+
+    if ((token == '(') || (token == ' ') || (token == 'e')) {
+        for (; *s != token; s++);
+        return ++s; 
+    } else {
+        return s;
+    }
+}
+
+void
+get_field_elem(char *s)
+{
+    int i, j;
+    
+    for (i = 0; i < SYMB_F_ELEM; i++) {
+        s = skipto(s, '(');
+        for (j = 0; *s != ')'; s++, j++) {
+            field_symb_table[i][j] = *s;
+        }
+        s++;
+        field_symb_table[i][j] = '\0'; 
+    }
+}
+/**/
+/*void*/
+/*get_elect_elem(FILE *fp)*/
+/*{*/
+/*    char sbuf[BUF_SIZE];*/
+/*    int i, j;*/
+/*   */
+/*    max_elect = 0; */
+/*    fgets(sbuf, BUF_SIZE, fp);*/
+/*    sbuf = skipto(sbuf, 'e')*/
+/*    for (; fgets(sbuf, BUF_SIZE, fp) != NULL;) {*/
+/*        sbuf = skipto(sbuf, '(')*/
+/**/
+/*        for (i = 0; i < nelect_symb_elem; i++) {*/
+/*            sbuf = skipto(sbuf, '(');*/
+/*            for (j = 0; *sbuf != ')'; sbuf++, j++) {*/
+/*                elect_symb_table[i][max_elect][j] = *sbuf;*/
+/*            }*/
+/*            sbuf++;*/
+/*            elect_symb_table[i][max_elect][j] = '\0';*/
+/*        }    */
+/*        sbuf = skipto(sbuf, ')')*/
+/*        max_elect++;*/
+/*    }*/
+/*}*/
+/**/
+
+void
+loadFromFile(anElectron *e)
+{
+    /* global symbol elements. */
+
+    FILE        *fp;
+    char    valbuf[BUF_SIZE];
+    char    strbuf[BUF_SIZE];
+    int         i; 
+
+    enum field_symb_elem {
+        NX, NY, T, DT, BN
+    };
+
+    enum elect_symb_elem {
+        X, Y, VX, VY, Q, M
+    };
+
+    fp = fopen(filename[INPUT_FILE], "r");
+    if (!fp)
+        perror("fopen"), exit(EXIT_FAILURE);
+
+    fgets(strbuf, BUF_SIZE, fp);
+    get_field_elem(strbuf);
+
+    for (i = 0; i < SYMB_F_ELEM; i++) {
+        sscanf(field_symb_table[i], "%s %s", strbuf, valbuf);
+        switch (i) {
+            case NX:
+                nx = atoi(valbuf);
+                break;
+
+            case NY:
+                ny = atoi(valbuf);
+                break;
+
+            case T:
+                t = atoi(valbuf);
+                break;
+
+            case DT:
+                dt = atof(valbuf);
+                break;
+
+           case BN:
+                bn = atoi(valbuf);
+                break;
+
+           default:
+                break;
+            }
+    }
+/*    get_elect_elem(fp);*/
+
+    fclose(fp);
+}
+
+/* file ends here. */

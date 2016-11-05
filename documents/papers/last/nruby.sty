@@ -1,0 +1,290 @@
+%   nruby.sty	(NAIST ruby macro)
+%	version 1.1	1993-12-25
+%	version 2.0	1994-02-13
+%		by T.Ogihara	ogihara@itc.aist-nara.ac.jp
+%
+%   Usage: \ruby{word}{ruby}
+
+\typeout{`nruby' V.2.0 <13 Dec 93> by T.Ogihara.}
+
+\def\rubysize{\tiny}
+
+\def\ruby#1#2{\leavevmode{%
+\setbox1=\hbox{#1}\setbox2=\hbox{\rubysize#2}%
+\ifdim\wd1>\wd2\setbox2=\hbox to\wd1{\rubysize\sparse{#2}}%
+\else\ifdim\wd1<\wd2\setbox1=\hbox to\wd2{\sparse{#1}}\fi%
+\fi%
+\vbox{\baselineskip.1em\hrule height.3em width0pt depth0pt\box2\box1}}}
+
+% English mode was deleted (Ver.2.0).
+
+\let\rubie\ruby
+
+% To use '@' as ruby macro, you must use \useruby first.
+%   Usage: @word(ruby)
+
+\def\rubii#1(#2){\ruby{#1}{#2}}
+\let\dospecialsorig\dospecials
+\def\mydospecials{\def\dospecials{\dospecialsorig\makeatother}}
+\catcode`\@=\active
+\def\useruby{\mydospecials\catcode`\@=\active\let@=\rubii}
+\catcode`\@=11
+\def\nouseruby{\makeatother\let\dospecials\dospecialsorig}
+\let\userubie\useruby
+\let\nouserubie\nouseruby
+
+
+% \boten adds emphasizing dots on each character.
+%   Usage: \boten@TEXT@
+%	where '@' can be any char.
+
+\def\boten#1{\let\do@next=\boten@tail\let\endtail=#1\boten@tail}
+\def\boten@tail#1#2{\setbox1=\hbox{#1}%
+\vbox{\baselineskip.1em\hrule height.3em width0pt depth0pt%
+\hbox to\wd1{\hfil\rubysize$\bullet$\hfil}\box1}%
+\penalty\hyphenpenalty\if\endtail#2\let\do@next=\feed@One\fi\do@next#2}
+\def\feed@One#1{\relax}
+
+%	sparse
+%	Usage1: \sparse[20mm]{TEXT}
+%	Usage2: \sparse*[20mm]{TEXT}
+%	Usage3: \sparse{TEXT}  or  \sparse*{TEXT}
+%
+\def\sparselist#1{\hfill\let\do@next=\do@tail\let\endtail=#1\do@tail}
+\def\do@tail#1#2{#1%
+  \if\endtail#2\let\do@next=\feed@one\else\hfill\fi\do@next#2}
+\def\feed@one#1{\hfill}
+
+\def\sparseList#1{\let\do@next=\do@Tail\let\endtail=#1\do@Tail}
+\def\do@Tail#1#2{#1%
+  \if\endtail#2\let\do@next=\feed@One\else\hfill\fi\do@next#2}
+% \def\feed@One#1{\relax}
+%
+% Thanx to Iwakuma & Furukawa
+%
+\def\sparse{\@ifstar{\let\sparse@skip\relax\@sparse}
+{\let\sparse@skip\hss\@sparse}}
+\def\@sparse{\@ifnextchar [{\bx@sparse}{\op@sparse}}
+\def\bx@sparse[#1]#2{\hbox to#1{\op@sparse{#2}}}
+\def\op@sparse#1{\sparse@skip%
+ \@ifundefined{jintercharskip}{%
+ \kanjiskip=0pt plus 1fil\xkanjiskip=\kanjiskip #1}{%
+ \jintercharskip=0pt plus 1fil\jasciikanjiskip=\jintercharskip #1}\sparse@skip}
+%
+\endinput
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% MANUAL %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentstyle[nruby]{jarticle}
+
+\setlength{\textheight}{244mm}
+\setlength{\textwidth}{164mm}
+\voffset-15mm
+\hoffset-20mm
+
+\begin{document}
+
+\centerline{\Large\bf nruby.sty (Ver.2.0) の使い方}
+\rightline{1994-02-13 荻原剛志}
+\rightline{\tt ogihara@itc.aist-nara.ac.jp}
+
+\vskip5mm
+
+nruby.sty は、\ruby{文章中}{ぶんしょうちゅう}にルビをふるためのマクロです。
+\boten+傍点+をつける機能も提供します。また、副次的な機能になりますが、
+文字の間に適当に間隔をあけて\sparse[35mm]{均等配置}する
+機能も利用できます。
+
+このテキスト自体がマクロの利用例になっていますので参考にして下さい。
+
+\section{ルビ}
+ルビをふるには、以下の形式のマクロを文章中に埋め込んでおきます。
+
+\begin{verbatim}
+    \ruby{語}{よみがな}
+\end{verbatim}
+
+語の部分、よみがなの部分には、ともに通常のテキストが記述できます。
+語の部分、よみがなの部分のどちらかが長くなった時には、短い方は適当に
+空白が挿入されて均等配置されます。例えば、
+\ruby{ルビの方が長い例}{ルビのほうが単語よりもずっとながいばあいの例}、
+\ruby{ルビの方が短い例}{ルビが短い例}のようになります。
+
+英文をルビとして使うこともできます。均等配置によって文字の間に空白が
+入ることはありません。例えば、
+『\ruby{過ちて改むるにはばかることなかれ}
+{It is never too late to mend.}』のようになります。
+
+\subsection*{注意点}
+
+\verb+\ruby+マクロの使用に際しては、以下の点に注意して下さい。
+\begin{itemize}
+\item ルビの文字の大きさは \verb+\tiny+ に固定されています。
+    これは、文書の文字の大きさを変更しても変化しません。従って、
+    見出しや脚注にこのマクロを用いるとバランスが悪くなります。
+\item  \verb+\ruby{語}{よみがな}+ でひとつの大きな文字のように
+    振舞います。従って、行末にきたときに語の中の適当なところで改行
+    するということができません。
+\end{itemize}
+
+\subsection*{拡張機能 --- ルビをたくさん使いたい時}
+
+\verb+\useruby+ というマクロを実行させると、それ以降、
+\verb+\ruby{語}{よみがな}+ と書くのと全く同じことを、
+\begin{verbatim}
+    @語(よみがな)
+\end{verbatim}
+という形式で行なうことができるようになります。括弧は半角で、
+よみがなには括弧を含めることはできません。
+
+\useruby %%% @形式を使う(ruby)
+
+@語の部分はかなり長くても大丈夫(これは「語の...大丈夫」を語とした例です)
+ですが、空白や改行、特殊記号を含めることはできません。
+\verb+\useruby+ の効果を@取り消す(disable)には、
+\verb+\nouseruby+ というマクロを実行します。
+
+ただし、\verb+@+を特殊な文字として定義しますので、文章中に\verb+@+を
+置けなくなります(電子メールのアドレスなどに注意)。
+{\tt verbatim}環境では出力できます。
+また、他のマクロなどで
+\verb+@+に何かの役割を与えて使っている場合にはそちらの機能が利用
+できなくなるなどの影響が出ることがあります。
+
+\nouseruby %%% @形式を使わない
+
+
+\section{傍点}
+
+文書の特定の部分に傍点をつけるには、次のようにします。
+
+\begin{verbatim}
+    \boten+テキスト+
+\end{verbatim}
+
+ただしここで、\verb@+@は、テキストに含まれない任意の文字とします。
+従って、例えば、\verb!\boten@テキスト@! でもいいわけです。
+テキスト部分は、複数の行にまたがることができます。
+
+\subsection*{注意点}
+
+\verb+\boten+マクロの使用に際しては、以下の点に注意して下さい。
+\begin{itemize}
+\item テキストの部分には、マクロなどを指定できません。必ず平文で
+	指定する必要があります。
+\item 傍点の大きさは \verb+\tiny+ に固定されています。
+    これは、文書の文字の大きさを変更しても変化しません。従って、
+    見出しや脚注にこのマクロを用いるとバランスが悪くなります。
+\item 傍点は基本的に日本語の文章に付けることを想定しています。
+    従って、\boten+英文(Like This)を含むような文書+では傍点が不揃いに
+    なります。
+\end{itemize}
+
+
+\section{均等配置}
+
+指定した文字列、例えば「\sparse[40mm]{テキスト}」という
+文字を40mmの中に均等配置することができます。
+均等配置の方法は、指定した文字列の最初と最後にも空白を入れる方法と、
+「\sparse*[40mm]{テキスト}」のように空白は入れない方法が
+指定できます。
+
+均等配置は、\verb+\sparse+ というマクロで指定します。
+例えば上の例はそれぞれ、
+
+\begin{verbatim}
+    \sparse[40mm]{テキスト}
+    \sparse*[40mm]{テキスト}
+\end{verbatim}
+
+のようにしています。
+
+なお、均等配置された文字列全体(ボックス)はひとつの大きな文字のように
+振舞います。従って、行末にきたときに語の中の適当なところで改行
+するということができません。
+また、文書や表などのどこででも利用できるわけではありませんので注意して
+下さい。
+
+\verb+[ ]+の中には寸法を指定しますが、これを指定しないこともできます。
+ただしその場合、このマクロは無限に長くなりうる空白を文字の間にはさんだ列を
+作るだけですので、全体の大きさを他の方法で決める必要があります。
+
+\subsection*{拡張機能 --- 英数文字の間にも空白を入れる}
+
+\verb@\sparse@は英数文字の間には空白を入れません。英数文字の間にも
+空白を入れるには \verb@\sparselist@、あるいは \verb@\sparseList@ という
+マクロを使用します。前者は文字列の先頭と末尾にも空白が入りますが、
+後者は入りません。
+
+これらの形式は以下のようになります。
+
+\begin{verbatim}
+    \sparselist+テキスト+
+\end{verbatim}
+
+ここで、\verb@+@ はテキストに含まれない任意の一文字です。
+テキストの部分には、マクロなどを指定できません。必ず平文で
+指定する必要があります。
+
+ただし、
+これらのマクロは、\verb@\sparse@で\verb+[ ]+の寸法を指定しなかった場合の
+ように、ボックスではなく、無限に長くなる空白を含む文字列を作ります。
+従って、決まった長さに納めるためには、\verb+\makebox+ などのマクロを
+組み合わせて指定します。例えば
+
+\begin{verbatim}
+    \makebox[40mm]{\sparselist+テキスト+}
+\end{verbatim}
+あるいは plain \TeX のマクロを使うなら、次のようになります。
+\begin{verbatim}
+    \hbox to 40mm{\sparselist+テキスト+}
+\end{verbatim}
+のようにします。
+
+\verb@\sparse@を使った場合（\sparse[30mm]{左or右}）と、
+\verb@\sparselist@を使った場合（\makebox[30mm]{\sparselist@左or右@}）
+を比較してみました。
+
+
+\section{改良点}
+Ver.1.1 から、\verb"\useruby"を指定している場合でも、verbatim環境なら
+\verb"@"が出力できるようになりました。
+
+Ver.2.0 では、\verb+\rubie+ マクロを廃止しました。\verb+\ruby+マクロ
+でも、英数文字の間に空白が入らないようになったためです。ただし、
+互換性のため、\verb+\ruby+と同じ働きをするマクロとして残してあります。
+\verb+\userubie+についても同様です。
+\verb+\ruby+のルビに英数文字を指定するような使い方をしていた場合のみ、
+Ver.1.1と出力結果が異なります。
+
+Ver.2.0 から、均等配置の標準のマクロを \verb@\sparse@に変更しました。
+Ver.1.1までの \verb+\sparselist+マクロ、および\verb+\sparseList+マクロ
+では、均等配置の引数に英数字が含まれていた場合、英数字の間にも
+空白が入れられていましたが、実際にはそのような使い方はあまりないため、
+これらは副次的なマクロとしました。
+
+
+\section{その他}
+この文書および nruby.sty に含まれるマクロは、自由に利用、配布して
+かまいません。改変も自由ですが、その場合は改変を行なった旨を明記して
+下さい。
+
+バグ、あるいは機能に関する注文などは作者まで連絡下さい。ただし、
+早急に改善されるかどうかまったく保証できません。\ruby{\tt :)}{Enjoy!}
+
+\end{document}
+------------------------------------------------------------------------
+Newsgroups: fj.comp.texhax
+From: ogihara@itc.aist-nara.ac.jp
+Subject: nruby.sty (v.2.0)
+Organization: Nara Institute of Science and Technology
+Date: Wed, 16 Mar 1994 10:57:40 GMT
+
+荻原＠奈良先端大です。
+
+文系の学生に依頼されて作った、ルビをふるためのスタイルファイルです。
+ルビ、およびルビをふられる側の文字列を均等配置します。
+傍点を打つ機能、文字を均等配置する機能も提供します。
+
+スタイルファイルの後ろに、簡単な説明文がついています。
+---------------------------------------------------------

@@ -1,0 +1,390 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  特殊文字 : 
+%    改行 -> \\
+% 
+%  注釈 : 
+%    \footnote[1]{ 注釈の内容 }
+%           
+%  次のページ :
+%    \pagebreak
+%
+%  整形をせずにそのまま出力 :
+%  (ソース等)
+%    \begin{verbatim}  〜内容
+%    \end{verbatim}
+%
+%  箇条書 :
+%    \begin{itemize}
+%    \item\hspace*{5mm} 箇条書の内容
+%    \end{itemize}
+%   
+%  画像を張り付ける
+%    \begin{center}
+%    \includegraphics{ 画像ファイル名.eps }
+%    \end{center}
+%
+%  セクションの作成 :
+%    \section{ 内容 }
+%
+%  サブセクションの作成 :
+%    \subsection{ 内容 }
+%
+%--------------------------------------------------
+%  番号の付いていないセクションも目次に出す:
+%    \addcontentsline{toc}{section}{目次に出す名前}
+%
+%  [ 参考文献の場合 ]
+%% (j)article クラスの場合
+%%
+%\begin{thebibliography}{99}
+%\addcontentsline{toc}{section}{\refname}% 追加
+%\bibitem{bibunsho4} 名前
+%                   本の名前
+%\end{thebibliography}
+%
+%% (j)report・(j)book クラスの場合
+%% 
+%\begin{thebibliography}{99}
+%\addcontentsline{toc}{chapter}{\bibname}% 追加
+%\bibitem{bibunsho4} 名前
+%                   本の名前
+%\end{thebibliography}
+%-----------------------------------------------
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% * 概要の書き方
+%    規定字数以内でその論文 の取り扱う範 囲，目的，内容
+%   の要点および主な結論などを記述する
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% documentclass の宣言 % @ 書式
+% \documentclass [ オプション ] { 書式 }
+%
+% [ オプションの種類 ]
+% * 二段組
+% [twocolumn]
+% * 印字の大きさ
+% [a4p]
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% レジュメに使うなら、jarticle
+%
+%\documentclass[twocolumn,a4p]{jarticle}
+
+\documentclass[a4p]{jarticle}
+\usepackage{multicol}
+\usepackage[dvips]{graphics}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 余白や文字間の幅の細かい設定
+%
+% 
+%\setlength{\voffset}{65pt}
+%\setlength{\topmargin}{-170pt}
+%\setlength{\textheight}{770pt}
+%\setlength{\oddsidemargin}{-10pt}
+%\setlength{\textwidth}{480pt}
+%\setlength{\headsep}{40pt}
+
+% 文書のはじまり 
+\begin{document}
+
+%---------------------------------------------
+%
+% article の時の表紙を別ページにする
+%
+\vspace*{4cm}
+\begin{center}
+{\LARGE 球の体積 \\} 
+\vspace*{1cm}
+{\large 01ca0125 鈴木 藍 \\ 
+  2002年 5月 7日}
+\end{center}
+\thispagestyle{empty}
+\newpage
+%------------------------------------------------
+%========================================
+% ここから文章
+%
+% 1ページ目
+%
+%========================================
+
+%----------------------------------------
+%
+% 表紙を付ける
+\tableofcontents
+\newpage
+%----------------------------------------
+
+% 概要 (abstract)
+%
+\begin{abstract} 
+\addcontentsline{toc}{section}{概要}
+球の体積を積分を使って求める。はじめに見通しを付けた
+方法で、計算の流れを整理し、その後に重積分を使って計算をした。
+
+\end{abstract}
+
+% はじめに
+% section のオプションで、数字を表示させないようにする
+% @ でも目次には載せる
+\section*{レポートの目的}
+\addcontentsline{toc}{section}{レポートの目的}
+任意の変数を一つ以上引数とする関数の積分を出来るようにする。
+また、重積分を計算する事で空間や次元の計算に積分を応用出来るように
+慣れる。
+
+%------------------------------------------------------
+% セクション
+%------------------------------------------------------
+\section{ 球の体積を求める方法 }
+%------------------------------------------------------
+\subsection{ はじめに思い付いた方法 }
+見通しとして、一番はじめに思い付いた方法。
+円柱の体積は、 底面積 × 高さで求められるので
+半径が r の球ならば、
+半径が $y = \sqrt{r^2 - x^2}$ 円の面積を求め、高さを 
+dx として -r から r までの 円柱の体積をたしていったものが
+球の体積である。
+
+\subsection{ 重積分 }
+はじめに思い付いた方法では、円柱の面積を公式を使って
+求めていたが、この面積も積分して求める。
+式は、積分した式を更に積分した形になる。
+
+%-------------------------------------------
+\section{ 思い付いた方法 }
+%-------------------------------------------
+まず見通しを付けたものを整理する。
+
+\subsection{ 円の半径 }
+円柱の底面積を求めるために、三平方の定理を使って円の半径を求める。
+求め方は以下の図。
+\begin{center}
+\includegraphics{height.eps}
+\end{center}
+
+\subsection{ 計算をする }
+以下のような、高さが dx, 半径が y のような円柱の体積を
+たしてゆく。
+\begin{center}
+\includegraphics{sphire.eps}
+\end{center}
+範囲は -r から r までなので、式は
+\begin{eqnarray*}
+V = \int_{-r}^r \pi ( \sqrt{r^2 - x^2} )^2 dx
+\end{eqnarray*}
+となる。
+平方根を二乗すると元の数になるから、
+\begin{eqnarray*}
+V = \int_{-r}^r \pi ( r^2 - x^2 ) dx
+\end{eqnarray*}
+そして、$\pi$ は定数なので、
+\begin{eqnarray*}
+V = \pi \int_{-r}^r ( r^2 - x^2 ) dx
+\end{eqnarray*}
+になる。
+
+ここで、$\int f(x)-g(x) dx = \int f(x) dx - \int g(x) dx$ のかたちにしたいので
+$r^2$ と $x^2$ をそれぞれ x の関数として
+\begin{eqnarray*}
+f(x) = r^2 x^0 ,\hspace*{5mm} g(x) = x^2 
+\end{eqnarray*}
+とする。
+これらの原始関数はそれぞれ
+\begin{eqnarray*}
+F(x) = \int f(x)dx = r^2x, \hspace*{5mm} G(x) = \int g(x) dx = \frac {x^3}{3}  
+\end{eqnarray*}
+であるから、
+\begin{eqnarray*}
+V = \pi \Bigg[ r^2x - \frac{x^3}{3} \Bigg]_{-r}^r 
+\end{eqnarray*}
+ここで、半球の面積を 2 倍すれば球の面積になるから、
+\begin{eqnarray*}
+V = 2\pi \Bigg[ r^2x - \frac{x^3}{3} \Bigg]_0^r 
+\end{eqnarray*}
+計算して、
+\begin{eqnarray*}
+V &=& 2\pi \{ (r^2 \cdot r - \frac{r^3}{3}) - (r^2 \cdot 0 - \frac{0^3}{3}) \} \\
+  &=& 2\pi (r^3 - \frac{r^3}{3}) \\
+  &=& 2\pi \frac{3r^3-r^3}{3} \\
+  &=& 2\pi \frac{2r^3}{3}\\
+  &=& \frac{4}{3} \pi r^3
+\end{eqnarray*}
+よって、
+\begin{eqnarray*}
+ V = \frac{4}{3} \pi r^3
+\end{eqnarray*}
+となる。
+
+%-------------------------------------------
+\section{ 重積分 }
+%-------------------------------------------
+今回の課題である、多変数関数の積分の形にした。
+円の面積も積分しているので、必要な変数は、
+角度を表す $y$, 円の面積を求める時の半径である $x$,
+面積を求める円を横から見たとき、変化する半径 の関数
+として $z$ 軸を使い、この関数を $z$ の関数とした。\\\\
+
+円の面積を積分して求める時の図形的な解釈は以下通りである。
+\begin{center}
+\includegraphics{sphire1.eps}
+\end{center}
+
+\subsection{ 円の面積の積分 }
+
+面積を求める時の $x$ 、$y$は以下の図である。
+\begin{center}
+\includegraphics{tekito.eps}
+\end{center}
+$y$を角度(ラジアン)、$x$を半径、角度 $y$ の関数を
+$f(y)$ 、この$f(y)$ の $y$が微小に変化した
+時の角度を $dy$ とする。この微小に角度が変化した時の
+円弧の長さは 半径×ラジアンであるから、$dyx$となる。
+この円の面積は、底辺を $dyx$, 高さを $x$とする
+三角形の面積を 円一周分、すなわち $2 \pi$ 分たしたものである
+から、
+\begin{eqnarray*}
+ S = \int_0^{2 \pi} \frac{x^2}{2} dy 
+\end{eqnarray*}
+となる。
+これを計算すると、
+\begin{eqnarray*}
+ S &=& \frac{x^2}{2} \int_0^{2 \pi} dy \\
+   &=& \frac{x^2}{2} \int_0^{2 \pi} y^0 dy \\
+   &=& \frac{x^2}{2} \Bigg[ y \Bigg]_0^{2 \pi} \\
+   &=& \frac{x^2}{2} (2 \pi - 0) \\
+   &=& \frac{2 \pi x^2}{2} \\ 
+   &=& \pi x^2
+\end{eqnarray*}
+となる。 
+
+\subsection{ 円柱の積分 }
+この $x$ が $-r$ から $r$ まで変化した時の面積を求める。
+この 変化する $x$ は球の半径 $r$ と、もう一つの軸 である $z$
+の関数で三平方の定理を使って求める。 $z$の関数は、
+\begin{eqnarray*}
+f(z) = \sqrt{r^2 - z^2}
+\end{eqnarray*}
+である。
+この関数を使って変化する半径を求め、この半径の円を底辺とし、
+$z$ が微小に変化した長さを高さとする円柱の体積を、$-r$ から $r$
+までのあいだで $z$ が変化した分たしてゆく。この式は
+\begin{eqnarray*}
+V = \int_{-r}^r \pi (f(z))^2 dz
+\end{eqnarray*}
+である。これを計算して、
+
+\begin{eqnarray*}
+V &=& \int_{-r}^r \pi (\sqrt{r^2 - z^2})^2 dz \\
+  &=& \pi \int_{-r}^r r^2 - z^2 dz 
+\end{eqnarray*}
+ここで、
+\begin{eqnarray*}
+F'(z) = r^2 z^0 ,\hspace*{5mm} G'(z) = z^2 
+\end{eqnarray*}
+とすると
+\begin{eqnarray*}
+F(z) = r^2z, \hspace*{5mm} G(z) = \frac {z^3}{3}  
+\end{eqnarray*}
+となる。
+これをあてはめて
+\begin{eqnarray*}
+V &=& \pi \Bigg[ r^2z - \frac{z^3}{3} \Bigg]_{-r}^r 
+\end{eqnarray*}
+$0$ から $r$までの範囲は半球の体積なのでこれを 2 倍すると
+球の面積になるから、
+\begin{eqnarray*}
+V &=& 2\pi \Bigg[ r^2z - \frac{z^3}{3} \Bigg]_{0}^r 
+\end{eqnarray*}
+これを計算して
+\begin{eqnarray*}
+V &=& 2\pi \{ (r^2r - \frac{r^3}{3}) - (r^2 \cdot 0 - \frac{0^3}{3}) \} \\
+  &=& 2\pi (r^3 - \frac{r^3}{3}) \\ 
+  &=& 2\pi (\frac{3r^3 - r^3}{3}) \\ 
+  &=& 2\pi \frac{2r^3}{3} \\ 
+  &=& \frac{4}{3} \pi r^3 
+\end{eqnarray*}
+となる。
+よって、関数は $(f \hspace*{2mm}x \hspace*{2mm} y \hspace*{2mm} z)$ 、重積分の式は
+\begin{eqnarray*}
+f(x \hspace*{2mm} y \hspace*{2mm} z) = \int_{-r}^r \int_0^{2 \pi} \frac {k(z)^2}{2} dy dz
+\end{eqnarray*}
+ここでの$k(z)$ は $x$ の値となり、
+\begin{eqnarray*}
+k(z) = \sqrt{r^2 - z^2}
+\end{eqnarray*}
+である。
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  感想、展望
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{まとめ・結論}
+\addcontentsline{toc}{section}{まとめ・結論}
+未定の変数がいくつかあっても、ひとつひとつを解決してゆくことで
+計算が可能である。解決の手段として、変数一つを引数としてもつ関数を引数
+とする関数をつくり、その関数がさらにある関数の引数となることでそれぞれの
+関数が、問題を一つずつ解決するという方法をとることが出来た。とってもλである。
+
+%------------------------------------------------
+\section*{感想} 
+\addcontentsline{toc}{section}{感想}
+以前、円の面積を積分で求めた事があったが、3 次元で
+使えるとは思っていなかった。また、極座標の表現に
+慣れていないので、以前の方法と当てはめるのに時間が
+かかった。今回は、計算結果を座標を書くことが出来て
+空間の想像がしやすかったので楽しかった。
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  参考文献
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% 「関連図書」を変更する
+% jreport, jbook なら、bibname
+%\renewcommand{\bibname}{変更後の名前}
+%\renewcommand{\bibname}{参考文献}
+
+% 「参考文献」を変更する
+% jarticle なら、refname
+\renewcommand{\refname}{参考文献}
+\begin{thebibliography}{9}
+
+% 目次に参考文献をいれる
+\addcontentsline{toc}{section}{\refname}% 追加
+
+% 参考文献
+\bibitem{ tag1 }
+ 球の体積の求め方とその証明 \\
+ http://homepage2.nifty.com/otsu/travel/kyu.html \\
+ 5 月 6 日参照
+
+\bibitem{ tag2 }
+ 積分 \\
+ http://isweb23.infoseek.co.jp/school/phaos/int1/index.htm \\
+ 5 月 6 日参照
+
+\bibitem{ tag3 }
+ 定積分の応用 \\
+ http://www.kwansei.ac.jp/hs/z90010/SUGAKU2/Sekibunh/cube/cube.htm \\
+ 5 月 6 日参照
+
+\bibitem{ tag3 }
+ 入門 情報処理数学 \\
+ 実教出版  野ノ山 隆幸\\
+ 1995 年 3 月 20 日 第9版
+
+\end{thebibliography}
+% 文書の終了
+\end{document} 

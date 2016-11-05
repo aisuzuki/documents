@@ -1,0 +1,276 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  特殊文字 : 
+%    改行 -> \\
+% 
+%  注釈 : 
+%    \footnote[1]{ 注釈の内容 }
+%           
+%  次のページ :
+%    \pagebreak
+%
+%  整形をせずにそのまま出力 :
+%  (ソース等)
+%    \begin{verbatim}  〜内容
+%    \end{verbatim}
+%
+%  整形をせずにそのまま出力：
+%  ( 枠を付ける )
+%   まず、以下のパッケージを使う  
+%   \usepackage{eclbkbox}
+%   そのあとにソースを記述
+%   \begin{breakbox}
+%     \begin{verbatim}
+%        ソース
+%     \end{verbatim}
+%   \end{breakbox}
+%
+%  箇条書 :
+%    \begin{itemize}
+%    \item\hspace*{5mm} 箇条書の内容
+%    \end{itemize}
+%   
+%  画像を張り付ける
+%    \begin{center}
+%    \includegraphics{ 画像ファイル名.eps }
+%    \end{center}
+%
+%  数式 (数式モード)
+%   \begin{eqnarray*}
+%    式 ( = を揃える時は &=& )
+%   \end{eqnarray*}
+%
+%  セクションの作成 :
+%    \section{ 内容 }
+%
+%  サブセクションの作成 :
+%    \subsection{ 内容 }
+%
+%--------------------------------------------------
+%  番号の付いていないセクションも目次に出す:
+%    \addcontentsline{toc}{section}{目次に出す名前}
+%
+%  [ 参考文献の場合 ]
+%% (j)article クラスの場合
+%%
+%\begin{thebibliography}{99}
+%\addcontentsline{toc}{section}{\refname}% 追加
+%\bibitem{bibunsho4} 名前
+%                   本の名前
+%\end{thebibliography}
+%
+%% (j)report・(j)book クラスの場合
+%% 
+%\begin{thebibliography}{99}
+%\addcontentsline{toc}{chapter}{\bibname}% 追加
+%\bibitem{bibunsho4} 名前
+%                   本の名前
+%\end{thebibliography}
+%-----------------------------------------------
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% * 概要の書き方
+%    規定字数以内でその論文 の取り扱う範 囲，目的，内容
+%   の要点および主な結論などを記述する
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% documentclass の宣言 % @ 書式
+% \documentclass [ オプション ] { 書式 }
+%
+% [ オプションの種類 ]
+% * 二段組
+% [twocolumn]
+% * 印字の大きさ
+% [a4p]
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% レジュメに使うなら、jarticle
+%
+%\documentclass[twocolumn,a4p]{jarticle}
+
+\documentclass[a4p, epsf]{jarticle}
+\usepackage{multicol}
+% 画像を張り付ける
+\usepackage[dvips]{graphics}
+% 行列が使えるパッケージ
+\usepackage{amsmath}
+% ソースに枠をつける
+\usepackage{eclbkbox}
+\usepackage{epsf}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 余白や文字間の幅の細かい設定
+%
+% 
+%\setlength{\voffset}{65pt}
+%\setlength{\topmargin}{-170pt}
+%\setlength{\textheight}{770pt}
+%\setlength{\oddsidemargin}{-10pt}
+%\setlength{\textwidth}{480pt}
+%\setlength{\headsep}{40pt}
+
+% 文書のはじまり 
+\begin{document}
+
+%---------------------------------------------
+%
+% article の時の表紙を別ページにする
+%
+\vspace*{4cm}
+\begin{center}
+{\LARGE 第 5 章 演習 力学的振動 (追レポート) \\} 
+\vspace*{1cm}
+{\large 01ca0125 鈴木 藍 \\ 
+  2002年 7月 4日}
+\end{center}
+\thispagestyle{empty}
+\newpage
+%------------------------------------------------
+%========================================
+% ここから文章
+%
+% 1ページ目
+%
+%========================================
+
+%----------------------------------------
+%
+% もくじをつける
+\tableofcontents
+\newpage
+%----------------------------------------
+
+% 概要 (abstract)
+%
+\begin{abstract} 
+\addcontentsline{toc}{section}{概要}
+前回提出したレポートで理解出来なかった所で、少しでも
+進んだ所を書く。
+
+
+\end{abstract}
+
+% はじめに
+% section のオプションで、数字を表示させないようにする
+%
+\section*{レポートの目的}
+\addcontentsline{toc}{section}{レポートの目的}
+線形2解微分方程式の解法について、現在わかっている所まで
+をまとめる。 
+
+%-------------------------------------------
+\section{ はじめにについて }
+%-------------------------------------------
+\subsection{ 前回理解できなかった部分 }
+\begin{itemize}
+\item 今まで積分して解を求めていたのに今回はどこで積分しているのか
+\item 解法の流れとして 一般解と特解を求めるのはわかったが、これらはどうやってどうやって求めるのか
+\end{itemize}
+
+\subsection{ 現在の解釈 }
+\subsubsection{ どこで積分しているのか }
+解を求める方法で、今回は始めに $y$ を「仮定」してから
+求めている。仮定するための情報として、式の「形」を見て、仮定する
+式を定めている。例えば、108 頁の中間あたりに「$y = e^{mx}$ を試してみよう。」
+とある。これは、(5.2)式 $\frac{d^2 y}{d x^2} + a \frac{dy}{dx} + by = 0$ という形が
+「線形かつ同次の微分方程式で、しかも係数が定数の場合」であり、一般的に指数関数の
+解を仮定するとうまくゆく形だからである。 \\
+他の解法を見ると、どうも特解を求める時に積分しているように見えるが、まだ
+はっきりしない。
+
+\subsubsection{ 一般解や特解の求め方 }
+一般解は、式の形をみてから 解を仮定して求める。特解は
+初期値などをあたえられた時に求められる。
+
+\section{ わかった点  }
+\subsection{ 指数関数について }
+一般解を仮定して求めるにあたり、指数部分の定数を求めてから
+解とするが、オイラーの公式を使って 指数関数の指数部が複素数の場合まで
+拡張する事が出来る。
+まず、指数部 $\theta$ を実数として
+\begin{eqnarray*}
+\left
+\{
+    \begin{array}{c}
+e^{i \theta } = \cos \theta + i \sin \theta \cr
+e^{-i \theta } = \cos \theta - i \sin \theta 
+    \end{array}
+\right.
+\end{eqnarray*}
+
+と定義する。
+この章のほとんどの解が
+\begin{eqnarray*}
+  e^z = e^{\alpha +i \beta} = e^a \cdot e^{i \beta} = e^{\alpha} (\cos \beta + i \sin \beta)
+\end{eqnarray*}
+となっているのは、これを使ったからだと思う。
+
+\section{ 演習 1.力学的振動 }
+\subsection{ b. }
+まだ終わっていません。
+
+%-------------------------------------------
+\section{ ここまでで理解できていない点 }
+%-------------------------------------------
+\subsection{ 線形2階微分方程式について }
+特解を解く時に、微分を使っているが、何故その部分だけ
+微分を使っているのかがわからない。しかも、たまに
+特解を求めてから一般解を求めている時がある。どういう
+流れでそうなっているのか。
+
+\subsection{ これからの予定 }
+演習問題に沿ってこの方程式が解ける所まで追ってみる。
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  感想、展望
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{まとめ・結論}
+\addcontentsline{toc}{section}{まとめ・結論}
+とにかく、積分をしないのははじめに解を仮定しているから
+だった。それ以外は未だに釈然としない。また、前回と今回のレポートは
+最低限理解した上での まともなレポートの形になっていないので
+早く考えを整理したい。
+
+%------------------------------------------------
+\section*{感想} 
+\addcontentsline{toc}{section}{感想}
+今回は、文献を調べたが この章の「はじめに」があまりにも端折り過ぎているので
+少し嫌な気分になった。とにかく、早くにこの微分方程式を
+理解したい。
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  参考文献
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% 「関連図書」を変更する
+% jreport, jbook なら、bibname
+%\renewcommand{\bibname}{変更後の名前}
+%\renewcommand{\bibname}{参考文献}
+
+% 「参考文献」を変更する
+% jarticle なら、refname
+\renewcommand{\refname}{参考文献}
+\begin{thebibliography}{9}
+
+% 目次に参考文献をいれる
+\addcontentsline{toc}{section}{\refname}% 追加
+
+% 参考文献
+\bibitem{ タグ }
+ キーポイント微分方程式 \\
+ 著者 佐野 理 \\
+ 2001年 7月16日 発行 (第11版)
+
+\end{thebibliography}
+
+% 文書の終了
+\end{document} 

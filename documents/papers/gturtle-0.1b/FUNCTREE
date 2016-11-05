@@ -1,0 +1,131 @@
+
+  "gturtle"
+   Function reference
+
+   2002/8/24
+   Author: ai suzuki <spiral@soulhack.net>
+
+    main
+      + atoi
+      + SystemInit
+      + getCommand
+      |   + fprintf
+      |   + fgets
+      |   + sscanf
+      |   + strcmp
+      |   + ls
+      |   |  + system
+      |   + TurtleList
+      |   |   + fprintf
+      |   |   + self
+      |   |   + TurtleList
+      |   + Load
+      |   |   + fileCheck
+      |   |   |   + strlen
+      |   |   |   + strcmp
+      |   |   |   + fopen
+      |   |   |   + perror
+      |   |   |   + fgets
+      |   |   |   + fclose
+      |   |   |   + fprintf
+      |   |   + fopen
+      |   |   + perror
+      |   |   + fprintf
+      |   |   + fgets
+      |   |   + sscanf
+      |   |   + strcpy
+      |   |   + searchTurtle
+      |   |   |   + isSame
+      |   |   |     + strcmp 
+      |   |   + addTurtle
+      |   |   |   + isEmpty
+      |   |   + MakeTurtle
+      |   |   |   + newTurtle
+      |   |   |   |   + malloc
+      |   |   |   |   + perror
+      |   |   |   + setAngle 
+      |   |   |   + setName
+      |   |   |   + setColor
+      |   |   |   + penDown
+      |   |   |   + Forward
+      |   |   |   |   + isDown
+      |   |   |   |   + line
+      |   |   |   |       + printf
+      |   |   |   |       + fflush
+      |   |   |   + penUp
+      |   |   |   |   + isDown
+      |   |   |   + strcpy
+      |   |   + Do
+      |   |      + strcmp
+      |   |      + undo
+      |   |      |   + Replot
+      |   |      |       + clearData
+      |   |      |       |   + home
+      |   |      |       |   + setColor
+      |   |      |       |   + clearData
+      |   |      |       + WindowClear
+      |   |      |       |   + printf
+      |   |      |       |   + fflush
+      |   |      |       + isEmpty
+      |   |      + sscanf
+      |   |      + Forward
+      |   |      + Back
+      |   |      |   + Forward
+      |   |      + turnRight
+      |   |      + turnLeft
+      |   |      |   + turnRight
+      |   |      + penDown
+      |   |      + penUp
+      |   |      + setColor
+      |   |      + home
+      |   |      + history
+      |   |      |   + fprintf
+      |   |      + fprintf
+      |   + Save
+      |   |   + searchTurtle
+      |   |   + fprintf
+      |   |   + fopen
+      |   |   + perror
+      |   |   + fclose
+      |   + SaveAll
+      |   |   + isEmpty
+      |   |   + fprintf
+      |   |   + stat
+      |   |   + Save
+      |   + help
+      |   |   + fprintf
+      |   + showColors
+      |   |   + fprintf
+      |   + bye
+      |   |   + fprintf
+      |   |   + exit
+      |   + init
+      |   |   + fprintf
+      |   |   + searchTurtle
+      |   |   + addTurtle
+      |   |   + MakeTurtle
+      |   + delete
+      |   |   + searchTurtle
+      |   |   + fprintf
+      |   |   + deleteTurtle
+      |   |       + WindowClear
+      |   |       + free
+      |   + inspectIt
+      |   |   + searchTurtle
+      |   |   + fprintf
+      |   |   + self
+      |   |   + locationX
+      |   |   + locationY
+      |   |   + yourAngle
+      |   |   + isDown
+      |   |   + penColor
+      |   + inspectAll
+      |   |   + isEmpty
+      |   |   + fprintf
+      |   |   + inspectIt
+      |   + searchTurtle
+      |   + strcpy
+      + Draw
+
+
+# File ends here

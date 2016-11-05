@@ -1,0 +1,241 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  特殊文字 : 
+%    改行 -> \\
+%    改行 -> \cr
+% 
+%  注釈 : 
+%    \footnote[1]{ 注釈の内容 }
+%           
+%  次のページ :
+%    \pagebreak
+%
+%  整形をせずにそのまま出力 :
+%  (ソース等)
+%    \begin{verbatim}  〜内容
+%    \end{verbatim}
+%
+%  整形をせずにそのまま出力：
+%  ( 枠を付ける )
+%   まず、以下のパッケージを使う  
+%   \usepackage{eclbkbox}
+%   そのあとにソースを記述
+%   \begin{breakbox}
+%     \begin{verbatim}
+%        ソース
+%     \end{verbatim}
+%   \end{breakbox}
+%
+%  箇条書 :
+%    \begin{itemize}
+%    \item\hspace*{5mm} 箇条書の内容
+%    \end{itemize}
+%   
+%  画像を張り付ける
+%    \begin{center}
+%    \includegraphics{ 画像ファイル名.eps }
+%    \end{center}
+%
+%  セクションの作成 :
+%    \section{ 内容 }
+%
+%  サブセクションの作成 :
+%    \subsection{ 内容 }
+%
+%--------------------------------------------------
+%  番号の付いていないセクションも目次に出す:
+%    \addcontentsline{toc}{section}{目次に出す名前}
+%
+%  [ 参考文献の場合 ]
+%% (j)article クラスの場合
+%%
+%\begin{thebibliography}{99}
+%\addcontentsline{toc}{section}{\refname}% 追加
+%\bibitem{bibunsho4} 名前
+%                   本の名前
+%\end{thebibliography}
+%
+%% (j)report・(j)book クラスの場合
+%% 
+%\begin{thebibliography}{99}
+%\addcontentsline{toc}{chapter}{\bibname}% 追加
+%\bibitem{bibunsho4} 名前
+%                   本の名前
+%\end{thebibliography}
+%-----------------------------------------------
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% * 概要の書き方
+%    規定字数以内でその論文 の取り扱う範 囲，目的，内容
+%   の要点および主な結論などを記述する
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% documentclass の宣言 % @ 書式
+% \documentclass [ オプション ] { 書式 }
+%
+% [ オプションの種類 ]
+% * 二段組
+% [twocolumn]
+% * 印字の大きさ
+% [a4p]
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% レジュメに使うなら、jarticle
+%
+%\documentclass[twocolumn,a4p]{jarticle}
+
+\documentclass[a4p, epsf]{jarticle}
+\usepackage{multicol}
+% 画像を張り付ける
+\usepackage[dvips]{graphics}
+% 行列が使えるパッケージ
+\usepackage{amsmath}
+% ソースに枠をつける
+\usepackage{epsf}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 余白や文字間の幅の細かい設定
+%
+% 
+%\setlength{\voffset}{65pt}
+%\setlength{\topmargin}{-2.0cm}
+%\setlength{\oddsidemargin}{1cm}
+%\setlength{\evensidemargin}{1cm}
+%\setlength{\textwidth}{15cm}
+%\setlength{\textheight}{26cm}
+%\setlength{\headsep}{40pt}
+\renewcommand{\baselinestretch}{0.3}
+
+% 文書のはじまり 
+\begin{document}
+
+\begin{center}
+\LARGE{第4章 4.3 節 \\ 美術品の贋作 }\\
+\large{2002年 6月 25日 \hspace*{5mm} 01ca0125 鈴木 藍} 
+\end{center}
+%========================================
+% ここから文章
+%
+% 1ページ目
+%
+%========================================
+% はじめに
+\paragraph{はじめに}
+本節は 美術品が贋作であるかどうかを 線形一階微分方程式を使って
+検証する。式からグラフをプロットし、図形的な意味を考察した。
+%------------------------------------------------------
+% セクション
+%------------------------------------------------------
+\section{ \large 話題と方針 }
+%------------------------------------------------------
+\subsection{ \normalsize 20世紀最大の贋作事件 }
+贋作の疑いがかかっている絵を科学的に検証する。理由は この絵が
+本物であると鑑定されていたから。
+\subsection{ \normalsize 方針 }
+絵に使われている絵の具に含まれる放射性物質の崩壊数から
+絵の描かれた年代を特定する。
+%------------------------------------------------------
+\section{ \large 放射性崩壊の微分方程式モデル }
+%------------------------------------------------------
+\subsection{ \normalsize 今回扱う式 }
+\begin{eqnarray*}
+ \frac{dy}{dt} = - \lambda y + \gamma (t) \hspace*{5mm} (86 頁 4.8)
+\end{eqnarray*}
+\subsection{ \normalsize 式の意味 }
+「$Pb^{210}$ の 時間による変化の割合は、$Pb^{210}$ の
+減少した値に $Ra^{226}$ が崩壊して $Pb^{210}$ が増えた分を
+足したものである。」
+\subsection{ \normalsize 厳密解 }
+(4.8) を解くと、
+\begin{eqnarray*}
+ y &=&  \frac{\gamma}{ \lambda } + (-\frac{\gamma}{ \lambda } + y_0 ) e^{-\lambda (t-t_0)} \hspace*{5mm} (87 頁 4.10)
+\end{eqnarray*}
+となる。\\
+※ 式の意味は ?
+\subsection{ \normalsize モデルの検証 }
+\subsubsection{ \normalsize 仮定 }
+・仮に、絵が贋作ではなく 300 年前の本物であったとする。\\
+$\to$ $Pb^{210}$ の変化量が 期待した値より大きければ贋作\\
+\hspace*{4mm}・絵の具が作られた鉱石中での $Pb^{210}$ の量は、$Ra^{226}$ と平衡状態にあった。\\
+\begin{eqnarray*}
+  \lambda y_0 = \gamma 
+\end{eqnarray*}
+$\to$ 300年 時間が立った $Ra^{226}$ の変化量は $0 〜 200$。これを期待する値とする
+\subsubsection{ \normalsize 結果 }
+検査する絵から 放射性物質のデータを測定。式(4.12)にあてはめる。\\
+$\to$ 88 頁 $\lambda y_0 = 98,147$ で 200 よりはるかに大きい値であったので贋作である。
+%------------------------------------------------------
+\section{ \large グラフのプロット }
+%------------------------------------------------------
+贋作のデータを使った。
+\begin{center}
+   \includegraphics{plot.eps}\\
+   fig 1. 差分法と厳密解
+\end{center}
+ほぼ誤差がでていない。
+\subsection{ \normalsize 考察 }
+式の値になるはずであった $Pb^{210}$ の量 200 は、贋作が描かれてから 300 年以上も前の位置にあり、少なくとも、本物より 300 年以上後に描かれた絵であるということがわかる。
+\section{ \large 疑問点 }
+この章での積分因数の意味はなにか？
+\paragraph{まとめ}
+影響し合わない $Pb^{210}$ と $Ra^{226}$ の変移が重なる時、
+それぞれ単独に作用するときの変位の和になっているので
+重ね合わせの原理の性質をもつ、この微分方程式も直感的に理解しやすかったような
+きがする。
+\renewcommand{\refname}{参考文献}
+\begin{thebibliography}{9}
+% 参考文献
+\bibitem{ age }
+  水中シャボン玉の研究 \\
+ http://www01.u-page.so-net.ne.jp/za2/urushiya/sasaki.htm \\ 
+ 2002年 6月24日 
+
+\bibitem{ sage }
+  平衡状態 \\
+  http://soil.en.a.u-tokyo.ac.jp/~zico/works/retentio/5potenti/equili/equili.htm \\
+ 2002年 6月24日 
+
+\bibitem{ mona }
+  重ね合わせの原理　\\
+  http://www.iris.dti.ne.jp/~post/onpa/03.html \\
+ 2002年 6月24日 
+
+\bibitem{ tyu }
+  放射能の半減期とは \\
+  http://www.irm.or.jp/hakarukun/FAQ/Q6.html \\
+ 2002年 6月24日 
+
+\end{thebibliography}
+
+\newpage
+
+\paragraph{参考資料}
+
+\section*{ \large 専門用語 }
+\subsection*{ \large 放射性物質 }
+放射能をもつ物質。特に、その核種が特定されていない場合、または多数の放射性核種の
+混合物である場合にいう。
+\subsection*{ 半減期 }
+放射性物質(核種)は時間とともに崩壊してその量が減り、放射能も時間とともに弱くなる。
+最初にあった放射能の量が半分になるまでの時間を半減期という。
+\begin{center}
+   \includegraphics{lower.eps}\\
+   fig 2. 放射能の減り方
+  \end{center}
+\subsection*{ \large 放射平衡 }
+ものの動きが長期間停止した場所では、各段階の放射能の強さは皆同じになる。
+一つのつながった流れでは、細いところでも太いところでも時間当たりの
+「量」が一定となるように、放射性原子の単位時間の崩壊数（個／秒）
+は同じになる。これを「放射平衡」という。ただし、平衡が成立するまでの時間は、
+それぞれの放射性原子の崩壊の速さ、または半減期（その量が崩壊により半分に減るまでの時間）
+が関係してくるので、環境が変化しない状況(閉鎖されている)である必要がある。
+\subsection*{ \large 平衡状態 }
+ふたつの変化の「勢い」のバランスがとれた状態である。
+
+
+% 文書の終了
+\end{document} 

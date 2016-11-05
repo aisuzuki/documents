@@ -1,0 +1,387 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  特殊文字 : 
+%    改行 -> \\
+% 
+%  注釈 : 
+%    \footnote[1]{ 注釈の内容 }
+%           
+%  次のページ :
+%    \pagebreak
+%
+%  整形をせずにそのまま出力 :
+%  (ソース等)
+%    \begin{verbatim}  〜内容
+%    \end{verbatim}
+%
+%  整形をせずにそのまま出力：
+%  ( 枠を付ける )
+%   まず、以下のパッケージを使う  
+%   \usepackage{eclbkbox}
+%   そのあとにソースを記述
+%   \begin{breakbox}
+%     \begin{verbatim}
+%        ソース
+%     \end{verbatim}
+%   \end{breakbox}
+%
+%  箇条書 :
+%    \begin{itemize}
+%    \item\hspace*{5mm} 箇条書の内容
+%    \end{itemize}
+%   
+%  画像を張り付ける
+%    \begin{center}
+%    \includegraphics{ 画像ファイル名.eps }
+%    \end{center}
+%
+%  数式 (数式モード)
+%   \begin{eqnarray*}
+%    式 ( = を揃える時は &=& )
+%   \end{eqnarray*}
+%
+%  セクションの作成 :
+%    \section{ 内容 }
+%
+%  サブセクションの作成 :
+%    \subsection{ 内容 }
+%
+%--------------------------------------------------
+%  番号の付いていないセクションも目次に出す:
+%    \addcontentsline{toc}{section}{目次に出す名前}
+%
+%  [ 参考文献の場合 ]
+%% (j)article クラスの場合
+%%
+%\begin{thebibliography}{99}
+%\addcontentsline{toc}{section}{\refname}% 追加
+%\bibitem{bibunsho4} 名前
+%                   本の名前
+%\end{thebibliography}
+%
+%% (j)report・(j)book クラスの場合
+%% 
+%\begin{thebibliography}{99}
+%\addcontentsline{toc}{chapter}{\bibname}% 追加
+%\bibitem{bibunsho4} 名前
+%                   本の名前
+%\end{thebibliography}
+%-----------------------------------------------
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% * 概要の書き方
+%    規定字数以内でその論文 の取り扱う範 囲，目的，内容
+%   の要点および主な結論などを記述する
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% documentclass の宣言 % @ 書式
+% \documentclass [ オプション ] { 書式 }
+%
+% [ オプションの種類 ]
+% * 二段組
+% [twocolumn]
+% * 印字の大きさ
+% [a4p]
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% レジュメに使うなら、jarticle
+%
+%\documentclass[twocolumn,a4p]{jarticle}
+
+\documentclass[a4p, epsf]{jarticle}
+\usepackage{multicol}
+% 画像を張り付ける
+\usepackage[dvips]{graphics}
+% 行列が使えるパッケージ
+\usepackage{amsmath}
+% ソースに枠をつける
+\usepackage{eclbkbox}
+\usepackage{epsf}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 余白や文字間の幅の細かい設定
+%
+% 
+%\setlength{\voffset}{65pt}
+%\setlength{\topmargin}{-170pt}
+%\setlength{\textheight}{770pt}
+%\setlength{\oddsidemargin}{-10pt}
+%\setlength{\textwidth}{480pt}
+%\setlength{\headsep}{40pt}
+
+% 文書のはじまり 
+\begin{document}
+
+%---------------------------------------------
+%
+% article の時の表紙を別ページにする
+%
+\vspace*{4cm}
+\begin{center}
+{\LARGE 電子の相互作用シミュレーション \\} 
+\vspace*{1cm}
+{\large 01ca0125 鈴木 藍 \\ 
+  2002年 9月 27日}
+\end{center}
+\thispagestyle{empty}
+\newpage
+%------------------------------------------------
+%========================================
+% ここから文章
+%
+% 1ページ目
+%
+%========================================
+
+%----------------------------------------
+%
+% もくじをつける
+\tableofcontents
+\newpage
+%----------------------------------------
+
+% 概要 (abstract)
+%
+\begin{abstract} 
+\addcontentsline{toc}{section}{概要}
+しめのレポートである。行った作業や、システムの概要、 関数と
+変数の表などをまとめた。
+
+\end{abstract}
+
+% はじめに
+% section のオプションで、数字を表示させないようにする
+%
+\section*{レポートの目的}
+\addcontentsline{toc}{section}{レポートの目的}
+
+\begin{itemize}
+ \item 基礎的な数学の理解確認
+ \item 基本的なプログラミングの練習
+ \item ソフトウェア・アーキテクチャを考える
+\end{itemize}
+
+%------------------------------------------------------
+% セクション
+%------------------------------------------------------
+\section{ はじめに }
+%------------------------------------------------------
+まず、レポートの提出期限を守れずに、ここまで遅い提出になってしまった事を
+謹んでここで反省したいと思います。
+
+%------------------------------------------------------
+% セクション
+%------------------------------------------------------
+\section{ 全体の仕様 }
+%------------------------------------------------------
+課題として提示されたものを最低限実装した。
+
+%------------------------------------------------------
+% セクション
+%------------------------------------------------------
+\section{ オプション一覧 }
+%------------------------------------------------------
+今回は、オプションの処理に getopt\_long を使ったので、-option ではなく --option とした。
+\begin{itemize}
+ \item $--if オプション, -i <filename> \hspace*{5mm} 初期状態入力ファイル$
+ \item $--of オプション, -o <filename> \hspace*{5mm} 最終状態ファイル$
+ \item $--bn オプション, -b <number> \hspace*{1cm} 乱数で電子を生成$
+ \item $--fn オプション, -f <number> \hspace*{1cm} 指定のフレームを出力する$
+\end{itemize}
+なお、オプションが指定されなかった時のデフォルトとして 2 つの電子が乱数を使ったパラメータを状態として持っている。
+
+\subsection{ ファイルのフォーマット }
+出力されるファイルのフォーマットは以下のとおりである。
+\begin{breakbox}
+  \begin{verbatim}
+(nx 20) (ny 20) (t 100) (dt 0.100000) (bn 1)  
+(e
+((x 18.129819) (y 48.093291) (vx 0.000000) (vy 0.000000) (q -1.000000) (m 5))
+((x 23.576020) (y 29.195874) (vx -0.029880) (vy 0.142618) (q 1.000000) (m 6))
+)
+  \end{verbatim}
+\end{breakbox}
+一番はじまりの行は、場の状態を表す。以下の (e で始まる行は、1 行に付き、一つの電子の電子の状態を格納している。
+
+%------------------------------------------------------
+% セクション
+%------------------------------------------------------
+\section{ 開発工程 }
+%------------------------------------------------------
+今回は、時間をかける事が出来なくて大きな成果を得られなかったが、
+今までとは違う方法をとることで、よい方向に向かった事を書いておく。
+
+\subsection{ バージョン管理 }
+常に、動くものを保存しておく。今回は ディレクトリに バージョン番号を付け、
+管理した。もし、新しく改良を行って失敗してしまった場合にも、すぐに動くものにもどす事が出来る上に、
+差分を見て 新しく問題を発見する事も出来た。また、0.95 〜 1.0 になるまでを目標に作る事で
+作業にめりはりが付いたと思う。この間に 6 + α 分の プログラムを作成した。
+
+\subsection{ データの管理 }
+これまで、定数の扱いに悩んできたが enum を使って 一貫した定数の管理が出来るようになった。
+また、配列の先頭から順に 美しく意味付けをすることが出来て良かったと思う。
+
+\section{ データ構造 }
+大きなデータ構造は使用しなかった。電子の構造体と場の構造体は、一番始めのバージョンから作られていたため
+、これを継続する事にした。
+
+\subsection{ 電子を表す構造体 }
+
+\begin{breakbox}
+    \begin{verbatim}
+/*----------- an Electron -----------------------*/
+    struct electron {
+    double   q;
+    int      m;      
+    double   x, y;   
+    double   vx, vy; 
+    struct electron *next;
+};
+/*-----------------------------------------------*/
+    \end{verbatim}
+\end{breakbox}
+
+\subsection{ スカラー場を表す構造体 }
+要素は、double 型の 2次元配列のみである。
+\begin{breakbox}
+    \begin{verbatim}
+/*------------ scale field ----------------------*/
+    struct sfield {
+    double  **potential;
+};
+/*-----------------------------------------------*/
+    \end{verbatim}
+\end{breakbox}
+
+\subsection{ ベクトル場を表す構造体 }
+一ヶ所に付き、二次元の性質を持つ構造体をもう一つ定義し、ベクトル場の一点の要素とした。
+\begin{breakbox}
+    \begin{verbatim}
+/*-------------- 2D being -----------------------*/
+    struct twoDbeing {
+    double  x, y;
+};
+/*-----------------------------------------------*/
+/*------------- vector field --------------------*/
+    struct vfield {
+    struct  twoDbeing **pointOf; 
+};
+/*-----------------------------------------------*/
+    \end{verbatim}
+\end{breakbox}
+
+\newpage
+\section{ おもな変数一覧 }
+主な変数はグローバル変数として定義している。
+\begin{center}
+\begin{tabular}{|l|l|l|}\hline
+型      &  変数名        & 説明 \\ \hline\hline
+int     &  nx, ny        & 画面の分割数 \\ \hline
+double  & dx, dy         & 分割された一つのセルの大きさ \\ \hline
+int     & t             & 実行する時間 \\ \hline
+double  & dt         & ある時間から時間までの微小な差分 \\ \hline
+int     & bn        & 電子の数 \\ \hline
+int     & fn  & 出力するフレームの数  \\ \hline
+anElectorn   & electorn & 電子  \\ \hline
+ScaleField   & scalefiled  & スカラー場  \\ \hline
+VectorField   & vectorfiled  & ベクトル場  \\ \hline
+\end{tabular}
+\end{center}
+
+\newpage
+\subsection{ 関数一覧 }
+\begin{center}
+\begin{tabular}{|l|l|l|l|}\hline
+型      &  関数名    & 引数     & 説明 \\ \hline\hline
+ScaleField  & newScaleField  & なし & スカラー場のメモリを確保する。 \\ \hline
+ScaleField  & makeScaleField  & ScaleField *, anElectron * & 電子からスカラー場を形成する。 \\ \hline
+ScaleField  & clearScaleField  & ScaleField * & スカラー場を 0.0 で初期化する。 \\ \hline
+VectorField  & newVectorField  & なし &ベクトル場のメモリを確保する。 \\ \hline
+VectorField  & makeVectorField  & VectorField *, ScaleField * & ベクトル場を形成する。 \\ \hline
+VectorField  & clearVectorField  & Vectorield * & ベクトル場を 0.0 で初期化する。 \\ \hline
+void  & initWorld  & なし & gnuplot 用の準備をする。 \\ \hline
+void    & outputVectorDataFormat  & VectorField * & ベクトル場用の出力 \\ \hline
+void    & outputScaleDataFormat  & ScaleField * & スカラー場用の出力 \\ \hline
+void    & inspectIt  & anElectron * & 電子の状態を出力する \\ \hline
+anElectorn  &  initElectrons  & なし & 電子を生成する \\ \hline
+void    & theWorld & なし & main 関数の次に中心となる関数  \\ \hline
+void    & procOptions & int, char ** & オプションを処理する  \\ \hline
+char    & skipto & char *, char & トークンのポインタを返す  \\ \hline
+void    & outputFile & anElectron *& ファイルに最終状態を出力する  \\ \hline
+void    & loadFormFile & anElectron *& ファイルから状態を入力する  \\ \hline
+void    & get\_field\_elem &char *& 場の要素を取り出す  \\ \hline
+void    & get\_field\_val &なし& 要素から 値を取り出す  \\ \hline
+void    & get\_elect\_elem &FILE *& 電子の要素を取り出す  \\ \hline
+void    & get\_elect\_val &anElectrons *& 要素から 値を取り出す  \\ \hline
+\end{tabular}
+\end{center}
+
+%-------------------------------------------
+\section{ 実行例  }
+%-------------------------------------------
+紙面でアニメーションがしづらいので、今回は割愛させていただきます。
+
+\subsection{ 動いている事の実証 }
+テストを ベクトル場のアニメーション、スカラー場のアニメーション、電子のみのアニメーション
+全てをそのつど行う事で、不自然な動きがないかを確認してきた。中でもベクトル場は、計算がずれると
+すぐにおかしな画面になるので これをいつも確認してきたことは良かったと思う。
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  感想、展望
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{まとめ・結論}
+\addcontentsline{toc}{section}{まとめ・結論}
+設計という事がまた、良くできていなかったが いままで読んで来た本などが
+生かせる場があった。いつも、何かの形でできあがっているプログラムを
+こまめに保存しておくことは良かったと思う。
+
+%------------------------------------------------
+\section*{感想} 
+\addcontentsline{toc}{section}{感想}
+後悔しきりでありますが、全てが言い訳に聞こえますので止めます。
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  参考文献
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% 「関連図書」を変更する
+% jreport, jbook なら、bibname
+%\renewcommand{\bibname}{変更後の名前}
+%\renewcommand{\bibname}{参考文献}
+
+% 「参考文献」を変更する
+% jarticle なら、refname
+\renewcommand{\refname}{参考文献}
+\begin{thebibliography}{9}
+
+% 目次に参考文献をいれる
+\addcontentsline{toc}{section}{\refname}% 追加
+
+% 参考文献
+\bibitem{ hoge }
+ プログラミング言語 C \\ 
+ カーニハン , リッチー 著 \\
+ 2000年4月15日 (第2版) 
+\bibitem{ piyo }
+ Smalltalk イディオム \\ 
+ 青木 淳 著 \\
+ 1997年2月25日 (第1版) 
+\bibitem{ mona }
+ プログラミング作法 \\
+ カーニハン , パイク \\
+ 2001年6月21日 (第1版)
+
+\end{thebibliography}
+
+% 文書の終了
+\end{document} 

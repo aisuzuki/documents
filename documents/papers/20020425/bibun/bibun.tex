@@ -1,0 +1,332 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  TeX template for ~
+%
+%
+%  特殊文字 : 
+%    改行 -> \\
+% 
+%  注釈 : 
+%    \footnote[1]{ 注釈の内容 }
+%           
+%  次のページ :
+%    \pagebreak
+%
+%  整形をせずにそのまま出力 :
+%  (ソース等)
+%    \begin{verbatim}  〜内容
+%    \end{verbatim}
+%
+%  箇条書 :
+%    \begin{itemize}
+%    \item\hspace*{5mm} 箇条書の内容
+%    \end{itemize}
+%
+%  セクションの作成 :
+%    \section{ 内容 }
+%
+%  サブセクションの作成 :
+%    \subsection{ 内容 }
+%
+%  番号の付いていないセクションも目次に出す:
+%    \addcontentsline{toc}{section}{目次に出す名前}
+%
+%  [ 参考文献の場合 ]
+%% (j)article クラスの場合
+%%
+%\begin{thebibliography}{99}
+%\addcontentsline{toc}{section}{\refname}% 追加
+%\bibitem{bibunsho4} 名前
+%                   本の名前
+%\end{thebibliography}
+%
+%% (j)report・(j)book クラスの場合
+%% 
+%\begin{thebibliography}{99}
+%\addcontentsline{toc}{chapter}{\bibname}% 追加
+%\bibitem{bibunsho4} 名前
+%                   本の名前
+%\end{thebibliography}
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% タイトルの作成
+%
+%\title{ シミュレーション課題 }
+%\author{ 01ca0125 鈴木 藍 }
+%\date{ 2002年 4月25日 }
+
+% 概要を二段組に分けないのなら、
+% \date{} に入れる (改行はされない)
+%
+% * 概要の書き方
+%    規定字数以内でその論文 の取り扱う範 囲，目的，内容
+%   の要点および主な結論などを記述する
+%
+% 使用例
+%\date{ \large {\gt 概要 } \normalsize 内容 } 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% * タイトルを実際に付けるには
+% 文書のはじまりを表すタグの
+% \begin{document} を書いた後に、
+% \maketitle
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% documentclass の宣言 % @ 書式
+% \documentclass [ オプション ] { 書式 }
+%
+% [ オプションの種類 ]
+% * 二段組
+% [twocolumn]
+% * 印字の大きさ
+% [a4p]
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% レジュメに使うなら、jarticle
+%
+%\documentclass[twocolumn,a4p]{jarticle}
+
+\documentclass[a4p]{jarticle}
+\usepackage{multicol}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 余白や文字間の幅の細かい設定
+%
+% 
+%\setlength{\voffset}{65pt}
+%\setlength{\topmargin}{-170pt}
+%\setlength{\textheight}{770pt}
+%\setlength{\oddsidemargin}{-10pt}
+%\setlength{\textwidth}{480pt}
+%\setlength{\headsep}{40pt}
+
+% 文書のはじまり 
+\begin{document}
+
+%---------------------------------------------
+%
+% article の時の表紙を別ページにする
+%
+\vspace*{4cm}
+\begin{center}
+{\LARGE シミュレーション課題 \\} 
+\vspace*{1cm}
+{\large 01ca0125 鈴木藍 \\ 
+  2002年 4月25日}
+\end{center}
+\thispagestyle{empty}
+\newpage
+%------------------------------------------------
+
+
+% タイトルを付ける
+%\maketitle
+
+%========================================
+% ここから文章
+%
+% 1ページ目
+%
+%========================================
+\tableofcontents
+\newpage
+
+% 概要 (abstract)
+% ただし、二段組の場合、二段に別れる
+% (二段に分けない時は、\date{} の中に概要をいれる
+%
+\begin{abstract} 
+\addcontentsline{toc}{section}{概要}
+出題された各問題を、\(\frac{f(x-h)-f(x)}{h}\)を使って解く。
+\end{abstract}
+
+% はじめに
+% section のオプションで、数字を表示させないようにする
+%
+\section*{レポートの目的}
+\addcontentsline{toc}{section}{レポートの内容}
+多項式以外に、$\sin$ や $e$ を微分することで式の変形に慣れる。また、これらを微分する際に
+必要な公式などを調べて、知識を付ける。
+
+%------------------------------------------------------
+% 1から始まるセクション
+%------------------------------------------------------
+\section{ \(3x^3+2x^2+x+1\)の微分 }
+%------------------------------------------------------
+
+\(f(x) = 3x^3+2x^2+x+1\) であるから、これを導関数に当てはめて
+\[\frac{3(x+h)^3+2(x+h)^2+(x+h)+1-(3x^3+2x^2+x+1)}{h}\] 
+展開して
+\[\frac{3(x^3+3x^2h+3xh^2+h^3)+2(x^2+2xh+h^2)+x+h+1-3x^3-2x^2-x-1}{h}\] 
+\[\frac{3x^3+9x^2h+9xh^2+3h^3+2x^2+4xh+2h^2+x+h+1-3x^3-2x^2-x-1}{h}\] 
+これらを約分してゆき、
+\[9x^2+9xh+3h^2+4x+2h+1\] 
+となる。ここで
+$h\to0$
+であるから
+\[9x^2+4x+1\] 
+を得る。\\
+
+また、微分法の公式を用いて確認すると
+\begin{itemize}
+\item n が実数の時 \(y=x^n\) ならば \(y'=nx^{n-1}\) 
+\item k が定数の時 \(y=k\) ならば \(y'=0\) 
+\end{itemize}
+この二つを使い、
+\(f(x) = 3x^3+2x^2+x+1\) の各項に当てはめる。
+\begin{eqnarray*}
+ y' &=& 3(x^3) \\
+   &=& 3(3x^2) \\
+   &=& 9x^2
+\end{eqnarray*}
+\begin{eqnarray*}
+ y' &=& 2(x^2) \\
+   &=& 2(2x^1) \\
+   &=& 4x
+\end{eqnarray*}
+\begin{eqnarray*}
+ y' &=& x \\
+   &=& 1x^0 \\
+   &=& 1 
+\end{eqnarray*}
+1 は定数なので
+\begin{eqnarray*}
+ y' &=& 1 \\
+   &=& 0 
+\end{eqnarray*}
+
+よって\(9x^2+4x+1\) を得る事が出来る。 
+
+%-------------------------------------------
+\section{\(\sin x\)の微分}
+%-------------------------------------------
+
+ここでは \(\Delta x\)を限りなく 0 に近付く角度とする。\\
+\(\sin x\) を導関数に当てはめると
+\[\frac{\sin(x+\Delta x)-\sin(x)}{\Delta x}\] 
+
+加法定理 \(\sin(x+y)=\sin(x)\cos(y)+\sin(y)\cos(x)\)により、
+\[\frac{\sin(x)\cos(\Delta x)+\sin(\Delta x)\cos(x)-\sin(x)}{\Delta x}\]
+
+\(\sin(x)\) でくくって
+\[\frac{\sin(x)(\cos(\Delta x)-1)}{\Delta x} + \frac{\sin(\Delta x)\cos(x)}{\Delta x}\]
+ここで、\(\lim\limits_{x\to0}\frac{\sin x}{x}=1\)であるから 
+\[\frac{\sin(x)(\cos(\Delta x)-1)}{\Delta x} + \cos(x)\]
+\(\frac{\sin(x)(\cos(\Delta x)-1)}{\Delta x}\)の分子と分母に\(\cos(\Delta x)+1\)をかける
+\[\frac{\sin(x)(\cos(\Delta x)-1)(\cos(\Delta x)+1)}{\Delta x(\cos(\Delta x)+1)} + \cos(x)\]
+\begin{eqnarray}
+\frac{\sin(x)(\cos^2(\Delta x)-1)}{\Delta x(\cos(\Delta x)+1)} + \cos(x)
+\end{eqnarray}
+ここで、\(\cos^2x+\sin^2x=1\)なので、これを変形して、
+\[\cos^2x-1=-\sin^2x\]
+これを先程の(1)にあてはめて
+\[\frac{\sin(x)-\sin^2(\Delta x)}{\Delta x(\cos(\Delta x)+1)} + \cos(x)\]
+\[\frac{\sin(x)(-\sin^2(\Delta x))(\sin(\Delta x))}{\Delta x(\cos(\Delta x)+1)} + \cos(x)\]
+\(\frac{\sin x}{x}=1\)なので
+\[\frac{\sin(x)(-\sin^2(\Delta x))}{\cos(\Delta x)+1} + \cos(x)\]
+\(\sin0=0\),\(\cos0=1\)であるから、
+\[\frac{0}{2} + \cos(x)\]
+よって、
+\[(\sin x)'=\cos x \]
+\[(x \to 0)\]
+が得られる。
+
+\newpage
+
+%-------------------------------------------
+\section{ \(e^x\)の微分 }
+%-------------------------------------------
+
+\(e^x\) を導関数に当てはめると
+\[\frac{e^{x+h}-e^x}{h}\] 
+この式を\(e^x\)でくくる
+\begin{eqnarray}
+\frac{e^h-1}{h} \cdot e^x 
+\end{eqnarray}
+
+ここで、
+\[C=\frac{e^h-1}{h}\] 
+とおく。
+この式を\(e\)を求める式になおして
+\[Ch=e^h+1\]
+\[e^h=Ch+1\]
+\begin{eqnarray}
+e=(Ch+1)^{\frac{1}{h}}
+\end{eqnarray}
+ここで\(Ch=t\)とおきかえて
+\[h=\frac{t}{C}\]
+なので
+\[e=(t+1)^{\frac{1}{\frac{t}{C}}}\]
+\[e=(t+1)^{\frac{C}{t}}\]
+Cを外に出して
+\[e=\{(t+1)^{\frac{1}{t}}\}^C\]
+これで、(3)とこの\((t+1)^{\frac{1}{t}}\)を同じ性質を持つ物として
+\[e=e^C\]
+となる。よって\(C=1\)であるから、(2)にあてはめると 
+\[1 \cdot e^x\]
+したがって
+\[e'=e^x \]
+\[(h\to0)\]
+が得られる。
+
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  感想、展望
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{まとめ・結論}
+\addcontentsline{toc}{section}{まとめ・結論}
+導関数を使えば、式は長くなるが $\sin$ や $e$ を微分する事が出来た。
+
+\section*{感想} 
+\addcontentsline{toc}{section}{感想}
+初めて微分を勉強したので、$\sin$ の微分はとても難しかった。また、自然対数が何かを知らなかったのでそこから調べた事も時間がかかった。今回は、微分法の基本的な公式も覚えたのでこれから使っていきたい。
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  参考文献
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% 「関連図書」を変更する
+% jreport, jbook なら、bibname
+%\renewcommand{\bibname}{変更後の名前}
+%\renewcommand{\bibname}{参考文献}
+
+% 「参考文献」を変更する
+% jarticle なら、refname
+\renewcommand{\refname}{参考文献}
+
+\begin{thebibliography}{9}
+\addcontentsline{toc}{section}{\refname}% 追加
+\bibitem{ hoge }
+ 三角関数 \(\sin x,\cos \) の微分について \\
+ http://takeno.iee.niit.ac.jp/~shige/TeX/latex2html/sinprime/node2.html \\
+ 2002/ 4/21 参照 
+
+\bibitem{ fuga }
+ 指数函数と対数函数の微分\\
+ http://isweb23.infoseek.co.jp/school/phaos/diff2/explog.htm \\
+ 2002/ 4/21 参照 
+
+\bibitem{ age }
+ 微分積分 \\
+ http://homepage1.nifty.com/noric/Math/Diff\_Inte/Diff\_Inte.htm \\
+ 2002/ 4/21 参照 
+
+\bibitem{ sage }
+ 自然対数の図形的意味 \\ 
+ http://www.nikonet.or.jp/spring/sanae/MathTopic/e/e.htm \\
+ 2002/ 4/21 参照 
+
+\end{thebibliography}
+
+% 文書の終了
+\end{document} 

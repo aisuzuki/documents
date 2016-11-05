@@ -1,0 +1,37 @@
+#include <stdio.h>
+#include <math.h>
+#include "field.h"
+
+int main()
+{
+  ScaleField  *sfield;
+  VectorField *vfield;
+  anElectron  *electrons;
+  int i, j;
+  
+  sfield  = newScaleField();
+  vfield = newVectorField();
+
+  electrons = initElectrons(2, "","");
+
+  sfield  = makeScaleField(sfield, electrons);
+  vfield = makeVectorField(sfield, vfield, e);
+
+ /* test for sfield     */
+  for (i=0; i<ny; i++) { 
+    for (j=0; j<ny; j++) { 
+      printf("%d %d %f\n", j, i, sfield->potential[i][j]);
+    }
+    printf("\n");
+   }
+  
+
+ /* test for vfield 
+  for (i=0; i<FIELD_SIZE; i++) { 
+    for (j=0; j<FIELD_SIZE; j++) { 
+      printf("%d %d %f %f\n", j, i, vfield->pointOf[i][j].x, vfield->pointOf[i][j].y);
+    }
+    printf("\n");
+  }   */
+  return 0;
+}

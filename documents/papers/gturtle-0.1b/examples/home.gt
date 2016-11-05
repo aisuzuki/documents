@@ -1,0 +1,31 @@
+(hoge
+    pd
+    color purple
+    rt 45
+    fd 50
+    rt 90
+    fd 50
+    rt 135
+    fd 70.710678
+    bk 10
+    color brown
+    lt 90
+    fd 40
+    lt 90
+    fd 50
+    lt 90
+    fd 40
+    bk 10
+    pu
+    lt 90
+    fd 15
+    color blue
+    pd
+    fd 20
+    lt 90
+    fd 20
+    lt 90
+    fd 20
+    lt 90
+    fd 20
+)

@@ -1,0 +1,541 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  特殊文字 : 
+%    改行 -> \\
+% 
+%  注釈 : 
+%    \footnote[1]{ 注釈の内容 }
+%           
+%  次のページ :
+%    \pagebreak
+%
+%  整形をせずにそのまま出力 :
+%  (ソース等)
+%    \begin{verbatim}  〜内容
+%    \end{verbatim}
+%
+%  整形をせずにそのまま出力：
+%  ( 枠を付ける )
+%   まず、以下のパッケージを使う  
+%   \usepackage{eclbkbox}
+%   そのあとにソースを記述
+%   \begin{breakbox}
+%     \begin{verbatim}
+%        ソース
+%     \end{verbatim}
+%   \end{breakbox}
+%
+%  箇条書 :
+%    \begin{itemize}
+%    \item\hspace*{5mm} 箇条書の内容
+%    \end{itemize}
+%   
+%  画像を張り付ける
+%    \begin{center}
+%    \includegraphics{ 画像ファイル名.eps }
+%    \end{center}
+%
+%  数式 (数式モード)
+%   \begin{eqnarray*}
+%    式 ( = を揃える時は &=& )
+%   \end{eqnarray*}
+%
+%  セクションの作成 :
+%    \section{ 内容 }
+%
+%  サブセクションの作成 :
+%    \subsection{ 内容 }
+%
+%--------------------------------------------------
+%  番号の付いていないセクションも目次に出す:
+%    \addcontentsline{toc}{section}{目次に出す名前}
+%
+%  [ 参考文献の場合 ]
+%% (j)article クラスの場合
+%%
+%\begin{thebibliography}{99}
+%\addcontentsline{toc}{section}{\refname}% 追加
+%\bibitem{bibunsho4} 名前
+%                   本の名前
+%\end{thebibliography}
+%
+%% (j)report・(j)book クラスの場合
+%% 
+%\begin{thebibliography}{99}
+%\addcontentsline{toc}{chapter}{\bibname}% 追加
+%\bibitem{bibunsho4} 名前
+%                   本の名前
+%\end{thebibliography}
+%-----------------------------------------------
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% * 概要の書き方
+%    規定字数以内でその論文 の取り扱う範 囲，目的，内容
+%   の要点および主な結論などを記述する
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% documentclass の宣言 % @ 書式
+% \documentclass [ オプション ] { 書式 }
+%
+% [ オプションの種類 ]
+% * 二段組
+% [twocolumn]
+% * 印字の大きさ
+% [a4p]
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% レジュメに使うなら、jarticle
+%
+%\documentclass[twocolumn,a4p]{jarticle}
+
+\documentclass[a4p, epsf]{jarticle}
+\usepackage{multicol}
+% 画像を張り付ける
+\usepackage[dvips]{graphics}
+% 行列が使えるパッケージ
+\usepackage{amsmath}
+% ソースに枠をつける
+\usepackage{eclbkbox}
+\usepackage{epsf}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 余白や文字間の幅の細かい設定
+%
+% 
+%\setlength{\voffset}{65pt}
+%\setlength{\topmargin}{-170pt}
+%\setlength{\textheight}{770pt}
+%\setlength{\oddsidemargin}{-10pt}
+%\setlength{\textwidth}{480pt}
+%\setlength{\headsep}{40pt}
+
+% 文書のはじまり 
+\begin{document}
+
+%---------------------------------------------
+%
+% article の時の表紙を別ページにする
+%
+\vspace*{4cm}
+\begin{center}
+{\LARGE 第4章 4.3 節 美術品の贋作 \\} 
+\vspace*{1cm}
+{\large 01ca0125 鈴木 藍 \\ 
+  2002年 6月 25日}
+\end{center}
+\thispagestyle{empty}
+\newpage
+%------------------------------------------------
+%========================================
+% ここから文章
+%
+% 1ページ目
+%
+%========================================
+
+%----------------------------------------
+%
+% もくじをつける
+\tableofcontents
+\newpage
+%----------------------------------------
+
+% 概要 (abstract)
+%
+\begin{abstract} 
+\addcontentsline{toc}{section}{概要}
+線形一階微分方程式を理解し、そのモデルを今回担当の節にどのように
+適用されるか考えた上で 式を計算した。計算した結果をプロットし、
+妥当性を自分なりに考察した。
+
+\end{abstract}
+
+% はじめに
+% section のオプションで、数字を表示させないようにする
+%
+\section*{レポートの目的}
+\addcontentsline{toc}{section}{レポートの目的}
+今回は、式についての議論が出来るようにする事を重点的に
+考えた。先週の反省は、変数の意味などに拘り過ぎだと考えた
+為である。
+%------------------------------------------------------
+% セクション
+%------------------------------------------------------
+\section{ 線形一階微分方程式について }
+%------------------------------------------------------
+線形一階微分方程式とはどういうものなのかを
+まず調べた。
+
+\subsection{ 線形とは }
+辞書より意味を調べると\\
+せんけい 【線形・線型】\\
+\hspace*{5mm}（1）線のように細長い形。線状。 \\
+\hspace*{5mm}（2）〔生〕 葉の形態の一。付け根から先までの幅がほぼ同じ広さで、全体が細長いもの。\\
+\hspace*{1cm} リュウノヒゲの葉など。\\
+\hspace*{5mm}（3）〔数〕 ベクトルの集合に対してその要素の定数倍と加法で特徴づけられる数式、\\
+\hspace*{1cm} すなわち一次式。⇔非線形 \\
+\hspace*{5mm}（4）〔物〕 重ね合わせの原理が成り立つ現象を線形であるという。この現象は線形微分方程式\\
+\hspace*{1cm} の解で記述される。 \\
+とある。ここで (4) に線形微分方程式の名前がでて来ているので、(4) が該当すると考えた。
+また、線形であるとは常微分方程式が
+\begin{eqnarray*}
+  y(x) + P_1(x)y(n-1) + \ldots + P_{n-1}(x)y = Q(x)
+\end{eqnarray*}
+のような式の形(1次)になる。この時、この式を n 階線形微分方程式という。
+一階常微分方程式が線形であるとは、$y,y'$ に関して線形である事であり、
+\begin{eqnarray*}
+  y'(x) + a(t)y(t) + b(t) = 0
+\end{eqnarray*}
+と書ける。よって
+\begin{eqnarray*}
+  y'(x) + t^3y(t) + e^t = 0
+\end{eqnarray*}
+は線形であり、$y$ の係数となっている関数 $a(t), y$ に関しては「定数項」となっている
+関数 $b(t)$ が線形な関数かどうかは、微分方程式が線形であることには無関係である。
+始めは、関数のがとる値をプロットすると線になるのかと思っていたが、それとは無関係
+だった。
+
+\subsection{ 線形常微分方程式の性質 }
+一階線形常微分方程式
+\begin{eqnarray*}
+  y'(t) + a(t)y(t) = 0
+\end{eqnarray*}
+を考えた時、次が成り立つ。
+\begin{itemize}
+\item 恒等的に 0 となる関数は、この式の解である。
+\item $y(t)$をこの式の 任意の解とした時、任意の $C \in R$ に対して、$Cy(t)$ も 再び
+この式の解になる (これを斉次性という。)
+\item $y_1(t),y_2(t)$ をこの式の任意の二つの解とした時、$y_1(t)+y_2(t)$ も再びこの式の解になる。(これを重ね合わせの原理と言う)
+\end{itemize}
+また、この式を斉次一階線形常微分方程式と言う。
+\subsection{ 重ね合わせの原理とは }
+「重ね合わせの原理」という知らない単語がでて来たので調べてみた。
+重ね合わせの原理とは、複数の波が重なる時、ある点の変位はそれらの波がそれぞれ
+単独に作用するときの変位の和になる、という原理である。もし、関数 $f(x)$ と $g(x)$ が
+重なる時、お互いに作用しあわないような関係で、二つの関数を重ねてプロットした時
+それぞれの関数の値の和になることであると 解釈した。以下が図形的な解釈である。
+\begin{center}
+  \includegraphics{sin1.eps}\\
+  fig 1. sin(x)とcos(x)の和
+\end{center}
+\begin{center}
+   \includegraphics{sin2.eps}\\
+  fig 2. sin(x)と-sin(x)の和
+\end{center}
+\subsection{ どのような状況でこの式を使うか }
+今回担当した節では、ある二つの現象が、お互いに関与せずに変化した時
+その変位 は、二つの現象の和であったので、この微分方程式が適当で
+あったと思う。
+
+%-------------------------------------------
+\section{ 4.3 節 美術品の贋作 }
+%-------------------------------------------
+\subsection{ 節の概要 }
+20 世紀最大の贋作事件がこの節の話題である。現在、贋作画家とされている
+ある三流画家が、ナチスに絵を売った事から話は始まる。このとき、売った絵を
+この画家は自分が描いた贋作であると発言した。何故、このように大きな事件に
+なったかというと、すでにこれらの絵は著明な美術評論家から本物と鑑定され、
+高値で取り引きがされていたので もし贋作だとすると大変なことになる。
+そこで化学者たちが、これらの絵が贋作かどうかを科学的に解析した。この節の
+とりあつかっている主題は、この解析方法である。結論から言うと
+これらの絵は贋作で、当時まだ使われていないはずの絵の具が使われていて
+贋作が見破られる事件は、何度か聞いた事がある。
+\subsection{ 解析方法 }
+この絵に使われている顔料の放射性物質を解析する。
+放射性物質は現在の量によって崩壊する量が変わる。
+よって、ある時間の白鉛$(Pb^{210})$の量が変化する割合を知る事で
+その絵がいつ描かれたものかをかんていする。
+
+%-------------------------------------------
+\section{ この節の用語の解説 }
+%-------------------------------------------
+専門的な用語があるのでまとめた。
+\subsection{ 放射性物質 }
+放射能をもつ物質。特に、その核種が特定されていない場合、または多数の放射性核種の
+混合物である場合にいう。
+\subsection{ 半減期 }
+放射性物質(核種)は時間とともに崩壊してその量が減り、放射能も時間とともに弱くなる。
+最初にあった放射能の量が半分になるまでの時間を半減期という。
+\begin{center}
+   \includegraphics{lower.eps}\\
+   fig 3. 放射能の減り方
+  \end{center}
+\subsection{ 放射平衡 }
+ものの動きが長期間停止した場所では、各段階の放射能の強さは皆同じになる。
+一つのつながった流れでは、細いところでも太いところでも時間当たりの
+「量」が一定となるように、放射性原子の単位時間の崩壊数（個／秒）
+は同じになる。これを「放射平衡」という。ただし、平衡が成立するまでの時間は、
+それぞれの放射性原子の崩壊の速さ、または半減期（その量が崩壊により半分に減るまでの時間）
+が関係してくるので、環境が変化しない状況(閉鎖されている)である必要がある。
+\subsection{ 平衡状態 }
+ふたつの変化の「勢い」のバランスがとれた状態である。
+
+%-------------------------------------------
+\section{ 解析の方針 }
+%-------------------------------------------
+方向としては、ある時間の放射性物質 $Pb^{210}$ の量の変化の割合を求める。
+現在、崩壊して $Pb^{210}$ になる物質 $Ra^{226}$ のある時間での崩壊の割合は分かっていて
+ふたつの物質の変化の割合は放射平衡にあるときに、同じになる。よって、もしこの絵の
+300年前の(本物の絵だとしたときの) $Pb^{210}$ の変化の割合が、 現在わかっている
+300 年たった時の $Ra^{226}$ の変化の割合と同じくらいなら、この絵は本物であるという事になる。
+放射性物質は、その物質が多く含まれているほど変化の度合が大きくなるので、
+絵が新しいほど、顔料に放射性物質が多く含まれている事になり この変化の割合が大きい。
+もし、絵が 300年より後の絵であれば、解である $Pb^{210}$ の変化の割合は 
+想定しているものより大きくなる。
+まず、モデルの為の仮定を立てる。仮定と言っても、二つの放射性物質が
+均衡状態にある事はわかっているので、それにそったモデルを使用する。それが
+線形一階微分方程式である。均衡を保ってはいるが、二つの放射性物質は
+お互いに作用はしあわない。そして、変数の意味をはっきりさせ、式を解く。
+そのあと、式の説明をする。妥当性は検証できないものとする。
+
+%-------------------------------------------
+\section{ 変数の説明 }
+%-------------------------------------------
+重要な変数を 整理しておく。
+\subsection{ $y(t)$ }
+時刻 $t$ における通常の鉛$1g$ ごとの $Pb^{210}$ の量
+\subsection{ $y(t_0)$ }
+$y_0$, $t_0$ は顔料の製造の時刻
+\subsection{ $ \gamma (t)$ }
+通常の鉛のなかにおける 毎分 $1g$ ごとの $Ra^{226}$ の崩壊数
+\subsection{ $ \lambda $ }
+$Pb^{210}$ の崩壊定数
+\subsection{ $ \lambda y $ }
+$Pb^{210}$ に 崩壊定数をかけたもの。$Pb^{210}$ の変化する割合
+\subsection{ $ R $ }
+通常の鉛 $1g$ ごとの $Ra^{226}$の毎分の崩壊数
+
+%-------------------------------------------
+\section{ モデルの式 }
+%-------------------------------------------
+\subsection{ 式の意味 }
+ここでは、二つの $Pb^{210}$ と $Ra^{226}$ はお互いに
+作用し合わない事から、微分方程式
+\begin{eqnarray*}
+  \frac{dy}{dt} = - \lambda y + \gamma (t) \hspace*{5mm} (4.8)
+\end{eqnarray*}
+を用いる。この式の意味は、
+$Pb^{210}$ の 時間による変化の割合は、$Pb^{210}$ の
+減少した値に $Ra^{226}$ が崩壊して $Pb^{210}$ が増えた分を
+足したものである。
+\subsection{ 式の解 }
+まず、積分定数を求める。積分定数は
+\begin{eqnarray*}
+  e^{\int P(x)dx} 
+\end{eqnarray*}
+であるので
+\begin{eqnarray*}
+  e^{\int \lambda dt} = e^{\lambda t}
+\end{eqnarray*}
+である。
+これを、(4.8) に適用して
+\begin{eqnarray*}
+  e^{\lambda t} \frac{dy}{dt} + e^{\lambda t} \lambda y = e^{\lambda t} \gamma (t)
+\end{eqnarray*}
+となる。ここで
+$e^{\lambda t} = f(t), y = g(t)$ とすると 左辺は ${f(t)g(t)}'$ という合成関数を
+展開した形になるので
+\begin{eqnarray*}
+  e^{\lambda t} \frac{dy}{dt} + e^{\lambda t} \lambda y &=& e^{\lambda t} \gamma (t) \cr
+  \frac{d}{dt} (e^{\lambda t} y) &=& e^{\lambda t} \gamma (t)
+\end{eqnarray*}
+と書き換えられる。これを積分して、
+\begin{eqnarray*}
+ e^{\lambda t} y &=& \int e^{\lambda t} \gamma (t) dt + A  \cr
+ y &=& \frac{1}{e^{\lambda t}} \int e^{\lambda t} \gamma (t) dt + \frac{1}{e^{\lambda t}} A  \cr
+ y &=& e^{-\lambda t} \int e^{\lambda t} \gamma (t) dt + A e^{- \lambda t} 
+\end{eqnarray*}
+となる。ここで、$A$ は積分定数である。
+次に、積分定数を求める。
+ここで、$Ra^{226}$ の変化の割合を考える。$Ra^{226}$ は、半減期が 1600年であり
+調べている絵は 400 年前の絵である。$Ra^{226}$ は、400 年たっても、それほど崩壊しなかったと
+考える。よって、$Ra^{226}$ の崩壊数 $\gamma$ は定数扱いする。すると、
+\begin{eqnarray*}
+ y &=& e^{-\lambda t} \int e^{\lambda t} \gamma dt + A e^{- \lambda t} 
+\end{eqnarray*}
+ここで、公式から $\int e^{ax} dx = \frac{1}{a} e^{ax}$ なので
+\begin{eqnarray*}
+ y &=& e^{-\lambda t}  \frac{e^{\lambda t}}{ \lambda } \gamma  + A e^{- \lambda t}  \cr
+   &=&  \frac{\gamma}{ \lambda } + A e^{- \lambda t}  
+\end{eqnarray*}
+となる。そして、$t = t_0$ ならば、
+\begin{eqnarray*}
+  y_0 &=& \frac{\gamma}{ \lambda } + A e^{- \lambda t_0} \cr
+  - \frac{A}{e^{\lambda t_0}} &=& \frac{\gamma}{ \lambda } - y_0 \cr
+    \frac{A}{e^{\lambda t_0}} &=& -\frac{\gamma}{ \lambda } + y_0 \cr
+    A                         &=& e^{\lambda t_0} (-\frac{\gamma}{ \lambda } + y_0 )
+\end{eqnarray*}
+これを $y =  \frac{\gamma}{ \lambda } + A e^{- \lambda t}$  に当てはめて
+\begin{eqnarray*}
+  y &=&  \frac{\gamma}{ \lambda } + (-\frac{\gamma}{ \lambda } + y_0 ) e^{-\lambda (t-t_0)} \hspace*{5mm} (4.10)
+\end{eqnarray*}
+となる。\\
+さて、ここでは 絵の具が作られてから立った時間と、絵の具が作られる前の $Pb^{210}$ は
+わかっていない。そこで、絵の具が作られる前の鉱石では、$Pb^{210}$ と $Ra^{226}$ はしばらく
+静止している状態だったので 平衡状態であったと言える。よって
+\begin{eqnarray*}
+  \lambda y_0 = R  \hspace*{5mm}(4.11)
+\end{eqnarray*}
+である。現在、300 年たった $Ra^{226}$ の変化量は測定が可能で $0 〜 200$ の値を
+とることがわかっている。よって、現在の $Pb^{210}$ から、絵の具の作られた時の $Pb^{210}$ の変化量を
+知る事が可能であるから、この値と $Ra^{226}$ の 値とを比べる。放射性物質は 物質の量が多いほど
+変化量が大きいので、もし この絵に使われている絵の具が本物の絵に使われている物より新しければ
+式の値は $0 〜 200$ より大きくなる。仮に、絵が本物であるとして、式 4.10 から $\lambda y_0$ を
+求める式に変形し、値を当てはめる。すると、
+\begin{eqnarray*}
+  y(t) &=&  \frac{\gamma}{ \lambda } + (-\frac{\gamma}{ \lambda } + y_0 ) e^{-\lambda (t-t_0)} \cr
+  y(t) &=&  \frac{\gamma}{ \lambda } + -\frac{\gamma}{ \lambda } e^{- \lambda (t-t_0)} + y_0 e^{-\lambda (t-t_0)} \cr 
+  y_0 e^{-\lambda (t-t_0)} &=& - \frac{\gamma}{ \lambda } + \frac{\gamma}{ \lambda } e^{- \lambda (t-t_0)} + y(t)  \cr 
+  y_0 e^{-\lambda (t-t_0)} \lambda &=&  - \gamma + \gamma e^{- \lambda (t-t_0)} + y(t) \lambda  \cr 
+  y_0 \lambda &=&  - \gamma (e^{\lambda (t-t_0)} - 1) + y(t) \lambda e^{ \lambda (t-t_0)} \cr 
+  y_0 \lambda &=&  - \gamma (e^{\lambda (300)} - 1) + y(t) \lambda e^{ \lambda (300)} \hspace*{5mm} (4.12)
+\end{eqnarray*}
+となる。ここで、崩壊定数 $\lambda$ の値は $3.151 \times 10^{-2}$ である。現在の絵の具から放射性物質
+を採取し、変化量を測定すると、$\lambda y = 8.5$, $\gamma = 0.8$ となる。これを (4.12) に当てはめて
+計算する。ここは計算機に任せた。
+\begin{verbatim}
+printf("%lf\n",(8.5*exp(300.0*0.03151))+(-0.8*exp(300.0*0.03151))+(-0.8*-1.0));
+\end{verbatim}
+これを実行すると、\\
+98147.671926  \\
+という値が得られた。明らかに贋作である。
+
+%-------------------------------------------
+\section{ プログラムの作成 }
+%-------------------------------------------
+\subsection{ 作成の意図 }
+今回のモデルは妥当性を求める事が出来ないので、
+贋作であったこの絵のデータをもとに 実験してみた。
+差分法と、厳密解 をプロットした。
+
+\subsection{ ソース }
+以下は差分法である。式にすると $y(t+dt) = - \lambda y(t) dt + \gamma(t) dt + y(t)$ となる。
+\begin{breakbox}
+  \begin{verbatim}
+#include <stdio.h>
+#include <math.h>
+main()
+{
+  double  lambda, y, t, dt;
+  y      = 3114810.3;
+  lambda = 0.03135;
+  dt     = 0.01;
+  for (t=0.0; t<1600; t+=dt) {
+    printf("%lf %lf \n", t, -lambda*y*dt+y);
+    y = -lambda*y*dt+y;
+  }
+}
+  \end{verbatim}
+\end{breakbox}
+以下は厳密解 (4.10) である。
+\begin{breakbox}
+  \begin{verbatim}
+#include <stdio.h>
+#include <math.h>
+main()
+{
+  double  lambda, y0, t, dt, gamma;
+  y0     = 3114810.3;
+  lambda = 0.03135;
+  dt     = 0.01;
+  gamma  = 0.8;
+  for (t=0.0; t<1600; t+=dt) {
+    printf("%lf %lf \n", t, gamma/lambda + (y0 - gamma/lambda)*exp(-lambda*t) );
+  }
+}
+  \end{verbatim}
+\end{breakbox}
+
+\subsection{ 実行結果 }
+\begin{center}
+   \includegraphics{plot.eps}\\
+   fig 4. 差分法と厳密解
+\end{center}
+誤差が出なかった。 矢印が指している所は もしこれが 300 年前の
+絵であった時に 式の値になるはずだった $Pb^{210}$ の量、200 の場所
+である。横軸の 時間は、315 を指しているが、これを見てわかる事は
+少なくとも、本物より 300 年以上後に描かれた絵であるということである。
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  感想、展望
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{まとめ・結論}
+\addcontentsline{toc}{section}{まとめ・結論}
+この微分方程式の適用は、影響し合わない二つの要素のとる値が
+和である、重ね合わせの原理が使える時にされるものであった。
+他の文献は読んでいないが、そうであると思う。
+
+%------------------------------------------------
+\section*{感想} 
+\addcontentsline{toc}{section}{感想}
+はじめは、放射線などの話題でとっつきにくいかと
+思っていたが、以外に理解しやすかった。というのも、やはり
+原先生が理解を助けてくれたからなので、毎度の事だが感謝したい。
+
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  参考文献
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% 「関連図書」を変更する
+% jreport, jbook なら、bibname
+%\renewcommand{\bibname}{変更後の名前}
+%\renewcommand{\bibname}{参考文献}
+
+% 「参考文献」を変更する
+% jarticle なら、refname
+\renewcommand{\refname}{参考文献}
+\begin{thebibliography}{9}
+
+% 目次に参考文献をいれる
+\addcontentsline{toc}{section}{\refname}% 追加
+
+% 参考文献
+\bibitem{ hoge }
+ 線形微分方程式 \\
+ http://www4.justnet.ne.jp/~masema/linear\_differential\_eq.html \\
+ 2002年 6月24日 
+
+\bibitem{ piyo }
+ goo 国語辞書 \\
+  http://dictionary.goo.ne.jp \\
+ 2002年 6月24日 
+
+\bibitem{ age }
+  水中シャボン玉の研究 \\
+ http://www01.u-page.so-net.ne.jp/za2/urushiya/sasaki.htm \\ 
+ 2002年 6月24日 
+
+\bibitem{ sage }
+  平衡状態 \\
+  http://soil.en.a.u-tokyo.ac.jp/~zico/works/retentio/5potenti/equili/equili.htm \\
+ 2002年 6月24日 
+
+\bibitem{ mona }
+  重ね合わせの原理　\\
+  http://www.iris.dti.ne.jp/~post/onpa/03.html \\
+ 2002年 6月24日 
+
+\bibitem{ giko }
+  応用数学概説 \\
+  http://www2c.airnet.ne.jp/phy/phy/m03.html \\
+ 2002年 6月24日 
+
+\bibitem{ tyu }
+  放射能の半減期とは \\
+  http://www.irm.or.jp/hakarukun/FAQ/Q6.html \\
+ 2002年 6月24日 
+
+\end{thebibliography}
+
+% 文書の終了
+\end{document} 

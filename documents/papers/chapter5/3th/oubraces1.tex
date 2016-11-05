@@ -1,0 +1,25 @@
+\documentclass[12pt]{jarticle}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{oubraces}
+
+\newcommand{\bs}{\texttt{\symbol{'134}}}
+
+\begin{document}
+
+$$
+\overunderbraces{&\br{2}{x}& &\br{2}{y}}
+   {a + b +&c + d +&e + f&+&g + h&+ i + j&+ k + l + m}
+   {& &\br{3}{z}}
+ = \pi r^2
+$$
+
+\begin{align}
+&\mathsurround =0pt\rlap{$\overbrace{A+B}$}A+\underbrace{B+C} 
+\qquad \text{\bs {\texttt oubraces.sty}なし} \\
+&\overunderbraces{&\br{2}{}}
+{&A+&B&+C&}
+{& &\br{2}{}}
+\qquad \text{\bs {\texttt oubraces.sty}あり}
+\end{align}
+
+\end{document}

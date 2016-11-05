@@ -1,0 +1,20 @@
+#include <stdio.h>
+#include <math.h>
+
+double R(double k, double b)
+{
+  return exp(k*b);
+}
+
+main()
+{
+  double b, db, k;
+
+  db = 0.01;
+  R  = 1.0;
+  k  = 21.4;
+
+  for (b=0.01; b<0.5; b+=db) {
+    printf("%f %f\n", b, R(k, b)); 
+  }
+}

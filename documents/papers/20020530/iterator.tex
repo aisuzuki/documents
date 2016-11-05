@@ -1,0 +1,382 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  特殊文字 : 
+%    改行 -> \\
+% 
+%  注釈 : 
+%    \footnote[1]{ 注釈の内容 }
+%           
+%  次のページ :
+%    \pagebreak
+%
+%  整形をせずにそのまま出力 :
+%  (ソース等)
+%    \begin{verbatim}  〜内容
+%    \end{verbatim}
+%
+%  整形をせずにそのまま出力：
+%  ( 枠を付ける )
+%   まず、以下のパッケージを使う  
+%   \usepackage{eclbkbox}
+%   そのあとにソースを記述
+%   \begin{breakbox}
+%     \begin{verbatim}
+%        ソース
+%     \end{verbatim}
+%   \end{breakbox}
+%
+%  箇条書 :
+%    \begin{itemize}
+%    \item\hspace*{5mm} 箇条書の内容
+%    \end{itemize}
+%   
+%  画像を張り付ける
+%    \begin{center}
+%    \includegraphics{ 画像ファイル名.eps }
+%    \end{center}
+%
+%  セクションの作成 :
+%    \section{ 内容 }
+%
+%  サブセクションの作成 :
+%    \subsection{ 内容 }
+%
+%--------------------------------------------------
+%  番号の付いていないセクションも目次に出す:
+%    \addcontentsline{toc}{section}{目次に出す名前}
+%
+%  [ 参考文献の場合 ]
+%% (j)article クラスの場合
+%%
+%\begin{thebibliography}{99}
+%\addcontentsline{toc}{section}{\refname}% 追加
+%\bibitem{bibunsho4} 名前
+%                   本の名前
+%\end{thebibliography}
+%
+%% (j)report・(j)book クラスの場合
+%% 
+%\begin{thebibliography}{99}
+%\addcontentsline{toc}{chapter}{\bibname}% 追加
+%\bibitem{bibunsho4} 名前
+%                   本の名前
+%\end{thebibliography}
+%-----------------------------------------------
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% * 概要の書き方
+%    規定字数以内でその論文 の取り扱う範 囲，目的，内容
+%   の要点および主な結論などを記述する
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% documentclass の宣言 % @ 書式
+% \documentclass [ オプション ] { 書式 }
+%
+% [ オプションの種類 ]
+% * 二段組
+% [twocolumn]
+% * 印字の大きさ
+% [a4p]
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% レジュメに使うなら、jarticle
+%
+%\documentclass[twocolumn,a4p]{jarticle}
+
+\documentclass[a4p, epsf]{jarticle}
+\usepackage{multicol}
+% 画像を張り付ける
+\usepackage[dvips]{graphics}
+% 行列が使えるパッケージ
+\usepackage{amsmath}
+% ソースに枠をつける
+\usepackage{eclbkbox}
+\usepackage{epsf}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 余白や文字間の幅の細かい設定
+%
+% 
+%\setlength{\voffset}{65pt}
+%\setlength{\topmargin}{-170pt}
+%\setlength{\textheight}{770pt}
+%\setlength{\oddsidemargin}{-10pt}
+%\setlength{\textwidth}{480pt}
+%\setlength{\headsep}{40pt}
+
+% 文書のはじまり 
+\begin{document}
+
+%---------------------------------------------
+%
+% article の時の表紙を別ページにする
+%
+\vspace*{4cm}
+\begin{center}
+{\LARGE C++ のテンプレート \\} 
+\vspace*{1cm}
+{\large 01ca0125 鈴木 藍 \\ 
+  2002年 5月 30日}
+\end{center}
+\thispagestyle{empty}
+\newpage
+%------------------------------------------------
+%========================================
+% ここから文章
+%
+% 1ページ目
+%
+%========================================
+
+%----------------------------------------
+%
+% もくじをつける
+\tableofcontents
+\newpage
+%----------------------------------------
+
+% 概要 (abstract)
+%
+\begin{abstract} 
+\addcontentsline{toc}{section}{概要}
+C++ のテンプレートについて調べる。
+また、実際にテンプレートを使っていくつかのサンプルプログラムを
+作成し、動作を確認する。
+
+\end{abstract}
+
+% はじめに
+% section のオプションで、数字を表示させないようにする
+%
+\section*{レポートの目的}
+\addcontentsline{toc}{section}{レポートの目的}
+C++ のテンプレートに触れて ソースに目をならす。
+C++ で、本以外の文書の検索方法になれる。
+
+%------------------------------------------------------
+% セクション
+%------------------------------------------------------
+\section{ C++ のテンプレートとは }
+%------------------------------------------------------
+C++にはテンプレートという機構が導入され、これによりクラスや関数内で使われている型を
+置き換える形で、 新たな型をコンパイル時に自動的に生成させることができる。C のマクロの
+さらに拡張版のようなものである。
+具体的には、以下のようにクラスのテンプレートを作成した場合、
+クラスの型を引数とすることで、新しい型を生成することが出来る。
+\begin{breakbox}
+  \begin{verbatim}
+  #include <iostream>
+  #include <string>
+
+  template <class T>
+  class Tekito {
+    public:
+      void show() { cout << "test" << endl; }
+  };
+
+  main()
+  {
+    Tekito <string> tekito;
+    tekito.show();
+  }
+  \end{verbatim}
+\end{breakbox}
+
+\newpage
+また、クラスに限らず、関数にも定義する事が出来る。
+\begin{breakbox}
+  \begin{verbatim}
+  template<class T>
+  #include <iostream>
+ 
+  T inc(T t)
+  {
+    return ++t;
+  }
+
+  main()
+  {
+    int a = 10;
+    double b = 2.2;
+
+    a = inc(a);
+    b = inc(b);
+  }
+  \end{verbatim}
+\end{breakbox}
+こういった機構を使用する事により、より汎用的な実装が可能になる。
+
+%-------------------------------------------
+\section{ iterator を使用したプログラム }
+%-------------------------------------------
+\subsection{ iterator テンプレート }
+micro soft の Visual C++ のサポートページでは、STL の iterator は
+以下のように定義されている。
+\begin{breakbox}
+  \begin{verbatim}
+  template<class C, class T, class Dist = ptrdiff_t>
+      struct iterator {
+      typedef C iterator_category;
+      typedef T value_type;
+      typedef Dist distance_type;
+      };
+  \end{verbatim}
+\end{breakbox}
+このテンプレート クラスは、すべての反復子の基本型になる。また、メンバ型 iterator\_category 
+(テンプレート パラメータ C のシノニム)、value\_type (テンプレート パラメータ T のシノニム)、
+および distance\_type (テンプレート パラメータ Dist のシノニム) を定義する。
+\subsection{ vector テンプレート }
+今回は、配列を操作するために vector テンプレートを使用している。
+\subsection{ iterator を使ったプログラム }
+iterator そのものを テンプレートとして定義しようと考えて
+いたが、C++ の開発環境が無いために言語使用を調べられなかった。
+今回は、vector クラスの iterator を使用してサンプルプログラムを
+作成した。
+
+\subsubsection{ サンプルプログラムの概要}
+以下は、整数型のデータ格納済の配列を vector コンテナに
+格納して、iterator を使って操作をするプログラムである。
+
+\begin{breakbox}
+  \begin{verbatim}
+  #include <vector>
+  #include <iostream>
+
+  main()
+  {
+    int array[] = {1,3,5,7,9,11,13,15};
+    vector<int> v(array,&array[8]);
+    vector<int>::iterator Ite;
+
+    // initalize
+    Ite = v.begin();
+    // put array
+    Ite ++;
+
+    // test for vector class iterator
+    cout << "test printing \"pointer\"" << endl;
+    cout << *Ite << endl;
+
+    // delete an element
+    v.erase(v.begin());
+    cout << *Ite << endl;
+
+    // test 'for' word
+    cout << "test printing \"for\"" << endl;
+    for (Ite = v.begin(); Ite != v.end(); Ite++) {
+      cout << *Ite << endl;
+    }
+  }
+  \end{verbatim}
+\end{breakbox}
+\newpage
+実行結果は以下の通りである。
+
+\begin{breakbox}
+  \begin{verbatim}
+  [spiral: ~/oop/c++]$ g++ sample.cpp
+  [spiral: ~/oop/c++]$ a.out 
+  test printing "pointer"
+  3
+  5
+  test printing "for"
+  3
+  5
+  7
+  9
+  11
+  13
+  15
+  \end{verbatim}
+\end{breakbox}
+iterator の動作などは確認済であるが、その実装については
+C ならば可能であると思う。
+また、iterator は あるクラス(コンテナ)が生成する方が
+自然ではないかと思う。
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  感想、展望
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{まとめ・結論}
+\addcontentsline{toc}{section}{まとめ・結論}
+テンプレートを使用すれば、プログラムの部品化と汎用化
+が可能である。この機能は実際に社会に出て仕事をする際に必要だと感じる。
+
+%------------------------------------------------
+\section*{感想} 
+\addcontentsline{toc}{section}{感想}
+C++ については、このテンプレートの機能など 利用価値の高い物がある
+ことは認めているが、まずこれらを開発する環境がないことには始まらない。
+UNIX そのものが開発環境であるから、C に関しては 文書も豊富で
+整った環境であるが、C++ はそうではない。man にも info にも情報は
+無いに等しい。 GNU が C++ の開発環境に無頓着であることが原因だと
+考えられるが、このように 言語が標準で用意している関数やクラスなどを
+調べるのに時間がかかるような生産性の低い言語(あるいは環境)は使うべきではない。
+その点においては Visual C++ や Wide studio は正しいと思う。
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  参考文献
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% 「関連図書」を変更する
+% jreport, jbook なら、bibname
+%\renewcommand{\bibname}{変更後の名前}
+%\renewcommand{\bibname}{参考文献}
+
+% 「参考文献」を変更する
+% jarticle なら、refname
+\renewcommand{\refname}{参考文献}
+\begin{thebibliography}{9}
+
+% 目次に参考文献をいれる
+\addcontentsline{toc}{section}{\refname}% 追加
+
+% 参考文献
+\bibitem{ age }
+  MSDN online\\
+ http://www.microsoft.com/japan/developer/library/\\
+ 2002 年 5 月 29 日 参照
+
+\bibitem{ sage }
+ イテレータ\\
+ http://homepage2.nifty.com/aito/cpp/node21.html\#SECTION00042000000000000000\\
+ 2002 年 5 月 29 日 参照
+
+\bibitem{ hoge }
+ クラステンプレート \\
+ http://www.njk.co.jp/otg/Study/CPP2/template.html \\
+ 2002 年 5 月 29 日 参照
+
+\bibitem{ piyo }
+ イテレータ(反復子) \\
+ http://www.wakhok.ac.jp/~sumi/stl/ex\_iterator.html\#example \\
+ 2002 年 5 月 29 日 参照
+
+\bibitem{ mona }
+ STLメモ \\
+ http://oita.cool.ne.jp/ja6hfa/ja6hfa/cpp/stlmemo.html \\
+ 2002 年 5 月 29 日 参照
+
+\bibitem{ hoke }
+ Skelton of GOF's Design Pattern   \\
+ http://www11.u-page.so-net.ne.jp/tk9/ys\_oota/mdp/Iterator/index.htm \\
+ 2002 年 5 月 29 日 参照
+
+\bibitem{ hoke }
+ STL(Standard Template Library) \\
+ http://www.wakhok.ac.jp/~sumi/stl/index.html \\
+ 2002 年 5 月 29 日 参照
+
+\end{thebibliography}
+
+% 文書の終了
+\end{document} 

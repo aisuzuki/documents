@@ -1,0 +1,484 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  特殊文字 : 
+%    改行 -> \\
+% 
+%  注釈 : 
+%    \footnote[1]{ 注釈の内容 }
+%           
+%  次のページ :
+%    \pagebreak
+%
+%  整形をせずにそのまま出力 :
+%  (ソース等)
+%    \begin{verbatim}  〜内容
+%    \end{verbatim}
+%
+%  整形をせずにそのまま出力：
+%  ( 枠を付ける )
+%   まず、以下のパッケージを使う  
+%   \usepackage{eclbkbox}
+%   そのあとにソースを記述
+%   \begin{breakbox}
+%     \begin{verbatim}
+%        ソース
+%     \end{verbatim}
+%   \end{breakbox}
+%
+%  箇条書 :
+%    \begin{itemize}
+%    \item\hspace*{5mm} 箇条書の内容
+%    \end{itemize}
+%   
+%  画像を張り付ける
+%    \begin{center}
+%    \includegraphics{ 画像ファイル名.eps }
+%    \end{center}
+%
+%  セクションの作成 :
+%    \section{ 内容 }
+%
+%  サブセクションの作成 :
+%    \subsection{ 内容 }
+%
+%--------------------------------------------------
+%  番号の付いていないセクションも目次に出す:
+%    \addcontentsline{toc}{section}{目次に出す名前}
+%
+%  [ 参考文献の場合 ]
+%% (j)article クラスの場合
+%%
+%\begin{thebibliography}{99}
+%\addcontentsline{toc}{section}{\refname}% 追加
+%\bibitem{bibunsho4} 名前
+%                   本の名前
+%\end{thebibliography}
+%
+%% (j)report・(j)book クラスの場合
+%% 
+%\begin{thebibliography}{99}
+%\addcontentsline{toc}{chapter}{\bibname}% 追加
+%\bibitem{bibunsho4} 名前
+%                   本の名前
+%\end{thebibliography}
+%-----------------------------------------------
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% * 概要の書き方
+%    規定字数以内でその論文 の取り扱う範 囲，目的，内容
+%   の要点および主な結論などを記述する
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% documentclass の宣言 % @ 書式
+% \documentclass [ オプション ] { 書式 }
+%
+% [ オプションの種類 ]
+% * 二段組
+% [twocolumn]
+% * 印字の大きさ
+% [a4p]
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% レジュメに使うなら、jarticle
+%
+%\documentclass[twocolumn,a4p]{jarticle}
+
+\documentclass[a4p]{jarticle}
+\usepackage{multicol}
+% 画像を張り付ける
+\usepackage[dvips]{graphics}
+% 行列が使えるパッケージ
+\usepackage{amsmath}
+% ソースに枠をつける
+\usepackage{eclbkbox}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 余白や文字間の幅の細かい設定
+%
+% 
+%\setlength{\voffset}{65pt}
+%\setlength{\topmargin}{-170pt}
+%\setlength{\textheight}{770pt}
+%\setlength{\oddsidemargin}{-10pt}
+%\setlength{\textwidth}{480pt}
+%\setlength{\headsep}{40pt}
+
+% 文書のはじまり 
+\begin{document}
+
+%---------------------------------------------
+%
+% article の時の表紙を別ページにする
+%
+\vspace*{4cm}
+\begin{center}
+{\LARGE 内積と外積を計算する関数 \\} 
+\vspace*{1cm}
+{\large 01ca0125 鈴木 藍 \\ 
+  2002年 5月 16日}
+\end{center}
+\thispagestyle{empty}
+\newpage
+%------------------------------------------------
+%========================================
+% ここから文章
+%
+% 1ページ目
+%
+%========================================
+
+%----------------------------------------
+%
+% 表紙を付ける
+\tableofcontents
+\newpage
+%----------------------------------------
+
+% 概要 (abstract)
+%
+\begin{abstract} 
+\addcontentsline{toc}{section}{概要}
+ 内積と外積の概念について調べ、これを計算するプログラム
+ を作成する。
+ このプログラムは、gnuplot で可視化をおこなった。
+ また、内積と外積をどのように応用するかを調べた。
+\end{abstract}
+
+% はじめに
+% section のオプションで、数字を表示させないようにする
+%
+\section*{レポートの目的}
+\addcontentsline{toc}{section}{レポートの目的}
+内積と外積について 不明な点を調べる。とても有用な
+道具である事がわかっているので、どこでこれらを
+使うべきかを 3DCG の分野から調べた。
+
+%------------------------------------------------------
+% セクション
+%------------------------------------------------------
+\section{ 言葉の定義 }
+%------------------------------------------------------
+\subsection{ 線形とは }
+線形なものは、線形な関数で表す事ができる。
+線形な関数とは、直線で表す事が出来る関数の事である。
+また、線形な関係が成り立つような要素の集まりを、線形空間という。
+線形空間とは、実数と対応できる軸を持つ集合である。たとえば、3 次元空間や
+時間、複素数や 三角関数なども含まれる。
+もっとも典型的な線形空間は 1 次元の実数である。
+また、複素平面も線形であるが、通常の演算規則が実数とは異なる。
+ベクトル空間も線形である。しかし、対象によっては何次元でも考える事が
+出来る。
+三角関数と多項式については、無限次元の線形空間となる。
+
+\subsection{ 線形とベクトル }
+ベクトルとは、空間の中で方向を持った量の事である。
+たとえば速度などは、方向を考えなければならないので
+ベクトルを使って考える事が出来る。
+ベクトルは線形な空間の要素である。
+
+\subsection{ 内積とは }
+内積 (dot product)とは、二つのベクトルの対応する要素をかけて 総和をとったものであり、
+計算の結果は一つの値となる。
+式にすると
+\[
+A \cdot B = (a_x b_x + a_y b_y + a_z b_z) 
+\]
+となる。内積は 以下の式が成り立つ。
+\[
+\vec{a} \cdot \vec{b} = |a||b| \cos \theta = a_x b_x + a_y b_y + a_z b_z
+\]
+また、二つのベクトルのなす角を求める事が出来る。
+
+\subsection{ 外積とは }
+内積は一つの値となるが、外積は ベクトルになる。
+外積(cross product)とは $a \times b$ と書き
+二つのベクトルの積の形である。外積 $a \times b$ は
+二つのベクトル の作る 平行四辺形の面積の大きさであり、
+かつ 二つのベクトルのどちらともに垂直である。
+この外積を使って、二つのベクトルがどの面に向かっているかなどを
+調べることが出来る。
+また、外積は 3 次元空間のなかで定義されるものである。
+式は
+\[
+\vec{a} \times \vec{b} = (a_y b_z -a_z b_y) e1 , (a_z b_x - a_x b_z)e2, (a_x b_y - a_y b_x)e3 \\
+                       = |a||b| \sin \theta \cdot c
+\]
+ここで、$e1$ は $x$ の単位ベクトル $(1,0,0)$、$e2$ は $y$ の単位ベクトル $(0,1,0)$、$e3$ は $z$ の単位ベクトル $(0,0,1)$、 $c$ は $z$ の単位ベクトルである。
+
+\newpage
+%-------------------------------------------
+\section{ 課題の内容 }
+%-------------------------------------------
+ベクトルの内積、外積を計算するプログラムを作成する。
+要素は 3 つと限定する。
+
+\subsection{ 作成した関数の概要 }
+以下がヘッダファイル 'product.h'の内容である。
+定義されている関数のプロトタイプ宣言はここで行っている。
+\begin{breakbox}
+\begin{verbatim}
+ #define PI     3.1415
+ typedef struct component VectorComponent;
+ typedef struct operator  MessageSelector;
+ typedef double           quantity;
+
+ struct component {
+    quantity  x, y, z;
+   /* the place where this is now. */
+    double    thisX, thisY, thisZ;
+ };
+ struct operator {
+    quantity         (*dotProduct)(VectorComponent *A, VectorComponent *B);
+    VectorComponent *(*crossProduct)(VectorComponent *A, VectorComponent *B);
+    VectorComponent *(*crossProductWithAngle)(VectorComponent *A,
+                                          VectorComponent *B, double theta); 
+                                             
+    VectorComponent *(*newVectorComponent)(void);
+    VectorComponent *(*newUnitVectorComponent)(void);
+ };
+ quantity          lambda1(VectorComponent *A, VectorComponent *B);
+ VectorComponent  *lambda2(VectorComponent *A, VectorComponent *B);
+ VectorComponent  *lambda3(VectorComponent *A, VectorComponent *B,
+                           double theta); 
+ VectorComponent  *lambda4(void);
+ VectorComponent  *lambda5(void);
+ MessageSelector  *newMessageSelector(void);
+\end{verbatim}
+\end{breakbox}
+構造体 $component$ は ベクトルを表している。また、構造体 $operator$ は
+ベクトルを操作する関数をひとまとまりに扱うための物である。
+
+\newpage
+\subsubsection{ 内積を求める関数 $dotProduct$ }
+内積を求める為に、ベクトルの成分を掛け合わせ、総和を取る方法を使った。
+これは Lisp で実装したことがある。$dotProduct$ と言う名前は、
+構造体 $component$ 内に記述されている。
+\begin{breakbox}
+\begin{verbatim}
+    quantity  lambda1(VectorComponent *A, VectorComponent *B)
+    {
+       return ((A->x * B->x) + (A->y * B->y));
+    }
+\end{verbatim}
+\end{breakbox}
+
+\subsubsection{ 外積を求める関数 $crossProduct$ }
+外積を求める為に、
+\[
+\vec{a} \times \vec{b} = (a_y b_z -a_z b_y) e1 , (a_z b_x - a_x b_z)e2, (a_x b_y - a_y b_x)e3 
+\]
+という式を使った。
+
+\begin{breakbox}
+\begin{verbatim}
+    VectorComponent *lambda2(VectorComponent *A, VectorComponent *B)
+    {
+      VectorComponent *com;
+      MessageSelector *message;
+
+      message  = newMessageSelector();
+      com      = message->newVectorComponent();
+
+      com->x = ((A->y * B->z) - (A->z * B->y));
+      com->y = ((A->z * B->x) - (A->x * B->z));
+      com->z = ((A->x * B->y) - (A->y * B->x));
+
+      free(message);
+      return com;
+    }
+\end{verbatim}
+\end{breakbox}
+$|a||b| \sin \theta \cdot c$ という式も試してみたが、うまくいかなかった。
+調査中である。
+
+\newpage
+\subsubsection{ その他の関数 }
+その他のツールとして作成した関数は割愛する。
+
+\section{ 関数の実行 }
+\subsection{ 方針 }
+どちらも、ただ値を表示してもなにもわからないので
+gnuplot で、その実行結果の値が何を表すのかを
+可視化してみた。 また、アニメーションとして表示する事で
+値が変化した時の状態を把握できるようにした。
+
+\subsection{ $dotProduct$ 関数 }
+表示しているものは、二つのベクトルがなす角が変化する時の
+長方形の面積である。 内積は、ある量を表しているので
+私にとっては 面積という見える形で表されると分かりやすい。
+内積の図形的な解釈は以下の通りである。
+\begin{center}
+\includegraphics{dotproduct.eps}
+\end{center}
+
+main関数内で、以下のように $dotProduct$ を実行している。
+\begin{verbatim}
+  dotproduct = message->dotProduct(A, B);
+\end{verbatim}
+データとして、
+\[
+\vec{A} = (40.0, 0.0, 0.0), \hspace*{5mm} \vec{B} = (0.0, 0.0, 0.0)
+\]
+とした。ここで ベクトル B は移動してゆくベクトルである。
+また、ベクトル B の量として double 型の変数 に 40.0 が格納されている。
+表示は、ベクトル A との 角度を 微小にふやしていった時の ベクトル A, ベクトル B, 内積を
+表示している。
+\begin{center}
+\includegraphics{dotproduct1.eps}
+\end{center}
+これは静止画像であるが、実行すると
+y は $0.0 < \theta < 1.0$ 分 移動する。
+
+\subsection{ $crossProduct$ 関数 }
+外積を、ベクトル A とベクトル B が作る平行四辺形として表現した。
+main 関数では  以下のように $crossProduct$ を実行している。
+\begin{verbatim}
+  C = message->crossProduct(A, B);
+\end{verbatim}
+ここでは 
+\[
+\vec{A} = (20.0, 0.0, 0.0), \hspace*{5mm} \vec{B} = (0.0, 0.0, 0.0) , \hspace*{5mm} \vec{C} = (0.0, 0.0, 1.0)
+\]
+C は単位ベクトルである。 \\
+
+表示をしているのは、ベクトル A と ベクトル B の $\vec{A} \times \vec{B}$
+の間で、 ベクトル B が z 軸を中心として回した時の z 軸の長さである。
+\begin{center}
+\includegraphics{crossproduct.eps}
+\end{center}
+y は 360 度 z 軸を中心に回転するが、180 度をすぎた時点で 外積の符号が反転する。
+
+\section{ 考察 }
+\subsection{ 外積と内積は何に使うか }
+外積と内積の調査をしてゆくと、コンピュータグラフィクスの世界では
+欠かす事の出来ない概念である事が分かってきた。 ある方向から
+何かの量を取り出す事が出来る、とても便利なものだそうである。
+いろいろなキーワードも出てきた。 クォータニオンというものも、とても
+便利な道具として使われていると書かれていた。 極端なところでは、Java でクォータニオンの
+4 つ程のメソッドがあれば、ほとんどの 3DCG が書けるそうである。
+こういった内容は とても興味はあるが、時間の都合上今回は
+内積が何につかわれているか、外積が何に使われているのかを、コンピュータグラフィクス
+の資料から調べ、考察した。
+
+\subsection{ 内積は何に使うか }
+内積とは、計算すると一つの値になる式が定義されている。
+このなかで
+\[
+\vec{a} \cdot \vec{b} = |a||b| \cos \theta 
+\]
+に関しては、 $\cos $ が入っているので、二つのベクトルのなす角度を
+求める事が出来る。 さらに具体的なところでは、内積を使えば
+ある面の光のあたり具合などが分かるそうである。
+想像ではあるが、このような感じではないかと思った。
+
+\begin{center}
+\includegraphics{flash.eps}
+\end{center}
+もし光が面の向いている方向に対して並行に反射すれば
+内積の定義から、内積の値は最大になるので光はおおく反射する。
+その他の用途についてはよくわからなかった。
+
+\subsection{ 外積は何に使うか }
+外積の値はベクトルである。 これは 二つのベクトルに直交するベクトルである。よって、
+ふたつのベクトルを含む面に対して垂直であるから、面の向きを計算する事が出来る。
+と、書いてあったのだが、これがどのように便利かはよくわからなかった。
+しかし、物理の方面で調べてみると 回転に関してとても重要な概念である事がわかった。
+ある文献で コマに関して簡単にふれているものがあったのでこれについて考察してみたい。\\
+まず、コマがあったとしてそれを回転させる。 そして、コマの軸を真上から押してみる。そうすると
+コマは押した方向には傾かず、横に傾くそうである。そして、コマは止まるまで倒す事は出来ない。
+ここで、回転軸を a , 回転する力の方向を b とすると、真上から軸を押したときに傾く横の方向が
+a と b に直交する外積である。これを図で書いてみた。
+\begin{center}
+\includegraphics{koma.eps}
+\end{center}
+実際には b の力の方向はこれほどおおざっぱではないので
+おそらくここで 微分をするのだと思う。
+
+\subsection{ 行列はどう使うか }
+行列は 座標の変換に使われていた。
+先人がもう、変換の為の行列を作ってくれているそうなので
+私もこれらを ライブラリとして作成したい。
+また、座標系という言葉が出てきたが ベクトルを移動する方向によって
+座標系の名前がついているそうである。 先日 シミュレーションの時間に
+教わった 外積の座標系は 右手座標系と左手座標系といわれている。
+この座標系をもとに 座標を変換する。カメラ座標系と言うものもあるそうである。
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  感想、展望
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{まとめ・結論}
+\addcontentsline{toc}{section}{まとめ・結論}
+外積と内積は、やはり何かの量であり 可視化は可能であった。
+とりあえず おぼえることが出来ないので、このように何らかの
+形(インスタンス)として出てくれば 応用の幅が広がるはずである。
+
+%------------------------------------------------
+\section*{感想} 
+\addcontentsline{toc}{section}{感想}
+最終的に 外積は 藤本先生から以前聞いた 「コマ」の話に
+いきついてしまった。偶然ではあったが、以前 聞く事と 現在聞く事では
+少し 捉え方も違い、絵が見えやすかったのでよかったと思う。
+また、時間が足らなくて 行列の 座標変換のライブラリが作れなかった
+事が残念である。
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  参考文献
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% 「関連図書」を変更する
+% jreport, jbook なら、bibname
+%\renewcommand{\bibname}{変更後の名前}
+%\renewcommand{\bibname}{参考文献}
+
+% 「参考文献」を変更する
+% jarticle なら、refname
+\renewcommand{\refname}{参考文献}
+\begin{thebibliography}{9}
+
+% 目次に参考文献をいれる
+\addcontentsline{toc}{section}{\refname}% 追加
+
+% 参考文献
+\bibitem{ hoge }
+ 3D\_programing \\
+ http://homepage1.nifty.com/mimi\_kaki/D3DRM/title.html \\
+ 2002 年 5月 15日 参照 
+
+\bibitem{ piyo }
+ 代数 \\
+ http://www.ee.seikei.ac.jp/user/seiichi/lecture/MathColum/ColumB/b1/b1.html \\
+ 2002 年 5月 15日 参照 
+
+\bibitem{ mona }
+ 3D 補講 \\
+ http://www.cc.rim.or.jp/~devilman/3dCoding/3dCoding.html \\
+ 2002 年 5月 15日 参照 
+
+\bibitem{ age }
+ ベクトルテクニックノート \\
+ http://www.yamagame.com/MyWeb/Heart/heart13.html \\
+ 2002 年 5月 15日 参照 
+
+\bibitem{ sage }
+ 3D幾何学 \\
+ http://hp.vector.co.jp/authors/VA013845/algorithm/vector.html \\
+ 2002 年 5月 15日 参照 
+
+\bibitem{ hiyo }
+ 外積 \\
+ http://www.hat.hi-ho.ne.jp/morishima/sub208.htm \\
+ 2002 年 5月 15日 参照 
+
+\end{thebibliography}
+
+% 文書の終了
+\end{document} 

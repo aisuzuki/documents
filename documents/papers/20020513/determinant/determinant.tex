@@ -1,0 +1,1528 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  特殊文字 : 
+%    改行 -> \\
+% 
+%  注釈 : 
+%    \footnote[1]{ 注釈の内容 }
+%           
+%  次のページ :
+%    \pagebreak
+%
+%  整形をせずにそのまま出力 :
+%  (ソース等)
+%    \begin{verbatim}  〜内容
+%    \end{verbatim}
+%
+%  箇条書 :
+%    \begin{itemize}
+%    \item\hspace*{5mm} 箇条書の内容
+%    \end{itemize}
+%   
+%  画像を張り付ける
+%    \begin{center}
+%    \includegraphics{ 画像ファイル名.eps }
+%    \end{center}
+%
+%  セクションの作成 :
+%    \section{ 内容 }
+%
+%  サブセクションの作成 :
+%    \subsection{ 内容 }
+%
+%--------------------------------------------------
+%  番号の付いていないセクションも目次に出す:
+%    \addcontentsline{toc}{section}{目次に出す名前}
+%
+%  [ 参考文献の場合 ]
+%% (j)article クラスの場合
+%%
+%\begin{thebibliography}{99}
+%\addcontentsline{toc}{section}{\refname}% 追加
+%\bibitem{bibunsho4} 名前
+%                   本の名前
+%\end{thebibliography}
+%
+%% (j)report・(j)book クラスの場合
+%% 
+%\begin{thebibliography}{99}
+%\addcontentsline{toc}{chapter}{\bibname}% 追加
+%\bibitem{bibunsho4} 名前
+%                   本の名前
+%\end{thebibliography}
+%-----------------------------------------------
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% * 概要の書き方
+%    規定字数以内でその論文 の取り扱う範 囲，目的，内容
+%   の要点および主な結論などを記述する
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% documentclass の宣言 % @ 書式
+% \documentclass [ オプション ] { 書式 }
+%
+% [ オプションの種類 ]
+% * 二段組
+% [twocolumn]
+% * 印字の大きさ
+% [a4p]
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% レジュメに使うなら、jarticle
+%
+%\documentclass[twocolumn,a4p]{jarticle}
+
+\documentclass[a4p]{jarticle}
+\usepackage{multicol}
+\usepackage[dvips]{graphics}
+\usepackage{amsmath}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 余白や文字間の幅の細かい設定
+%
+% 
+%\setlength{\voffset}{65pt}
+%\setlength{\topmargin}{-170pt}
+%\setlength{\textheight}{770pt}
+%\setlength{\oddsidemargin}{-10pt}
+%\setlength{\textwidth}{480pt}
+%\setlength{\headsep}{40pt}
+
+% 文書のはじまり 
+\begin{document}
+
+%---------------------------------------------
+%
+% article の時の表紙を別ページにする
+%
+\vspace*{4cm}
+\begin{center}
+{\LARGE 追レポート 行列式の計算 \\} 
+\vspace*{1cm}
+{\large 01ca0125 鈴木 藍 \\ 
+  2002年 5月 13日}
+\end{center}
+\thispagestyle{empty}
+\newpage
+%------------------------------------------------
+%========================================
+% ここから文章
+%
+% 1ページ目
+%
+%========================================
+
+%----------------------------------------
+%
+% 表紙を付ける
+\tableofcontents
+\newpage
+%----------------------------------------
+
+% 概要 (abstract)
+%
+\begin{abstract} 
+\addcontentsline{toc}{section}{概要}
+休んだ授業内容の理解を目的にレポートを書いた。
+課題としては、$3 \times 3$, $4 \times 4$, $5 \times 5$
+の行列式の計算をもらったが、行列式についても調査を行って
+行列式の基本的な性質をまとめた。
+\end{abstract}
+
+% はじめに
+% section のオプションで、数字を表示させないようにする
+%
+\section*{レポートの目的}
+\addcontentsline{toc}{section}{レポートの目的}
+行列式についての調査をすることと、一般的な計算方法をみにつける。同時に休むとこのような状態になることを覚える。
+
+%------------------------------------------------------
+% セクション
+%------------------------------------------------------
+\section{ 行列式とは }
+%------------------------------------------------------
+授業に出席出来なかったので、行列式について
+調査した。
+\subsection{ 行列式の定義 }
+n 次の正方行列 
+\[
+ A = \begin{pmatrix}
+       a_{11} & a_{12} & \ldots & a_{1n} \\
+       a_{21} & a_{22} & \ldots & a_{2n} \\
+       \vdots & \vdots & \ddots & \vdots \\
+       a_{m1} & a_{m2} & \ldots & a_{mn}
+   \end{pmatrix}
+\]
+に対して $A$ の行列式
+\[
+det A = |A| = 
+  \begin{vmatrix}
+     a_{11} & a_{12} & \ldots & a_{1n} \\
+     a_{21} & a_{22} & \ldots & a_{2n} \\
+     \vdots & \vdots & \ddots & \vdots \\
+     a_{m1} & a_{m2} & \ldots & a_{mn}
+   \end{vmatrix}
+\]
+が定義される。この時、この式を
+$a_{ij}$を成分とし、ある性質を満たす関数と定義する。
+行列$A$のそれぞれの成分$a_{ij}$に具体的な数を代入すると、一つの数になるので、行列とは区別される。
+
+\subsection{ 行列式の基本的な性質 }
+
+\subsubsection{ $1.$ 単位行列の行列式は1 }
+以下のような行列式の事。
+\[
+|E_n| = 
+  \begin{vmatrix}
+     1 &        &  \\
+       & \ddots &  \\
+       &        & 1
+  \end{vmatrix}
+  = 1
+\]
+
+\subsubsection{ $2.$ どの行に対しても線形 }
+例えば 第一行に関して線形とは以下の式の事。
+\[
+  \begin{vmatrix}
+     \alpha a_{11}+ \beta b_{11} & \alpha a_{12} + \beta b_{12} & \ldots & \alpha a_{1n} + \beta b_{1n} \\
+     a_{21} & a_{22} & \ldots & a_{2n} \\
+     \vdots & \vdots & \ddots & \vdots \\
+     a_{m1} & a_{m2} & \ldots & a_{mn}
+  \end{vmatrix}
+\]
+
+\begin{center}
+   \begin{tabular}{rr} 
+$
+= \alpha  \begin{vmatrix}
+     a_{11} & a_{12} & \ldots & a_{1n} \\
+     a_{21} & a_{22} & \ldots & a_{2n} \\
+     \vdots & \vdots & \ddots & \vdots \\
+     a_{m1} & a_{m2} & \ldots & a_{mn}
+   \end{vmatrix}
+$
+&
+$
+ \beta  \begin{vmatrix}
+     b_{11} & b_{12} & \ldots & b_{1n} \\
+     b_{21} & b_{22} & \ldots & b_{2n} \\
+     \vdots & \vdots & \ddots & \vdots \\
+     b_{m1} & b_{m2} & \ldots & b_{mn}
+   \end{vmatrix}
+$
+   \end{tabular}
+\end{center}
+
+\subsubsection{ $3.$ 行を交換すると行列式は符号を変える }
+次の行列は第 1 行と第 2 行を交換したものである。このことは
+どの二つの行の交換でも言える。
+
+\begin{center}
+   \begin{tabular}{rr} 
+$
+  \begin{vmatrix}
+     a_{11} & a_{12} & \ldots & a_{1n} \\
+     a_{21} & a_{22} & \ldots & a_{2n} \\
+     \vdots & \vdots & \ddots & \vdots \\
+     a_{m1} & a_{m2} & \ldots & a_{mn} 
+   \end{vmatrix}
+$
+&
+$
+= -  \begin{vmatrix}
+     a_{21} & a_{22} & \ldots & a_{2n} \\
+     a_{11} & a_{12} & \ldots & a_{1n} \\
+     \vdots & \vdots & \ddots & \vdots \\
+     a_{m1} & a_{m2} & \ldots & a_{mn} 
+   \end{vmatrix}
+$
+   \end{tabular}
+\end{center}
+
+\subsection{ 行列式の有用な性質 }
+以降のことはまだ理解しきれていないこともあるが
+一年次の基礎数学の行列の演算の性質でならったことが
+含まれていた。
+
+\subsubsection{ $4.$ 同じ行が2つあれば行列式は 0 になる }
+例えば、第 1 行と第 2 行が同じなら以下の式が成り立つ。
+
+\[
+  \begin{vmatrix}
+     a_{11} & a_{12} & \ldots & a_{1n} \\
+     a_{11} & a_{12} & \ldots & a_{1n} \\
+     a_{21} & a_{22} & \ldots & a_{2n} \\
+     \vdots & \vdots & \ddots & \vdots \\
+     a_{m1} & a_{m2} & \ldots & a_{mn}
+   \end{vmatrix}
+= 0
+\]
+
+\subsubsection{ $5.$ ある行の何倍かを他の行から引いても行列式は変わらない }
+ガウスジョルダンのはきだし法を習った時に使った。
+
+\begin{center}
+   \begin{tabular}{rr} 
+$
+  \begin{vmatrix}
+     a_{11} & a_{12} & \ldots & a_{1n} \\
+     a_{21}- \alpha a_{11} & a_{22} - \alpha a_{12}& \ldots & a_{2n} - \alpha a_{1n} \\
+     a_{31} & a_{32} & \ldots & a_{3n} \\
+     \vdots & \vdots & \ddots & \vdots \\
+     a_{m1} & a_{m2} & \ldots & a_{mn} 
+   \end{vmatrix}
+$
+&
+$
+=  \begin{vmatrix}
+     a_{11} & a_{12} & \ldots & a_{1n} \\
+     a_{21} & a_{22} & \ldots & a_{2n} \\
+     \vdots & \vdots & \ddots & \vdots \\
+     a_{m1} & a_{m2} & \ldots & a_{mn}
+   \end{vmatrix}
+$
+\end{tabular}
+\end{center}
+
+\subsubsection{ $6.$ ある行がゼロベクトルなら行列式は 0 }
+\[
+  \begin{vmatrix}
+     0 & 0 & \ldots & 0 \\
+     a_{21} & a_{22} & \ldots & a_{2n} \\
+     \vdots & \vdots & \ddots & \vdots \\
+     a_{m1} & a_{m2} & \ldots & a_{mn} 
+   \end{vmatrix}
+= 0
+\]
+\subsubsection{ $7.$ 行列$A$が三角行列ならばその行列式は主対角線上の要素の積 }
+上三角行列の場合は以下の式になる。
+\[
+  \begin{vmatrix}
+     a_{11} & a_{12} & \ldots & a_{1n} \\
+     \vdots & \vdots & \ddots & \vdots \\
+     a_{m1} & a_{m2} & \ldots & a_{mn} 
+   \end{vmatrix}
+= a_{11} \ldots a_{mn}
+\]
+
+\subsubsection{ $8.$ 行列$A$が正則行列 $\Leftrightarrow |A| \neq 0$ }
+与えられた行列が正則行列かどうかを判別できる。
+
+\subsubsection{ $9.$ $|AB| = |A||B|$ }
+$A$ が逆行列 $A^{-1}$ を持つ場合、$AA^{-1} = E_n$ にこの性質を適用すれば$|A||A^{-1}| = |E_n| = 1$ となる。
+
+\subsubsection{ $10.$ $|A^T| = |A|$}
+この性質があることで、先程の性質 2 〜 6 までの「行」という字を
+「列」に変えても成り立つらしい。
+
+\subsubsection{ $11.$ 余因子展開 }
+n 次正方行列
+\[
+ A= \begin{pmatrix}
+     a_{11} & \ldots & a_{1j} & \ldots & a_{1n} \\
+     a_{21} & \ldots & \vdots & \ldots & a_{2n} \\
+     \vdots & \vdots & \vdots & \vdots & \vdots \\
+     a_{i1} & \ldots & a_{ij} & \ldots & a_{in} \\
+     \vdots & \vdots & \vdots & \vdots & \vdots \\
+     a_{m1} & \ldots & a_{nj} & \ldots & a_{mn} 
+   \end{pmatrix}
+\]
+に対して、$a_{ij}$ を含む、行(第$i$行)と 列(第$j$列) を除いて出来る($n-1$)次正方行列
+\[
+ \begin{pmatrix}
+     a_{11} & \ldots & a_{1(j-1)} & a_{1(j+1)} & \ldots & a_{1n} \\
+     a_{21} & \ldots & a_{2(j-1)} & a_{2(j+1)} & \ldots & a_{2n} \\
+     \vdots & \vdots & \vdots & \vdots & \vdots & \vdots \\
+     a_{(i-1)1} & \ldots & a_{(i-1)(j-1)} & a_{(i-1)(j+1)} & \ldots & a_{(i-1)n} \\
+     a_{(i+1)1} & \ldots & a_{(i+1)(j-1)} & a_{(i+1)(j+1)} & \ldots & a_{(i+1)n} \\
+     \vdots & \vdots & \vdots & \vdots & \vdots & \vdots \\
+     a_{n1} & \ldots & a_{n(j-1)} & a_{n(j+1)} & \ldots & a_{nn} \\
+   \end{pmatrix}
+\]
+の行列式に$(-1)^{i+j}$ をかけたものを行列$A$の($i, j$) 余因子といい $A_{ij}$ という記号で表す。
+以下の式
+\[
+|A| = a_{i1}A_{i1} + a_{i2}A{i2} + \ldots + a_{in}A_{in}
+\]
+を行列式の余因子展開、または展開公式と言う。行列式はどの行に
+対しても この余因子展開ができる。
+以下の式も、これを使ったものである。
+\[
+ \begin{vmatrix}
+  a & b  \\ 
+  c & d   
+ \end{vmatrix}
+ = ad - bc
+\]
+
+\subsection{ $Cramer$ の公式 }
+行列 $A$ を $n$ 次正方行列(逆行列のある行列) とする。連立一次方程式 $Ax = b$ の解の 第 $i$ 成分 $x_i$ は
+
+\[
+ x _i= \frac{1}{|A|}
+ \begin{vmatrix}
+     a_{11} & \ldots & a_{1(i-1)} & b_1 & a_{1(i+1)} & \ldots & a_{1n} \\
+     a_{21} & \ldots & a_{2(i-1)} & b_2 & a_{2(i+1)} & \ldots & a_{2n} \\
+     \vdots & \ldots & \vdots & \vdots & \vdots & \vdots & \vdots \\
+     a_{n1} & \ldots & a_{n(i-1)} & b_n &  a_{n(i+1)} & \ldots & a_{nn} \\
+  \end{vmatrix}
+\]
+
+となる。 証明も調べたが、あまり理解できなかった。
+
+\subsection{ 行列式の計算の方針 }
+\subsubsection{ 基本方針 }
+行列式の値を変えないように行列の基本変形を行い、
+ある行(または列)になるべく多くの $0$ (ゼロ) を作る。
+どの行(または列)に注目するかは与えられた行列をみて判断する。\\
+以下の目的で、多くの$0$ を作ってゆく。
+\begin{itemize}
+\item 注目した行(または列)で行列式を展開する。
+\item 上三角行列(または下三角行列)の行列式に変形する。
+\item $A'_{11}, A'_{22}$ を正方行列として、
+\begin{center}
+   \begin{tabular}{ccc} 
+   $\begin{vmatrix}
+   A'_{11} & A_{12} \\
+    O   & A'_{22}
+   \end{vmatrix}$
+   &
+   や
+   &
+   $\begin{vmatrix}
+   A'_{11} &  O \\
+   A_{12}  & A'_{22}
+   \end{vmatrix}$
+   \end{tabular}
+\end{center}
+\end{itemize}
+といった 形の行列式に変形する。
+
+%-------------------------------------------
+\section{ $3 \times 3$ の計算 }
+%-------------------------------------------
+
+\begin{center}
+   \begin{tabular}{clll} 
+$
+   \begin{vmatrix}
+    a_{11} & a_{12} & a_{13}\\
+    a_{21} & a_{22} & a_{23}\\
+    a_{31} & a_{32} & a_{33}
+   \end{vmatrix}
+   =
+$
+& 
+$
+ a_{11}
+\begin{vmatrix}
+    a_{22}&    a_{23} \\
+    a_{32}&    a_{33} 
+\end{vmatrix}
+$
+&
+$
+- a_{12}\begin{vmatrix}
+     a_{21}&    a_{23} \\
+     a_{31}&    a_{33} 
+    \end{vmatrix}
+$
+&
+$ 
++ a_{13}\begin{vmatrix}  
+   a_{21}&    a_{22} \\
+   a_{31}&    a_{32}   
+   \end{vmatrix}
+$
+\end{tabular}
+\end{center}
+
+\[
+  = \hspace*{4mm}a_{11}(a_{22}a_{33} - a_{23}a_{32}) \\
+  \hspace*{5mm} -a_{12}(a_{21}a_{33} - a_{23}a_{31}) \\
+  \hspace*{5mm} +a_{13}(a_{21}a_{32} - a_{22}a_{31})
+\]
+
+%-------------------------------------------
+\section{ $4 \times 4$ の計算 }
+%-------------------------------------------
+
+\[
+  \begin{vmatrix} 
+    a_{11}&    a_{12}&    a_{13}&    a_{14} \\ 
+    a_{21}&    a_{22}&    a_{23}&    a_{24} \\ 
+    a_{31}&    a_{32}&    a_{33}&    a_{34} \\ 
+    a_{41}&    a_{42}&    a_{43}&    a_{44} 
+   \end{vmatrix} 
+\]
+
+\begin{center}
+   \begin{tabular}{cccc} 
+$= a_{11}
+  \begin{vmatrix} 
+    a_{22}&    a_{23}&    a_{24} \\ 
+    a_{32}&    a_{33}&    a_{34} \\ 
+    a_{42}&    a_{43}&    a_{44} 
+   \end{vmatrix} 
+$
+&
+$
+-a_{12}
+   \begin{vmatrix} 
+    a_{21}&    a_{23}&    a_{24} \\ 
+    a_{31}&    a_{33}&    a_{34} \\ 
+    a_{41}&    a_{43}&    a_{44} 
+   \end{vmatrix} 
+$
+&
+$
++a_{13}
+  \begin{vmatrix} 
+    a_{21}&    a_{22}&    a_{24} \\ 
+    a_{31}&    a_{32}&    a_{34} \\ 
+    a_{41}&    a_{42}&    a_{44} 
+   \end{vmatrix} 
+$
+&
+$
+-a_{14}
+  \begin{vmatrix} 
+    a_{21}&    a_{22}&    a_{23}\\
+    a_{31}&    a_{32}&    a_{33}\\
+    a_{41}&    a_{42}&    a_{43}
+    \end{vmatrix} 
+$
+\end{tabular}
+\end{center}
+
+\begin{center}
+  \begin{tabular}{ccc} 
+$=
+a_{11} \Bigg( 
+a_{22}
+\begin{vmatrix} 
+   a_{33}&    a_{34} \\ 
+   a_{43}&    a_{44} 
+\end{vmatrix} 
+$
+&
+$
+-a_{23}
+\begin{vmatrix} 
+   a_{32}&    a_{34} \\ 
+   a_{42}&    a_{44} 
+\end{vmatrix} 
+$
+&
+$
++a_{24}
+ \begin{vmatrix} 
+  a_{32}&    a_{33}\\
+  a_{42}&    a_{43}
+ \end{vmatrix} 
+$
+\Bigg)
+ \end{tabular}
+\end{center}
+
+\begin{center}
+  \begin{tabular}{ccc} 
+$
+-a_{12} \Bigg( 
+a_{21}
+  \begin{vmatrix} 
+   a_{33}&    a_{34} \\ 
+   a_{43}&    a_{44} 
+  \end{vmatrix} 
+$
+&
+$
+-a_{23}
+\begin{vmatrix} 
+    a_{31}&    a_{34} \\ 
+    a_{41}&    a_{44} 
+\end{vmatrix} 
+$
+&
+$
++a_{24}
+ \begin{vmatrix} 
+     a_{31}&    a_{33}\\
+     a_{41}&    a_{43}
+\end{vmatrix} 
+$
+\Bigg)
+ \end{tabular}
+\end{center}
+
+\begin{center}
+  \begin{tabular}{ccc} 
+$
++a_{13} \Bigg( 
+a_{21}
+\begin{vmatrix} 
+    a_{32}&    a_{34} \\ 
+    a_{42}&    a_{44} 
+\end{vmatrix} 
+$
+&
+$
+-a_{22}
+ \begin{vmatrix} 
+     a_{31}&    a_{34} \\ 
+     a_{41}&    a_{44} 
+ \end{vmatrix} 
+$
+&
+$
++a_{24}
+ \begin{vmatrix} 
+     a_{31}&    a_{32}\\
+     a_{41}&    a_{42}
+ \end{vmatrix} 
+$
+\Bigg)
+ \end{tabular}
+\end{center}
+
+\begin{center}
+  \begin{tabular}{ccc} 
+$
+-a_{14} \Bigg( 
+a_{21}
+\begin{vmatrix} 
+    a_{32}&    a_{33} \\ 
+    a_{42}&    a_{43}
+\end{vmatrix} 
+$
+&
+$
+-a_{22}
+ \begin{vmatrix} 
+     a_{31}&    a_{33} \\ 
+     a_{41}&    a_{43}
+ \end{vmatrix} 
+$
+&
+$
++a_{24}
+\begin{vmatrix} 
+    a_{31}&    a_{32} \\ 
+    a_{41}&    a_{42}
+ \end{vmatrix} 
+$
+\Bigg)
+ \end{tabular}
+\end{center}
+
+\[
+  = \hspace*{4mm}a_{11}( a_{22}(a_{33}a_{44} - a_{34}a_{43}) -a_{23}(a_{32}a_{44} - a_{34}a_{42}) +a_{24}(a_{32}a_{43} - a_{33}a_{42})) \\
+  \hspace*{5mm} -a_{12}( a_{21}(a_{33}a_{44} - a_{34}a_{43}) -a_{23}(a_{31}a_{44} - a_{34}a_{41}) +a_{24}(a_{31}a_{43} - a_{33}a_{41})) \\
+  \hspace*{5mm} -a_{13}( a_{21}(a_{32}a_{44} - a_{34}a_{42}) -a_{22}(a_{31}a_{44} - a_{34}a_{41}) +a_{24}(a_{31}a_{42} - a_{32}a_{41})) \\
+  \hspace*{5mm} -a_{14}( a_{21}(a_{32}a_{43} - a_{33}a_{42}) -a_{22}(a_{31}a_{43} - a_{33}a_{41}) +a_{23}(a_{31}a_{42} - a_{32}a_{41}))
+\]
+
+%-------------------------------------------
+\section{ $5 \times 5$ の計算 }
+%-------------------------------------------
+
+\[
+\begin{vmatrix} 
+    a_{11}&    a_{12}&    a_{13}&    a_{14}&    a_{15} \\ 
+    a_{21}&    a_{22}&    a_{23}&    a_{24}&    a_{25} \\ 
+    a_{31}&    a_{32}&    a_{33}&    a_{34}&    a_{35} \\ 
+    a_{41}&    a_{42}&    a_{43}&    a_{44}&    a_{45} \\ 
+    a_{51}&    a_{52}&    a_{53}&    a_{54}&    a_{55} 
+\end{vmatrix} 
+\]
+
+\begin{center}
+   \begin{tabular}{ccc} 
+$= a_{11}
+ \begin{vmatrix} 
+     a_{22}&    a_{23}&    a_{24}&    a_{25} \\ 
+     a_{32}&    a_{33}&    a_{34}&    a_{35} \\ 
+     a_{42}&    a_{43}&    a_{44}&    a_{45} \\ 
+     a_{52}&    a_{53}&    a_{54}&    a_{55} 
+ \end{vmatrix} 
+$
+&
+$
+-a_{12}
+ \begin{vmatrix} 
+     a_{21}&    a_{23}&    a_{24}&    a_{25} \\ 
+     a_{31}&    a_{33}&    a_{34}&    a_{35} \\ 
+     a_{41}&    a_{43}&    a_{44}&    a_{45} \\ 
+     a_{51}&    a_{53}&    a_{54}&    a_{55} 
+ \end{vmatrix} 
+$
+&
+$
++a_{13}
+\begin{vmatrix} 
+    a_{21}&    a_{22}&    a_{24}&    a_{25} \\ 
+    a_{31}&    a_{32}&    a_{34}&    a_{35} \\ 
+    a_{41}&    a_{42}&    a_{44}&    a_{45} \\ 
+    a_{51}&    a_{52}&    a_{54}&    a_{55} 
+\end{vmatrix} 
+$
+\end{tabular}
+\end{center}
+
+\begin{flushleft}
+   \begin{tabular}{rrr} 
+$
+\hspace*{7mm}
+-a_{14}
+\begin{vmatrix} 
+    a_{21}&    a_{22}&    a_{23}&    a_{25} \\ 
+    a_{31}&    a_{32}&    a_{33}&    a_{35} \\ 
+    a_{41}&    a_{42}&    a_{43}&    a_{45} \\ 
+    a_{51}&    a_{52}&    a_{53}&    a_{55} 
+\end{vmatrix} 
+$
+&
+$
++a_{15}
+\begin{vmatrix} 
+    a_{21}&    a_{22}&    a_{23}&    a_{24} \\ 
+    a_{31}&    a_{32}&    a_{33}&    a_{34} \\ 
+    a_{41}&    a_{42}&    a_{43}&    a_{44} \\ 
+    a_{51}&    a_{52}&    a_{53}&    a_{54}
+\end{vmatrix} 
+$
+&
+\end{tabular}
+\end{flushleft}
+
+\begin{center}
+  \begin{tabular}{cccc} 
+$
+=a_{11} \Bigg( 
+a_{22}
+ \begin{vmatrix} 
+     a_{33}&    a_{34}&    a_{35} \\ 
+     a_{43}&    a_{44}&    a_{45} \\ 
+     a_{53}&    a_{54}&    a_{55} 
+ \end{vmatrix} 
+$
+&
+$
+-a_{23}
+ \begin{vmatrix} 
+     a_{32}&    a_{34}&    a_{35} \\ 
+     a_{42}&    a_{44}&    a_{45} \\ 
+     a_{52}&    a_{54}&    a_{55} 
+ \end{vmatrix} 
+$
+&
+$
++a_{24}
+ \begin{vmatrix} 
+     a_{32}&    a_{33}&    a_{35} \\ 
+     a_{42}&    a_{43}&    a_{45} \\ 
+     a_{52}&    a_{53}&    a_{55} 
+ \end{vmatrix} 
+$
+&
+$
+-a_{25}
+ \begin{vmatrix} 
+     a_{32}&    a_{33}&    a_{34} \\ 
+     a_{42}&    a_{43}&    a_{44} \\ 
+     a_{52}&    a_{53}&    a_{54}
+ \end{vmatrix} 
+$
+\Bigg)
+ \end{tabular}
+\end{center}
+
+\begin{center}
+  \begin{tabular}{cccc} 
+$
+-a_{12} \Bigg( 
+a_{21}
+\begin{vmatrix} 
+    a_{33}&    a_{34}&    a_{35} \\ 
+    a_{43}&    a_{44}&    a_{45} \\ 
+    a_{53}&    a_{54}&    a_{55} 
+\end{vmatrix} 
+$
+&
+$
+-a_{23}
+ \begin{vmatrix} 
+     a_{31}&    a_{34}&    a_{35} \\ 
+     a_{41}&    a_{44}&    a_{45} \\ 
+     a_{51}&    a_{54}&    a_{55} 
+ \end{vmatrix} 
+$
+&
+$
++a_{24}
+ \begin{vmatrix} 
+     a_{31}&    a_{33}&    a_{35} \\ 
+     a_{41}&    a_{43}&    a_{45} \\ 
+     a_{51}&    a_{53}&    a_{55} 
+ \end{vmatrix} 
+$
+&
+$
+-a_{25}
+ \begin{vmatrix} 
+     a_{31}&    a_{33}&    a_{34} \\ 
+     a_{41}&    a_{43}&    a_{44} \\ 
+     a_{51}&    a_{53}&    a_{54}
+ \end{vmatrix} 
+$
+\Bigg)
+ \end{tabular}
+\end{center}
+
+\begin{center}
+  \begin{tabular}{cccc} 
+$
++a_{13} \Bigg( 
+a_{21}
+\begin{vmatrix} 
+    a_{32}&    a_{34}&    a_{35} \\ 
+    a_{42}&    a_{44}&    a_{45} \\ 
+    a_{52}&    a_{54}&    a_{55} 
+\end{vmatrix} 
+$
+&
+$
+-a_{22}
+ \begin{vmatrix} 
+     a_{31}&    a_{34}&    a_{35} \\ 
+     a_{41}&    a_{44}&    a_{45} \\ 
+     a_{51}&    a_{54}&    a_{55} 
+ \end{vmatrix} 
+$
+&
+$
++a_{24}
+ \begin{vmatrix} 
+     a_{31}&    a_{32}&    a_{35} \\ 
+     a_{41}&    a_{42}&    a_{45} \\ 
+     a_{51}&    a_{52}&    a_{55} 
+ \end{vmatrix}
+$
+&
+$
+-a_{25}
+ \begin{vmatrix} 
+     a_{31}&    a_{32}&    a_{34} \\ 
+     a_{41}&    a_{42}&    a_{44} \\ 
+     a_{51}&    a_{52}&    a_{54}
+ \end{vmatrix} 
+$
+\Bigg)
+ \end{tabular}
+\end{center}
+
+\begin{center}
+  \begin{tabular}{cccc} 
+$
+-a_{14} \Bigg( 
+a_{21}
+ \begin{vmatrix} 
+     a_{32}&    a_{33}&    a_{35} \\ 
+     a_{42}&    a_{43}&    a_{45} \\ 
+     a_{52}&    a_{53}&    a_{55} 
+ \end{vmatrix} 
+$
+&
+$
+-a_{22}
+ \begin{vmatrix} 
+     a_{31}&    a_{33}&    a_{35} \\ 
+     a_{41}&    a_{43}&    a_{45} \\ 
+     a_{51}&    a_{53}&    a_{55} 
+ \end{vmatrix} 
+$
+&
+$
++a_{23}
+\begin{vmatrix} 
+    a_{31}&    a_{32}&    a_{35} \\ 
+    a_{41}&    a_{42}&    a_{45} \\ 
+    a_{51}&    a_{52}&    a_{55} 
+\end{vmatrix} 
+$
+&
+$
+-a_{25}
+  \begin{vmatrix} 
+      a_{31}&    a_{32}&    a_{33} \\ 
+      a_{41}&    a_{42}&    a_{43} \\ 
+      a_{51}&    a_{52}&    a_{53}
+  \end{vmatrix} 
+$
+\Bigg)
+ \end{tabular}
+\end{center}
+
+\begin{center}
+  \begin{tabular}{cccc} 
+$
++a_{15} \Bigg( 
+a_{21}
+ \begin{vmatrix} 
+     a_{32}&    a_{33}&    a_{34} \\ 
+     a_{42}&    a_{43}&    a_{44} \\ 
+     a_{52}&    a_{53}&    a_{54}
+ \end{vmatrix} 
+$
+&
+$
+-a_{22}
+ \begin{vmatrix} 
+     a_{31}&    a_{33}&    a_{34} \\ 
+     a_{41}&    a_{43}&    a_{44} \\ 
+     a_{51}&    a_{53}&    a_{54}
+ \end{vmatrix} 
+$
+&
+$
++a_{23}
+\begin{vmatrix} 
+    a_{31}&    a_{32}&    a_{34} \\ 
+    a_{41}&    a_{42}&    a_{44} \\ 
+    a_{51}&    a_{52}&    a_{54}
+\end{vmatrix}
+$
+&
+$
+-a_{24}
+ \begin{vmatrix} 
+     a_{31}&    a_{32}&    a_{33} \\ 
+     a_{41}&    a_{42}&    a_{43} \\ 
+     a_{51}&    a_{52}&    a_{53}
+ \end{vmatrix} 
+$
+\Bigg)
+ \end{tabular}
+\end{center}
+
+%-----------------------------------------
+% 5*5  123
+%-----------------------------------------
+\begin{center}
+  \begin{tabular}{ccc} 
+$=
+a_{11} \Bigg( 
+a_{22} \Bigg(  
+a_{33}
+ \begin{vmatrix} 
+     a_{44}&    a_{45} \\ 
+     a_{54}&    a_{55} 
+ \end{vmatrix} 
+$
+&
+$
+-a_{34}
+\begin{vmatrix} 
+    a_{43}&    a_{45} \\ 
+    a_{53}&    a_{55} 
+\end{vmatrix} 
+$
+&
+$
++a_{35}
+ \begin{vmatrix} 
+     a_{43}&    a_{44} \\ 
+     a_{53}&    a_{54}
+ \end{vmatrix} 
+$
+\Bigg)
+ \end{tabular}
+\end{center}
+
+
+\begin{center}
+  \begin{tabular}{ccc} 
+$-
+a_{23} \Bigg(  
+a_{32}
+ \begin{vmatrix} 
+     a_{44}&    a_{45} \\ 
+     a_{54}&    a_{55} 
+ \end{vmatrix} 
+$
+&
+$
+-a_{34}
+  \begin{vmatrix} 
+      a_{42}&    a_{45} \\ 
+      a_{52}&    a_{55} 
+  \end{vmatrix} 
+$
+&
+$
++a_{35}
+ \begin{vmatrix} 
+     a_{42}&    a_{44} \\ 
+     a_{52}&    a_{54}
+ \end{vmatrix} 
+$
+\Bigg)
+ \end{tabular}
+\end{center}
+
+\begin{center}
+  \begin{tabular}{ccc} 
+$+
+a_{24} \Bigg(  
+a_{32}
+ \begin{vmatrix} 
+     a_{43}&    a_{45} \\ 
+     a_{53}&    a_{55} 
+ \end{vmatrix} 
+$
+&
+$
+-a_{33}
+ \begin{vmatrix} 
+     a_{42}&    a_{45} \\ 
+     a_{52}&    a_{55} 
+ \end{vmatrix} 
+$
+&
+$
++a_{35}
+ \begin{vmatrix} 
+     a_{42}&    a_{43} \\ 
+     a_{52}&    a_{53}
+ \end{vmatrix} 
+$
+\Bigg)
+ \end{tabular}
+\end{center}
+
+\begin{center}
+  \begin{tabular}{ccc} 
+$+
+a_{25} \Bigg(  
+a_{32}
+ \begin{vmatrix} 
+     a_{43}&    a_{45} \\ 
+     a_{53}&    a_{55} 
+ \end{vmatrix} 
+$
+&
+$
+-a_{33}
+ \begin{vmatrix} 
+     a_{42}&    a_{45} \\ 
+     a_{52}&    a_{55} 
+ \end{vmatrix} 
+$
+&
+$
++a_{34}
+ \begin{vmatrix} 
+     a_{42}&    a_{43} \\ 
+     a_{52}&    a_{53}
+ \end{vmatrix} 
+$
+\Bigg)
+\Bigg)
+ \end{tabular}
+\end{center}
+
+\begin{center}
+  \begin{tabular}{ccc} 
+$-
+a_{12} \Bigg(  
+a_{21} \Bigg(  
+a_{33}
+ \begin{vmatrix} 
+     a_{44}&    a_{45} \\ 
+     a_{54}&    a_{55} 
+ \end{vmatrix} 
+$
+&
+$
+-a_{34}
+ \begin{vmatrix} 
+     a_{43}&    a_{45} \\ 
+     a_{53}&    a_{55} 
+ \end{vmatrix} 
+$
+&
+$
++a_{35}
+ \begin{vmatrix} 
+     a_{43}&    a_{44} \\ 
+     a_{53}&    a_{54}
+ \end{vmatrix} 
+$
+\Bigg)
+ \end{tabular}
+\end{center}
+
+\begin{center}
+  \begin{tabular}{ccc} 
+$-
+a_{23} \Bigg(  
+a_{31}
+\begin{vmatrix} 
+    a_{44}&    a_{45} \\ 
+    a_{54}&    a_{55} 
+\end{vmatrix} 
+$
+&
+$
+-a_{34}
+ \begin{vmatrix} 
+     a_{41}&    a_{45} \\ 
+     a_{51}&    a_{55} 
+ \end{vmatrix} 
+$
+&
+$
++a_{35}
+ \begin{vmatrix} 
+     a_{41}&    a_{44} \\ 
+     a_{51}&    a_{54}
+ \end{vmatrix} 
+$
+\Bigg)
+ \end{tabular}
+\end{center}
+
+\begin{center}
+  \begin{tabular}{ccc} 
+$
+- a_{24} \Bigg(
+a_{31}
+\begin{vmatrix} 
+    a_{43}&    a_{45} \\
+    a_{53}&    a_{55}
+ \end{vmatrix}$
+&
+$
+-a_{33}
+ \begin{vmatrix} 
+    a_{41}&    a_{45} \\
+    a_{51}&    a_{55}
+\end{vmatrix}$
+&
+$
++a_{35}
+\begin{vmatrix} 
+    a_{41}&    a_{43} \\
+    a_{51}&    a_{53}
+\end{vmatrix}
+\Bigg) $
+ \end{tabular}
+\end{center}
+
+\begin{center}
+  \begin{tabular}{ccc} 
+$
+-a_{25} \Bigg(
+ a_{31}
+\begin{vmatrix} 
+   a_{43}&    a_{44} \\
+   a_{53}&    a_{54}
+\end{vmatrix}$
+&
+$
+-a_{33}
+\begin{vmatrix} 
+   a_{41}&    a_{44} \\
+   a_{51}&    a_{54}
+\end{vmatrix}$
+&
+$
++a_{34}
+\begin{vmatrix} 
+    a_{41}&    a_{43} \\
+    a_{51}&    a_{53}
+\end{vmatrix}
+\Bigg)
+\Bigg) $
+\end{tabular}
+\end{center}
+
+\begin{center}
+ \begin{tabular}{ccc}
+$+
+a_{13} \Bigg(
+a_{21} \Bigg(
+a_{32}
+\begin{vmatrix} 
+   a_{44}&    a_{45} \\
+   a_{54}&    a_{55}
+\end{vmatrix}$
+&
+$
+-a_{34}
+\begin{vmatrix} 
+   a_{42}&    a_{45} \\
+   a_{52}&    a_{55}
+\end{vmatrix}$
+&
+$
++a_{35}
+ \begin{vmatrix} 
+     a_{42}&    a_{44} \\
+     a_{52}&    a_{54}
+\end{vmatrix}
+\Bigg) $
+\end{tabular}
+\end{center}
+
+\begin{center}
+ \begin{tabular}{ccc}
+$- a_{22} \Bigg(
+a_{31}
+\begin{vmatrix} 
+    a_{44}&    a_{45} \\
+    a_{54}&    a_{55}
+\end{vmatrix}$
+&$
+-a_{34}
+\begin{vmatrix} 
+    a_{41}&    a_{45} \\
+    a_{51}&    a_{55}
+\end{vmatrix}$
+&$
++a_{35}
+\begin{vmatrix} 
+    a_{41}&    a_{44} \\
+    a_{51}&    a_{54}
+\end{vmatrix}
+\Bigg) $
+\end{tabular}
+\end{center}
+
+\begin{center}
+ \begin{tabular}{ccc}
+$- a_{24} \Bigg(
+a_{31}
+\begin{vmatrix} 
+    a_{42}&    a_{45} \\
+    a_{52}&    a_{55}
+\end{vmatrix}$
+&$
+-a_{32}
+\begin{vmatrix} 
+    a_{41}&    a_{45} \\
+    a_{51}&    a_{55}
+\end{vmatrix}$
+&$
++a_{35}
+\begin{vmatrix} 
+    a_{41}&    a_{42} \\
+    a_{51}&    a_{52}
+\end{vmatrix}
+\Bigg) $
+\end{tabular}
+\end{center}
+
+\begin{center}
+ \begin{tabular}{ccc}
+$+ a_{25} \Bigg(
+a_{31}
+\begin{vmatrix} 
+    a_{42}&    a_{44} \\
+    a_{52}&    a_{54}
+\end{vmatrix}$
+&$
+-a_{32}
+\begin{vmatrix} 
+    a_{41}&    a_{44} \\
+    a_{51}&    a_{54}
+\end{vmatrix}$
+&$
++a_{34}
+\begin{vmatrix} 
+    a_{41}&    a_{42} \\
+    a_{51}&    a_{52}
+\end{vmatrix}
+\Bigg) 
+\Bigg) $
+\end{tabular}
+\end{center}
+
+\begin{center}
+ \begin{tabular}{ccc}
+$-
+a_{14} \Bigg(
+a_{21} \Bigg(
+a_{32}
+\begin{vmatrix} 
+   a_{43}&    a_{45} \\
+   a_{53}&    a_{55}
+\end{vmatrix}$
+&$
+-a_{33}
+\begin{vmatrix} 
+   a_{42}&    a_{45} \\
+   a_{52}&    a_{55}
+\end{vmatrix}$
+&$
++a_{35}
+\begin{vmatrix} 
+   a_{42}&    a_{43} \\
+   a_{52}&    a_{53}
+\end{vmatrix}
+\Bigg) $
+\end{tabular}
+\end{center}
+
+\begin{center}
+ \begin{tabular}{ccc}
+$-a_{22} \Bigg(
+a_{31}
+\begin{vmatrix} 
+    a_{43}&    a_{45} \\
+    a_{53}&    a_{55}
+\end{vmatrix}$
+&$
+-a_{33}
+\begin{vmatrix} 
+    a_{41}&    a_{45} \\
+    a_{51}&    a_{55}
+\end{vmatrix}$
+&$
++a_{35}
+\begin{vmatrix} 
+    a_{41}&    a_{43} \\
+    a_{51}&    a_{53}
+\end{vmatrix}
+\Bigg) $
+\end{tabular}
+\end{center}
+
+\begin{center}
+ \begin{tabular}{ccc}
+$+ a_{23} \Bigg(
+a_{31}
+\begin{vmatrix} 
+    a_{42}&    a_{45} \\
+    a_{52}&    a_{55}
+\end{vmatrix}$
+&$
+-a_{32}
+\begin{vmatrix} 
+    a_{41}&    a_{45} \\
+    a_{51}&    a_{55}
+\end{vmatrix}$
+&$
++a_{35}
+\begin{vmatrix} 
+    a_{41}&    a_{42} \\
+    a_{51}&    a_{52}
+\end{vmatrix}
+\Bigg) $
+\end{tabular}
+\end{center}
+
+\begin{center}
+ \begin{tabular}{ccc}
+$- a_{25} \Bigg(
+a_{31}
+\begin{vmatrix} 
+    a_{42}&    a_{43} \\
+    a_{52}&    a_{53}
+\end{vmatrix}$
+&$
+-a_{32}
+\begin{vmatrix} 
+   a_{41}&    a_{43} \\
+   a_{51}&    a_{53}
+\end{vmatrix}$
+&$
++a_{33}
+\begin{vmatrix} 
+   a_{41}&    a_{42} \\
+   a_{51}&    a_{52}
+\end{vmatrix}
+\Bigg) 
+\Bigg) $
+\end{tabular}
+\end{center}
+
+\begin{center}
+ \begin{tabular}{ccc}
+$+
+a_{15} \Bigg(
+a_{21} \Bigg(
+a_{32}
+\begin{vmatrix} 
+   a_{43}&    a_{44} \\
+   a_{53}&    a_{54}
+\end{vmatrix}$
+&$
+-a_{33}
+\begin{vmatrix} 
+   a_{42}&    a_{44} \\
+   a_{52}&    a_{54}
+\end{vmatrix}$
+&$
++a_{34}
+\begin{vmatrix} 
+   a_{42}&    a_{43} \\
+   a_{52}&    a_{53}
+\end{vmatrix}
+\Bigg) $
+\end{tabular}
+\end{center}
+
+\begin{center}
+ \begin{tabular}{ccc}
+$- a_{22} \Bigg(
+a_{31}
+\begin{vmatrix} 
+    a_{43}&    a_{44} \\
+    a_{53}&    a_{54}
+\end{vmatrix}$
+&$
+-a_{33}
+\begin{vmatrix} 
+    a_{41}&    a_{44} \\
+    a_{51}&    a_{54}
+\end{vmatrix}$
+&$
+-a_{34}
+\begin{vmatrix} 
+    a_{41}&    a_{43} \\
+    a_{51}&    a_{53}
+\end{vmatrix}
+\Bigg) $
+\end{tabular}
+\end{center}
+
+\begin{center}
+ \begin{tabular}{ccc}
+$+ a_{23} \Bigg(
+a_{31}
+\begin{vmatrix} 
+    a_{42}&    a_{44} \\
+    a_{52}&    a_{54}
+\end{vmatrix}$
+&$
+-a_{32}
+\begin{vmatrix} 
+    a_{41}&    a_{44} \\
+    a_{51}&    a_{54}
+\end{vmatrix}$
+&$
++a_{34}
+\begin{vmatrix} 
+    a_{41}&    a_{42} \\
+    a_{51}&    a_{52}
+\end{vmatrix}
+\Bigg) $
+\end{tabular}
+\end{center}
+
+\begin{center}
+ \begin{tabular}{ccc}
+$- a_{24} \Bigg(
+a_{31}
+\begin{vmatrix} 
+    a_{42}&    a_{43} \\
+    a_{52}&    a_{53}
+\end{vmatrix}$
+&$
+-a_{32}
+\begin{vmatrix} 
+    a_{41}&    a_{43} \\
+    a_{51}&    a_{53}
+\end{vmatrix}$
+&$
++a_{33}
+\begin{vmatrix} 
+    a_{41}&    a_{42} \\
+    a_{51}&    a_{52}
+\end{vmatrix}
+\Bigg) 
+\Bigg) $
+\end{tabular}
+\end{center}
+
+\[
+  = \hspace*{4mm}a_{11}( a_{22}(a_{33}(a_{44}a_{55} - a_{45}a_{54})-a_{34}(a_{43}a_{55} - a_{45}a_{53})+a_{35}(a_{43}a_{54} - a_{44}a_{53})) \\
+ \hspace*{12mm} - a_{23}(a_{32}(a_{44}a_{55} - a_{45}a_{54})-a_{34}(a_{42}a_{55} - a_{45}a_{52})+a_{35}(a_{42}a_{54} - a_{44}a_{52})) \\
+ \hspace*{12mm} + a_{24}(a_{32}(a_{43}a_{55} - a_{45}a_{53})-a_{33}(a_{42}a_{55} - a_{45}a_{52})+a_{35}(a_{42}a_{53} - a_{43}a_{52})) \\
+ \hspace*{12mm} - a_{25}(a_{32}(a_{43}a_{54} - a_{44}a_{53})-a_{33}(a_{42}a_{54} - a_{44}a_{52})+a_{34}(a_{42}a_{53} - a_{43}a_{52}))) \\
+   \hspace*{8mm}-a_{12}( a_{21}(a_{33}(a_{44}a_{55} - a_{45}a_{54})-a_{34}(a_{43}a_{55} - a_{45}a_{53})+a_{35}(a_{43}a_{54} - a_{44}a_{53})) \\
+ \hspace*{12mm} - a_{23}(a_{31}(a_{44}a_{55} - a_{45}a_{54})-a_{34}(a_{41}a_{55} - a_{45}a_{51})+a_{35}(a_{41}a_{54} - a_{44}a_{51})) \\
+ \hspace*{12mm} + a_{24}(a_{31}(a_{43}a_{55} - a_{45}a_{53})-a_{33}(a_{41}a_{53} - a_{43}a_{51})+a_{35}(a_{41}a_{53} - a_{43}a_{51})) \\
+ \hspace*{12mm} - a_{25}(a_{31}(a_{43}a_{54} - a_{44}a_{53})-a_{33}(a_{41}a_{54} - a_{44}a_{51})+a_{34}(a_{41}a_{53} - a_{43}a_{51}))) \\
+   \hspace*{8mm}+a_{13}( a_{21}(a_{32}(a_{44}a_{55} - a_{45}a_{54})-a_{34}(a_{42}a_{55} - a_{45}a_{52})+a_{35}(a_{42}a_{54} - a_{44}a_{52})) \\
+ \hspace*{12mm} - a_{22}(a_{31}(a_{44}a_{55} - a_{45}a_{54})-a_{34}(a_{41}a_{55} - a_{45}a_{51})+a_{35}(a_{41}a_{54} - a_{44}a_{51})) \\
+ \hspace*{12mm} + a_{24}(a_{31}(a_{42}a_{55} - a_{45}a_{52})-a_{32}(a_{41}a_{55} - a_{45}a_{51})+a_{35}(a_{41}a_{52} - a_{42}a_{51})) \\
+ \hspace*{12mm} - a_{25}(a_{31}(a_{42}a_{54} - a_{44}a_{52})-a_{32}(a_{41}a_{54} - a_{44}a_{51})+a_{34}(a_{41}a_{52} - a_{42}a_{51}))) \\
+   \hspace*{8mm} - a_{14}( a_{21}(a_{32}(a_{43}a_{55} - a_{45}a_{53})-a_{33}(a_{42}a_{55} - a_{45}a_{52})+a_{35}(a_{42}a_{53} - a_{43}a_{52})) \\
+ \hspace*{12mm} - a_{22}(a_{31}(a_{43}a_{55} - a_{45}a_{53})-a_{33}(a_{41}a_{55} - a_{45}a_{51})+a_{35}(a_{41}a_{53} - a_{43}a_{51})) \\
+ \hspace*{12mm} + a_{23}(a_{31}(a_{42}a_{55} - a_{45}a_{52})-a_{32}(a_{41}a_{55} - a_{45}a_{51})+a_{35}(a_{41}a_{52} - a_{42}a_{51})) \\
+ \hspace*{12mm} - a_{25}(a_{31}(a_{42}a_{54} - a_{44}a_{52})-a_{32}(a_{41}a_{53} - a_{43}a_{51})+a_{33}(a_{41}a_{52} - a_{42}a_{51}))) \\
+   \hspace*{8mm} + a_{15}( a_{21}(a_{32}(a_{43}a_{54} - a_{44}a_{53})-a_{33}(a_{42}a_{54} - a_{44}a_{52})+a_{34}(a_{42}a_{53} - a_{43}a_{53})) \\
+ \hspace*{12mm} - a_{22}(a_{31}(a_{43}a_{54} - a_{44}a_{53})-a_{33}(a_{41}a_{54} - a_{44}a_{51})+a_{34}(a_{41}a_{53} - a_{43}a_{51})) \\
+ \hspace*{12mm} + a_{23}(a_{31}(a_{42}a_{54} - a_{44}a_{52})-a_{32}(a_{41}a_{54} - a_{44}a_{51})+a_{34}(a_{41}a_{52} - a_{42}a_{51})) \\
+ \hspace*{12mm} - a_{24}(a_{31}(a_{42}a_{53} - a_{43}a_{52})-a_{32}(a_{41}a_{53} - a_{43}a_{51})+a_{33}(a_{41}a_{52} - a_{42}a_{51}))) \\
+\]
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  感想、展望
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{まとめ・結論}
+\addcontentsline{toc}{section}{まとめ・結論}
+行列式の演算を使えば、次元の多いものも計算が出来るような気がするが、まだ気がするだけでどのように応用すれば良いかは見えて来ない。また、行列式の計算は人間が手でするものではなく、計算機に行わせるものである。
+
+%------------------------------------------------
+\section*{感想} 
+\addcontentsline{toc}{section}{感想}
+{\TeX} のソースが1500行を越えた。
+もう、休まないと心に誓った。\\
+行列の計算は、計算機にさせるものであることは確信した。
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  参考文献
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% 「関連図書」を変更する
+% jreport, jbook なら、bibname
+%\renewcommand{\bibname}{変更後の名前}
+%\renewcommand{\bibname}{参考文献}
+
+% 「参考文献」を変更する
+% jarticle なら、refname
+\renewcommand{\refname}{参考文献}
+\begin{thebibliography}{9}
+
+% 目次に参考文献をいれる
+\addcontentsline{toc}{section}{\refname}% 追加
+
+% 参考文献
+\bibitem{ hoge }
+ 線形台数 : 行列式の定義 \\
+  http://www.fbc.keio.ac.jp/~hkomiya/education/senkei\_daisu\_2001-0.2.pdf\\
+ 2002年 5月 12 日参照
+
+\bibitem{ piyo }
+  行列式虎の巻 \\
+ http://www.ne.jp/asahi/nishimura/takashi/jyugyou/linear/det-1.pdf \\ 
+ 2002年 5月 12 日参照
+\end{thebibliography}
+
+% 文書の終了
+\end{document} 

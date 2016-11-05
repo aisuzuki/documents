@@ -1,0 +1,356 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  特殊文字 : 
+%    改行 -> \\
+% 
+%  注釈 : 
+%    \footnote[1]{ 注釈の内容 }
+%           
+%  次のページ :
+%    \pagebreak
+%
+%  整形をせずにそのまま出力 :
+%  (ソース等)
+%    \begin{verbatim}  〜内容
+%    \end{verbatim}
+%
+%  箇条書 :
+%    \begin{itemize}
+%    \item\hspace*{5mm} 箇条書の内容
+%    \end{itemize}
+%
+%  セクションの作成 :
+%    \section{ 内容 }
+%
+%  サブセクションの作成 :
+%    \subsection{ 内容 }
+%
+%--------------------------------------------------
+%  番号の付いていないセクションも目次に出す:
+%    \addcontentsline{toc}{section}{目次に出す名前}
+%
+%  [ 参考文献の場合 ]
+%% (j)article クラスの場合
+%%
+%\begin{thebibliography}{99}
+%\addcontentsline{toc}{section}{\refname}% 追加
+%\bibitem{bibunsho4} 名前
+%                   本の名前
+%\end{thebibliography}
+%
+%% (j)report・(j)book クラスの場合
+%% 
+%\begin{thebibliography}{99}
+%\addcontentsline{toc}{chapter}{\bibname}% 追加
+%\bibitem{bibunsho4} 名前
+%                   本の名前
+%\end{thebibliography}
+%-----------------------------------------------
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% * 概要の書き方
+%    規定字数以内でその論文 の取り扱う範 囲，目的，内容
+%   の要点および主な結論などを記述する
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% documentclass の宣言 % @ 書式
+% \documentclass [ オプション ] { 書式 }
+%
+% [ オプションの種類 ]
+% * 二段組
+% [twocolumn]
+% * 印字の大きさ
+% [a4p]
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% レジュメに使うなら、jarticle
+%
+%\documentclass[twocolumn,a4p]{jarticle}
+
+\documentclass[a4p]{jarticle}
+\usepackage{multicol}
+\usepackage[dvips]{graphics}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 余白や文字間の幅の細かい設定
+%
+% 
+%\setlength{\voffset}{65pt}
+%\setlength{\topmargin}{-170pt}
+%\setlength{\textheight}{770pt}
+%\setlength{\oddsidemargin}{-10pt}
+%\setlength{\textwidth}{480pt}
+%\setlength{\headsep}{40pt}
+
+% 文書のはじまり 
+\begin{document}
+
+%---------------------------------------------
+%
+% article の時の表紙を別ページにする
+%
+\vspace*{4cm}
+\begin{center}
+{\LARGE シミュレーション課題 \\} 
+\vspace*{1cm}
+{\large 01ca0125 鈴木藍 \\ 
+  2002年 4月25日}
+\end{center}
+\thispagestyle{empty}
+\newpage
+%------------------------------------------------
+
+%========================================
+% ここから文章
+%
+% 1ページ目
+%
+%========================================
+
+%----------------------------------------
+%
+% 表紙を付ける
+\tableofcontents
+\newpage
+%----------------------------------------
+
+% 概要 (abstract)
+%
+\begin{abstract} 
+\addcontentsline{toc}{section}{概要}
+テイラー展開について調べ、\(\sin x\)などの関数を 4項まで展開した。
+また、展開した式を使って C 言語で \(\sin\) 関数を実装し、どれくらい
+近似した値が計算できるかを実験した。表示は gnuplot を使い、用意されている
+\(\sin\)関数と並べて表示してみた。
+\end{abstract}
+
+% はじめに
+% section のオプションで、数字を表示させないようにする
+%
+\section*{レポートの目的}
+\addcontentsline{toc}{section}{レポートの目的}
+テイラー展開は、\(\sin\)関数が小数点をサポートされていない環境で
+必要だった時に使った。その時はただ、公式とソースを見てそのまま書き写して
+いただけだったが今回改めて勉強しようと思う。
+
+%------------------------------------------------------
+% 1から始まるセクション
+%------------------------------------------------------
+\section{ テイラー展開とは }
+%------------------------------------------------------
+\subsection{テイラーの定理}
+関数\(f(x)\)は2点,a,b(a $\neq$ b )を含む区間Dでn回微分可能とする。
+この時、区間Dに次の関係式をみたすcが存在する。\\\\
+\[
+f(b) = f(a)+f'(a)(b-a)+ \frac{f''(a)(b-a)^2}{2!}+ \cdots +\frac{f^{(n-1)}(a)(b-a)^{n-1}}{(n-1)!}
+\]
+
+\subsection{テイラー展開}
+テイラー展開とは、関数\(f(x)\)が無限回微分可能ならば、以下のような展開が出来るという定理である。
+\[
+f(x) = f(a)+\frac{f^{(1)}(a)}{1!}(x-a)+\frac{f^{(2)}(a)}{2!}(x-a)^2+\cdots\frac{f^{(n)}(a)}{n!}(x-a)^n+\cdots   
+\]
+ここで、\(f^{(n)}(a)\)は関数\(f(x)\)をn 回微分したものに\(x=a\)の値を代入したものとする。
+
+\subsection{マクローリン展開}
+テイラー展開で、特に\(a=0\)とおいた場合、この展開は特別にマクローリン展開と呼ばれている。
+\[
+f(x) = f(0)+\frac{f^{(1)}(0)}{1!}x+\frac{f^{(2)}(0)}{2!}x^2+\cdots\frac{f^{(n)}(0)}{n!}x^n+\cdots   
+\]
+マクローリン展開は、\(e^x\),\(\sin x\), \(\cos x\) 等の値を求めるには非常に有効である。
+
+%-------------------------------------------
+\section{$\sin x$ の展開}
+%-------------------------------------------
+マクローリン展開を使って\(\sin x\)を展開する 
+
+\subsection{$\sin x$ の微分}
+\[
+\sin(0) = 0, \sin^{(1)}(0) = \cos(0) = 1, \sin^{(2)}(0) = \-sin(0) = 0, \\
+\sin^{(3)}(0) = \-cos(0) = -1,  \sin^{(4)}(0) = 0, \cdots 
+\]
+  (以降は循環する)
+\subsection{展開する}
+\(f(x) = \sin(x)\)とする
+\begin{eqnarray*}
+f(x) &=& sin(0)+\frac{\sin^{(1)}(0)}{1!}x+\frac{\sin^{(2)}(0)}{2!}x^2+ \frac{\sin^{(3)}(0)}{3!}x^3+\frac{\sin^{(4)}(0)}{4!}x^4+\frac{\sin^{5}(0)}{5!}x^5+\frac{\sin^{6}(0)}{6!}x^6+\frac{\sin^{7}(0)}{7!}x^7 \\ 
+f(x) &=& \frac{\cos(0)}{1!}x+\frac{\-sin(0)}{2!}x^2+\frac{\-cos(0)}{3!}x^3+\frac{\sin(0)}{4!}x^4+\frac{\cos(0)}{5!}x^5+\frac{\-sin(0)}{6!}x^6+\frac{\-cos(0)}{7!}x^7 \\ 
+f(x) &=& \frac{\cos(0)}{1!}x+\frac{\-sin(0)}{2!}x^2+\frac{\-cos(0)}{3!}x^3+\frac{\sin(0)}{4!}x^4+\frac{\cos(0)}{5!}x^5+\frac{\-sin(0)}{6!}x^6+\frac{\-cos(0)}{7!}x^7 \\ 
+f(x) &=& x-\frac{x^3}{3!}+\frac{x^5}{5!}-\frac{x^7}{7!}  \\
+\end{eqnarray*}
+また、和の表記を使うと 
+\begin{eqnarray*}
+\sum_{i=0}^\infty (-1)^i \frac{x^{2i+1}}{(2i+1)!}
+\end{eqnarray*}
+
+よって、\(\sin(x) =x-\frac{x^3}{3!}+\frac{x^5}{5!}-\frac{x^7}{7!}\)が得られる
+
+
+%-------------------------------------------
+\section{$\cos x$ の展開}
+%-------------------------------------------
+
+\subsection{$\cos x$ の微分}
+\[
+\cos(0) = 1, \cos^{(1)}(0) = \-sin(0) = 0, \cos^{(2)}(0) = \-cos(0) = -1,\\
+\cos^{(3)}(0) = \sin(0) = 0,  \cos^{(4)}(0) = \cos(0) = 1, \cdots
+\]
+  (以降は循環する)
+\subsection{展開する}
+
+\(f(x) = \cos(x)\)とする
+\begin{eqnarray*}
+f(x) &=& cos(0)+\frac{\cos^{(1)}(0)}{1!}x+\frac{\cos^{2}(0)}{2!}x^2+ \frac{\cos^{3}(0)}{3!}x^3+\frac{\cos^{4}(0)}{4!}x^4+\frac{\cos^{5}(0)}{5!}x^5+\frac{\cos^{(6)}(0)}{6!}x^6 \\ 
+f(x) &=& 1+\frac{\-cos(0)}{2!}x^2+\frac{\cos(0)}{4!}x^4+\frac{\-cos(0)}{6!}x^6 \\
+f(x) &=& 1-\frac{x^2}{2!}+\frac{x^4}{4!}-\frac{x^6}{6!}\\
+\end{eqnarray*}
+また、和の表記を使うと 
+\begin{eqnarray*}
+\sum_{i=0}^\infty (-1)^i \frac{x^{2i}}{(2i)!}
+\end{eqnarray*}
+
+よって、\(\cos(x) =x-\frac{x^2}{2!}+\frac{x^4}{4!}-\frac{x^6}{6!}\)が得られる
+
+\newpage
+
+%-------------------------------------------
+\section{$e^x$ の展開}
+%-------------------------------------------
+
+\subsection{$e^x$ の微分}
+前回のレポートで、
+\begin{eqnarray*}
+(e^x)' = e^x
+\end{eqnarray*}
+であることを確認した
+
+\subsection{展開する}
+\(f(x) = e^x\)とすると、\(f(0) = 1\)になる \\
+これをマクローリン展開の式に当てはめると
+\begin{eqnarray*}
+f(x) = 1+x+\frac{x^2}{2!}+\frac{x^3}{3!}
+\end{eqnarray*}
+また、和の表記法を使うと
+\begin{eqnarray*}
+\sum_{i=0}^\infty \frac{x^i}{i!}
+\end{eqnarray*}
+
+%-------------------------------------------
+\section{$log x$ の展開}
+%-------------------------------------------
+
+\subsection{$log x$ の微分}
+\begin{eqnarray*}
+(log x)' = \frac{1}{x}
+\end{eqnarray*}
+
+\subsection{展開する}
+
+\newpage
+%-------------------------------------------
+\section{テイラー展開の実装}
+%-------------------------------------------
+せっかくなので、C言語で\(\sin x\)のテイラー展開を実装してみた。
+
+\subsection{ソースファイル}
+シンプルに gnuplot で表示するようにした
+\begin{verbatim} 
+#include <stdio.h>
+
+double pi = 3.1415;
+double ep = 0.001;
+
+double my_sin(double rad)
+{
+  double  ans, rad2, rad3, rad5, rad7;
+
+   rad2 = rad  * rad;
+   rad3 = rad2 * rad;
+   rad5 = rad2 * rad3;
+   rad7 = rad2 * rad5;
+
+   ans = (rad - rad3/(3*2*1)
+              + rad5/(5*4*3*2*1)
+              - rad7/(7*6*5*4*3*2*1));
+   return ans;
+}
+
+int main()
+{
+  double x, y;
+
+  for (x=-10.0; x<=10; x+=ep) {
+    y = my_sin(x);
+    printf("%lf %lf \n",x, y);
+  }
+  return 0;
+}
+\end{verbatim}
+以下が、gnuplot で表示した画面
+\begin{center}
+\includegraphics{sin.eps}
+\end{center}
+gnuplot が用意している \(\sin\)関数と並べて表示しているが、十分な正確さだと感じた
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  感想、展望
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{まとめ・結論}
+\addcontentsline{toc}{section}{まとめ・結論}
+テイラー展開を、詳しく知る事が出来た。この展開を使えば、微分できる物ならなんでも展開できる事が
+分かったが、そのために微分法をもっと知る事が必要だと感じた。
+
+\section*{感想} 
+\addcontentsline{toc}{section}{感想}
+テイラー展開を調べる間に、知らない言葉や概念がたくさん出て来たのでそれらをまた調べるのに
+時間がかかった。微分法も、このテイラー展開も、プログラミングに当てはめて考えると分かりやすいと感じた。
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  参考文献
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% 「関連図書」を変更する
+% jreport, jbook なら、bibname
+%\renewcommand{\bibname}{変更後の名前}
+%\renewcommand{\bibname}{参考文献}
+
+% 「参考文献」を変更する
+% jarticle なら、refname
+\renewcommand{\refname}{参考文献}
+
+\begin{thebibliography}{9}
+\addcontentsline{toc}{section}{\refname}% 追加
+\bibitem{ hoge }
+テイラー展開 \\
+http://markun.cs.shinshu-u.ac.jp/learn/biseki/no\_9/cont09\_2.html \\
+ 2002/ 4/24 参照 
+
+\bibitem{ fuga }
+ 指数函数と対数函数の微分\\
+ http://isweb23.infoseek.co.jp/school/phaos/diff2/explog.htm \\
+ 2002/ 4/24 参照 
+
+\bibitem{ age }
+ テイラーの定理 〜１変数〜 \\
+http://www.geocities.co.jp/WallStreet-Bull/6990/taylor01.html \\
+ 2002/ 4/24 参照 
+
+\bibitem{ sage }
+  極大値と極小値\\ 
+http://www.heisei-u.ac.jp/\~fukui/pdf/mathtext5b.pdf \\
+ 2002/ 4/24 参照 
+
+\end{thebibliography}
+
+% 文書の終了
+\end{document} 

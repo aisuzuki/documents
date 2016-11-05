@@ -1,0 +1,304 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  特殊文字 : 
+%    改行 -> \\
+%    改行 -> \cr
+% 
+%  注釈 : 
+%    \footnote[1]{ 注釈の内容 }
+%           
+%  次のページ :
+%    \pagebreak
+%
+%  整形をせずにそのまま出力 :
+%  (ソース等)
+%    \begin{verbatim}  〜内容
+%    \end{verbatim}
+%
+%  整形をせずにそのまま出力：
+%  ( 枠を付ける )
+%   まず、以下のパッケージを使う  
+%   \usepackage{eclbkbox}
+%   そのあとにソースを記述
+%   \begin{breakbox}
+%     \begin{verbatim}
+%        ソース
+%     \end{verbatim}
+%   \end{breakbox}
+%
+%  箇条書 :
+%    \begin{itemize}
+%    \item\hspace*{5mm} 箇条書の内容
+%    \end{itemize}
+%   
+%  画像を張り付ける
+%    \begin{center}
+%    \includegraphics{ 画像ファイル名.eps }
+%    \end{center}
+%
+%  セクションの作成 :
+%    \section{ 内容 }
+%
+%  サブセクションの作成 :
+%    \subsection{ 内容 }
+%
+%--------------------------------------------------
+%  番号の付いていないセクションも目次に出す:
+%    \addcontentsline{toc}{section}{目次に出す名前}
+%
+%  [ 参考文献の場合 ]
+%% (j)article クラスの場合
+%%
+%\begin{thebibliography}{99}
+%\addcontentsline{toc}{section}{\refname}% 追加
+%\bibitem{bibunsho4} 名前
+%                   本の名前
+%\end{thebibliography}
+%
+%% (j)report・(j)book クラスの場合
+%% 
+%\begin{thebibliography}{99}
+%\addcontentsline{toc}{chapter}{\bibname}% 追加
+%\bibitem{bibunsho4} 名前
+%                   本の名前
+%\end{thebibliography}
+%-----------------------------------------------
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% * 概要の書き方
+%    規定字数以内でその論文 の取り扱う範 囲，目的，内容
+%   の要点および主な結論などを記述する
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% documentclass の宣言 % @ 書式
+% \documentclass [ オプション ] { 書式 }
+%
+% [ オプションの種類 ]
+% * 二段組
+% [twocolumn]
+% * 印字の大きさ
+% [a4p]
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% レジュメに使うなら、jarticle
+%
+%\documentclass[twocolumn,a4p]{jarticle}
+
+\documentclass[a4p, epsf]{jarticle}
+\usepackage{multicol}
+% 画像を張り付ける
+\usepackage[dvips]{graphics}
+% 行列が使えるパッケージ
+\usepackage{amsmath}
+% ソースに枠をつける
+\usepackage{epsf}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 余白や文字間の幅の細かい設定
+%
+% 
+%\setlength{\voffset}{65pt}
+%\setlength{\topmargin}{-2.0cm}
+%\setlength{\oddsidemargin}{1cm}
+%\setlength{\evensidemargin}{1cm}
+%\setlength{\textwidth}{15cm}
+%\setlength{\textheight}{26cm}
+%\setlength{\headsep}{40pt}
+\renewcommand{\baselinestretch}{0.3}
+
+% 文書のはじまり 
+\begin{document}
+
+\begin{center}
+\LARGE{第2章 2.5 節 \\ アルコールの吸収と事故危険率 }\\
+\large{2002年 6月 11日 \hspace*{5mm} 01ca0125 鈴木 藍} 
+\end{center}
+%========================================
+% ここから文章
+%
+% 1ページ目
+%
+%========================================
+% はじめに
+\paragraph{はじめに}
+第 2 章 2.5 にある アルコールの吸収と事故危険率 で
+アルコールの血中濃度と事故危険率をモデル化した式の解を導きだす。
+また、このモデル を使ってプログラムを描き、それぞれの定数を
+変えてプロットし、比較した。
+%------------------------------------------------------
+% セクション
+%------------------------------------------------------
+\section{ \large 仮定の式 }
+%------------------------------------------------------
+アルコールの吸収と事故危険率の関係を、事故 危険率 を $R$,
+血中アルコール濃度を $b$, とした時の式は
+\begin{eqnarray*}
+\frac{dR}{db} = kR \hspace*{1cm} (2.18)
+\end{eqnarray*}
+である。
+\subsection{ \normalsize 式の解 }
+事故危険率 $R = 1$, 血中アルコール濃度 $b = 0$ とすると、
+このモデルの解は
+\begin{eqnarray*}
+R(b) = e^{kb}  \hspace*{1cm} (2.19)
+\end{eqnarray*}
+となる。
+\subsection{ \normalsize モデルの解 }
+式を実際にデータを与えて値を得るために定数 k を求める。 k を求める式は
+\begin{eqnarray*}
+\frac{\log R}{b} &=& k 
+\end{eqnarray*}
+である。 
+ここで、血中アルコール濃度が $b = 0.14 \%$ の時の事故率を $R = 20 \%$ とすると
+\begin{eqnarray*}
+k &=& 21.4
+\end{eqnarray*}
+これをモデルの解に当てはめて
+\begin{eqnarray*}
+R(b) &=& e^{21.4b} \hspace*{1cm} (2.20)
+\end{eqnarray*}
+となる。
+\section{ \large 単位の整理 }
+%-------------------------------------------
+図を説明するにあたり、使い慣れない単位を整理した。
+\begin{itemize}
+\item ポンド \hspace*{5mm} 1 ポンドは $453.6 g$ の事である。
+\item プルーフ \hspace*{5mm} 日本のアルコール度数を2倍したもの。
+\end{itemize}
+図 2.8 の男性の体重は 72.57 kg である。
+%-------------------------------------------
+\section{ \large 式をプロットする }
+%-------------------------------------------
+$R(b+ \Delta b) = kR(b) \Delta b + R(b)$ と 厳密解 $R(b) = e^{kb}$ を並べて
+プロットした。
+\subsubsection{ \normalsize データの設定  }
+%-------------------------------------------
+ここでは $k = 21.4$, $b$ は 別紙資料 表 1 から、飲む前 の状態 0.01 から 死亡する程の状態 $0.5$ まで
+の間 $0.01$ づつ 増加し、$R$ の 初期状態は $1.0$ とした。縦軸は R, 横軸は b である。
+\begin{figure}[t]
+  \begin{center}
+  \begin{tabular}{cc}
+  \begin{minipage}{0.4\textwidth}
+    \mbox{
+      \epsfxsize = \textwidth
+      \epsfbox{test4.eps}
+      }
+    \caption{血液中のアルコール濃度と事故危険度}
+    \label{fig:nologscale}
+  \end{minipage}
+  &
+  \begin{minipage}{0.4\textwidth}
+    \mbox{
+      \epsfxsize = \textwidth
+      \epsfbox{test3.eps}
+      }
+    \caption{log scale}
+    \label{fig:log scale}
+  \end{minipage}
+  \end{tabular}
+\end{center}
+\end{figure}
+左の図は、値をそのままプロットしたもの、右の図は
+縦軸を log scale に設定して表示したものである。
+\section*{疑問点}
+ここで 定数 k は おそらくアルコールの吸収のはやさであると
+思われるが、アルコールを多く吸収しても抑制が利く人もいるし
+、アルコールを少し吸収しただけで前後不覚になるひとも
+いるので、k は「酒に弱いかどうか」の程度なのではないかと
+思う。
+\paragraph{まとめ}
+k の値が大きいほど 血中アルコール濃度 bの値が小さいうちに 事故率が上るというモデルであり、
+教科書にある 図 2.8 でプロットしている式は ほぼ計測データ通りとなっていた。
+しかし、アルコールに強いか弱いかなど、体質にも依存するモデルなので、
+実際に正しいかは疑問である。
+
+\renewcommand{\refname}{参考文献}
+\begin{thebibliography}{9}
+
+% 目次に参考文献をいれる
+\addcontentsline{toc}{section}{\refname}% 追加
+
+% 参考文献
+\bibitem{ hoge }
+ 酔いってなに？ \\
+ http://www.suntory.co.jp/arp/what.html \\
+ 2002年 6月 10日 参照
+
+\bibitem{ piyo }
+  「お酒と楽しくつき合うために」\\
+  http://www.suntory.co.jp/health/library/001203.html \\
+ 2002年 6月 10日 参照
+
+\bibitem{ mona }
+  ウィスキー雑学 \\
+  http://homepage1.nifty.com/stylish\_gallery/top/thebar.html \\
+ 2002年 6月 10日 参照
+
+\end{thebibliography}
+
+\newpage
+
+\paragraph{参考資料}
+
+\section*{ \large 単位 プルーフとは }
+日本では酒のアルコール分を表示するのに容量パーセント（Percent by Volume）方式を採用していて、
+ヨーロッパの大部分の国も日本と同じ容量パーセント方式である。
+これは気温15℃で、100mlの液体中に何mlのエチルアルコールが含まれるかを指している。
+よって、100ml中１mlのエチルアルコールが含まれていればアルコール度数1度になります。\\
+
+しかし、アメリカやイギリスのように重量パーセント（Percent by Weight）方式を採用している
+国もあり、この場合に使っている単位がプルーフ（Proof）である。
+プルーフ表示では100gの液体に含まれるエチルアルコールの重量で表わす。 \\
+
+同じプルーフ表示でも、アメリカのプルーフ（American Proof）とイギリスのプルーフ
+（British Proof）では基準が違うため大きく異なり、
+アメリカン・プルーフでは華氏60度（摂氏15.6度）の純水を0プルーフ、純エチルアルコールを
+200プルーフと規定している。
+100 \% のエチルアルコールは200プルーフとなり、容量パーセントを用いる日本のアルコール度数を
+2倍したものがアメリカン・プルーフである。\\
+イギリスのプルーフは 基準が複雑との事。
+
+%-------------------------------------------
+\section*{ \large 血中アルコール濃度の計算 }
+%-------------------------------------------
+アルコールの血中濃度は、以下の式で計算が出来る。
+
+\begin{eqnarray*}
+アルコールの血中濃度 (\%) =  \frac{ 飲酒量 (ml) \times アルコール度数 } { 833 \times 体重 (kg) }
+\end{eqnarray*}
+
+\section*{ \large 血中アルコール濃度に対する 酔い加減 の関係 }
+
+\begin{table}[h]
+  \caption{血中アルコール濃度と酔態}
+  \label{tekito}
+  \begin{center}
+    \begin{tabular}{|c|l|} 
+    \hline  
+     血中濃度(\%)  & 酔いの状態 \cr 
+    \hline  
+     0.02 〜 0.04 & 爽快期。判断が少し鈍くなる。 \cr 
+    \hline 
+     0.05 〜 0.10 & ほろ酔い期。体温上昇、脈が速くなる。 \cr
+    \hline 
+     0.11 〜 0.15 & 酩酊初期。立つとふらつく。 \cr
+    \hline 
+     0.16 〜 0.30 & 酩酊期。千鳥足、吐き気、呼吸が速くなる。 \cr
+    \hline 
+     0.31 〜 0.40 & 泥酔期。まともに立てない、意識混濁。 \cr
+    \hline 
+     0.41 〜 0.50 & 昏睡期。揺り動かしても起きない。死亡の恐れあり。 \cr
+
+    \hline 
+    \end{tabular}
+  \end{center}
+\end{table}
+
+※ [ 酩酊 ] 飲酒などによってひどく酔うこと。
+
+% 文書の終了
+\end{document} 

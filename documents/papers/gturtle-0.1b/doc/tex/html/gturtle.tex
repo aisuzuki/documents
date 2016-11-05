@@ -1,0 +1,510 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  特殊文字 : 
+%    改行 -> \\
+% 
+%  注釈 : 
+%    \footnote[1]{ 注釈の内容 }
+%           
+%  次のページ :
+%    \pagebreak
+%
+%  整形をせずにそのまま出力 :
+%  (ソース等)
+%    \begin{verbatim}  〜内容
+%    \end{verbatim}
+%
+%  整形をせずにそのまま出力：
+%  ( 枠を付ける )
+%   まず、以下のパッケージを使う  
+%   \usepackage{eclbkbox}
+%   そのあとにソースを記述
+%   \begin{breakbox}
+%     \begin{verbatim}
+%        ソース
+%     \end{verbatim}
+%   \end{breakbox}
+%
+%  箇条書 :
+%    \begin{itemize}
+%    \item\hspace*{5mm} 箇条書の内容
+%    \end{itemize}
+%   
+%  画像を張り付ける
+%    \begin{center}
+%    \includegraphics{ 画像ファイル名.eps }
+%    \end{center}
+%
+%  数式 (数式モード)
+%   \begin{eqnarray*}
+%    式 ( = を揃える時は &=& )
+%   \end{eqnarray*}
+%
+%  セクションの作成 :
+%    \section{ 内容 }
+%
+%  サブセクションの作成 :
+%    \subsection{ 内容 }
+%
+%--------------------------------------------------
+%  番号の付いていないセクションも目次に出す:
+%    \addcontentsline{toc}{section}{目次に出す名前}
+%
+%  [ 参考文献の場合 ]
+%% (j)article クラスの場合
+%%
+%\begin{thebibliography}{99}
+%\addcontentsline{toc}{section}{\refname}% 追加
+%\bibitem{bibunsho4} 名前
+%                   本の名前
+%\end{thebibliography}
+%
+%% (j)report・(j)book クラスの場合
+%% 
+%\begin{thebibliography}{99}
+%\addcontentsline{toc}{chapter}{\bibname}% 追加
+%\bibitem{bibunsho4} 名前
+%                   本の名前
+%\end{thebibliography}
+%-----------------------------------------------
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% * 概要の書き方
+%    規定字数以内でその論文 の取り扱う範 囲，目的，内容
+%   の要点および主な結論などを記述する
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% documentclass の宣言 % @ 書式
+% \documentclass [ オプション ] { 書式 }
+%
+% [ オプションの種類 ]
+% * 二段組
+% [twocolumn]
+% * 印字の大きさ
+% [a4p]
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% レジュメに使うなら、jarticle
+%
+%\documentclass[twocolumn,a4p]{jarticle}
+
+\documentclass[a4p, epsf]{jarticle}
+\usepackage{multicol}
+% 画像を張り付ける
+\usepackage[dvips]{graphics}
+% 行列が使えるパッケージ
+\usepackage{amsmath}
+% ソースに枠をつける
+\usepackage{eclbkbox}
+\usepackage{epsf}
+\usepackage{eclclass}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 余白や文字間の幅の細かい設定
+%
+% 
+%\setlength{\voffset}{65pt}
+%\setlength{\topmargin}{-170pt}
+%\setlength{\textheight}{770pt}
+%\setlength{\oddsidemargin}{-10pt}
+%\setlength{\textwidth}{480pt}
+%\setlength{\headsep}{40pt}
+
+% 文書のはじまり 
+\begin{document}
+
+%---------------------------------------------
+%
+% article の時の表紙を別ページにする
+%
+\vspace*{4cm}
+\begin{center}
+{\LARGE インタラクティブ タートルグラフィクス \\} 
+\vspace*{1cm}
+{\large 01ca0125 鈴木 藍 \\ 
+  2002年 8月 27日}
+\end{center}
+\thispagestyle{empty}
+\newpage
+%------------------------------------------------
+%========================================
+% ここから文章
+%
+% 1ページ目
+%
+%========================================
+
+%----------------------------------------
+%
+% もくじをつける
+\tableofcontents
+\newpage
+%----------------------------------------
+
+% 概要 (abstract)
+%
+\begin{abstract} 
+\addcontentsline{toc}{section}{概要}
+作成したインタラクティブタートルグラフィクスの仕様と実行例をまとめた。
+独自の追加点についてもいくつか挙げてある。
+
+\end{abstract}
+
+% はじめに
+% section のオプションで、数字を表示させないようにする
+%
+\section*{レポートの目的}
+\addcontentsline{toc}{section}{レポートの目的}
+アーキテクチャに沿っての設計やそれを意識した実装を心がけて
+作成してみたプログラムを振り返る。
+
+%------------------------------------------------------
+% セクション
+%------------------------------------------------------
+\section{ 全体の仕様 }
+%------------------------------------------------------
+
+\begin{itemize}
+\item マルチタートルをサポート
+\item gnuplot の使用できる色を全色使用可能
+\item スクリプトファイルを ロード、セーブが可能
+\item タートルの状態を検査できる inspector を実装
+\end{itemize}
+
+%------------------------------------------------------
+% セクション
+%------------------------------------------------------
+\section{ 命令一覧 }
+%------------------------------------------------------
+Gturtle では、コマンドを大きく二つの種類に分類している。
+\subsection{ システムコマンド }
+turtleを生成、削除したり タートル達を検査するといった 彼らへの間接的な通信や 
+ユーザからタートル達への命令を補助するようなコマンド郡。
+\subsubsection{ コマンドの記述形式 }
+システムへのコマンドは以下のフォーマットで行う。
+\begin{center}
+$<コマンド名> \hspace*{5mm} <第一引数> \hspace*{5mm} <第二引数> ....$
+\end{center}
+
+\subsection{ タートルへの命令 }
+生成したタートル達へ通信するための手段。
+\subsubsection{ 命令の記述形式 }
+タートルへの命令は以下のフォーマットで行う。
+\begin{center}
+$<turtle の名前> \hspace*{5mm} <命令> \hspace*{5mm} <第一引数> ....$
+\end{center}
+\newpage
+
+\subsection{ システムコマンド一覧 }
+\begin{center}
+\includegraphics{systemcommand.eps}
+\end{center}
+\newpage
+\subsection{ タートルへの命令一覧 }
+\begin{center}
+\includegraphics{turtlecommand.eps}
+\end{center}
+\newpage
+
+%------------------------------------------------------
+% セクション
+%------------------------------------------------------
+\section{ プログラムの仕様 }
+%------------------------------------------------------
+\subsection{ アーキテクチャ }
+今回は、MVC を意識して実装した。モデル、ビュー、コントローラに
+それぞれ役割を分担するような形にした。
+\subsection{ 主な変数 }
+\subsubsection{ Turtle }
+モデルであるタートルの状態を表す構造体。ソースの冒頭で Turtle で  typedef 宣言されている。\\
+現在の位置、向いている方向、ペンの上げ下げ、ペンの色、現在までの命令の数、
+コマンドとその引数の履歴、前と後ろのタートルのポインタを情報として持つ。
+117 行目
+\begin{breakbox}
+    \begin{verbatim}
+/*--------- Instance Variable. ----------------*/ 
+struct _turtle {
+    double          x, y, angle;
+    int             pen;
+    int             color;
+    int             commandNumber;
+    char            name[NAME_SIZE];
+    char            command[BUF_SIZE][BUF_SIZE];
+    char            parameter[BUF_SIZE][BUF_SIZE];
+    struct _turtle *prev, *next;
+};
+typedef struct _turtle Turtle;
+    \end{verbatim}
+\end{breakbox}
+\subsubsection{ リストを管理する変数  }
+タートルは リストで管理されている。リストの先頭、末尾、現在命令を与えられている
+タートルを表す変数を 3 つ使用している。\\
+513 行目
+\begin{breakbox}
+    \begin{verbatim}
+/*----------- Class Variable. -------------------*/
+Turtle     *frontPointer  = NULL;
+Turtle     *rearPointer   = NULL;
+Turtle     *activeTurtle  = NULL;
+/* ^ClassVariable */
+/*-----------------------------------------------*/
+    \end{verbatim}
+\end{breakbox}
+\newpage
+変数一覧
+\begin{center}
+\begin{tabular}{|l|l|l|}\hline
+型      &  変数名        & 説明 \\ \hline\hline
+double  &  x, y          & 現在の座標 \\ \hline
+double  & angle          & タートルが向いている方向 \\ \hline
+int     & pen            & ペンの上げ下げの状態。 0 なら上げていて、1 なら下げている \\ \hline
+int     & color         & ペンの色 \\ \hline
+int     & commandNumber & 現在までの命令の数 \\ \hline
+char    & name[]        & 名前 \\ \hline
+char    & command[][]   & 命令  \\ \hline
+char    & parameter[][] & 命令の引数\\ \hline
+Turtle * &  prev & 前のタートルへのポインタ \\ \hline
+Turtle * &  next & 後ろのタートルへのポインタ \\ \hline
+Turtle * & frontPointer & リストの先頭のタートルのポインタ  \\ \hline
+Turtle * & rearPointer  & リストの末尾のタートルへのポインタ  \\ \hline
+Turtle * & activeTurtle & 最後に命令をあたえられたタートルへのポインタ  \\ \hline
+\end{tabular}
+\end{center}
+
+\subsection{ 関数の階層構造 }
+別紙に添付
+\subsection{ 関数一覧 }
+\subsubsection{ モデル }
+モデルであるタートルを操作する関数の一覧。
+\begin{center}
+\begin{tabular}{|l|l|l|l|}\hline
+型      &  関数名    & 引数     & 説明 \\ \hline\hline
+double  & locationX  & Turtle  *tp & 引数のタートルの x 座標を返す\\ \hline
+double  & locationY  & Turtle  *tp & 引数のタートルの y 座標を返す\\ \hline
+void    & setX  & Turtle *tp , double x & 引数のタートルの x 座標 に 引数の x を設定する \\ \hline
+void    & setY  & Turtle *tp , double y & 引数のタートルの y 座標 に 引数の y を設定する \\ \hline
+void    & setAngle  & Turtle *tp , double th & 引数のタートルの angle に 引数の th を設定する \\ \hline
+double  & yourAngle  & Turtle *tp & 引数のタートルの angleを返す \\ \hline
+void    & setColor   & Turtle *tp & 引数のタートルの angleを返す \\ \hline
+char *  & penColor   & Turtle *tp & 引数のタートルの colorを返す \\ \hline
+void    & setName    & Turtle *tp, char *name & 引数のタートルのname に引数の name を設定する \\ \hline
+char    & self       & Turtle *tp & 引数のタートルの name を返す \\ \hline
+void    & history    & Turtle *tp & 引数のタートルの命令の履歴を全て表示する \\ \hline
+int     & isDown     & Turtle *tp & 引数のタートルの pen が 1 なら 1 を返す \\ \hline
+int     & isUp       & Turtle *tp & 引数のタートルの pen が 0 なら 1 を返す \\ \hline
+void    & turnRight  & Turtle *tp, double th & 引数のタートルの向きを th 分右に向ける \\ \hline
+void    & turnLeft   & Turtle *tp, double th & 引数のタートルの向きを th 分左に向ける \\ \hline
+void    & Forward    & Turtle *tp, double len & 引数のタートルを len 分 前方に進ませる  \\ \hline
+void    & Back       & Turtle *tp, double len & 引数のタートルを len 分 後方に進ませる  \\ \hline
+void    & home       & Turtle *tp & 引数のタートルを座標 x=0, y=0 の位置に移動する   \\ \hline
+void    & penDown    & Turtle *tp & 引数のタートルの pen に 1 を設定する   \\ \hline
+void    & penUp      & Turtle *tp & 引数のタートルの pen に 0 を設定する   \\ \hline
+void    & undo       & Turtle *tp & 引数のタートルの一つ前の命令を取り消す   \\ \hline
+void    & Do         & Turtle *tp, int index & 引数のタートルの index 番目の命令を実行する   \\ \hline
+void    & line       & int color, double x1, y1, x2, y2 & color の色で線を描く \\ \hline
+int     & isExistColor & char *colorname & 引数のcolornameという色が存在すれば 1 を返す  \\ \hline
+void    & Replot & void & 全てのタートルは命令をはじめからやり直す  \\ \hline
+\end{tabular}
+\end{center}
+
+\subsubsection{ ビュー }
+命令の結果を gnuplot に反映させるための関数の一覧。
+\begin{center}
+\begin{tabular}{|l|l|l|l|}\hline
+型      &  関数名    & 引数     & 説明 \\ \hline\hline
+void   & Draw  & void  &  最後に命令を与えられたタートルの命令を実行する  \\ \hline
+void   & WindowClear  & void  &  gnuplot 上に描かれた線を全て消す  \\ \hline
+\end{tabular}
+\end{center}
+
+\newpage
+\subsubsection{ コントローラ }
+今回は、主にシステムにあたえられるコマンドを処理するという役割にした。
+\begin{center}
+\begin{tabular}{|l|l|l|l|}\hline
+型      &  関数名    & 引数     & 説明 \\ \hline\hline
+int & isEmpty & void & タートルが一つも存在しなければ 1 を返す \\ \hline
+int & isSame & Turtle *tp, char *name & tp の name と 引数の name が同じなら 1 を返す \\ \hline
+Turtle * & addTurtle & Turtle *tp & tp を リストの末尾に追加する \\ \hline
+void   & deleteTurtle & Turtle *tp & tp を リスト から削除する \\ \hline
+void   & ls & void & カレントディレクトリを表示する \\ \hline
+void   & help & void & ヘルプを表示する \\ \hline
+void   & bye & void & Gturtle を終了する \\ \hline
+void   & init & char *name & name というタートルを生成する \\ \hline
+void   & delete & char *name & name というタートルを削除する  \\ \hline
+void   & showColor & void & カラーリストを表示する  \\ \hline
+void   & inspectIt & char *name & name というタートルを検査する  \\ \hline
+void   & inspectAll & void & 全てのタートルを検査する  \\ \hline
+int    & getCommand & void & システムコマンドを受け取れば実行して 0を返す  \\ \hline
+Turtle * & searchTurtle & char *name & name というタートルのポインタを返す  \\ \hline
+void & clearData & Turtle & tp の現在の状態を初期化する  \\ \hline
+void & SystemInit & void & gnuplot の画面の大きさなどを設定する  \\ \hline
+void & TurtleList & Turtle & 存在するタートルの名前を全て表示する \\ \hline
+void & Save & char *name,*filename, *mode & タートルを filename に保存する \\ \hline
+void & SaveAll & char *filename & 全てのタートルを filename に保存する \\ \hline
+void & Load & char *filename & filename からデータをロードする \\ \hline
+int & fileCheck & char *filename & filename 読み込み可能かチェックする \\ \hline
+\end{tabular}
+\end{center}
+
+%-------------------------------------------
+\section{ 追加した機能  }
+%-------------------------------------------
+いくつか、機能を追加した。
+\begin{itemize}
+  \item マルチタートル
+  \item タートルの命令の履歴の表示
+  \item ペンの色の変更が可能
+  \item タートルの検査が可能
+  \item ディレクトリの表示
+\end{itemize}
+gnuplot が使用可能な色を全て使えるようにした。又、
+タートルの検査は、タートルの状態を知るために用いる。
+
+%-------------------------------------------
+\section{ 実行例  }
+%-------------------------------------------
+\subsection{対話的に実行する}
+以下は、tt というタートルを生成して、ペンを下げ、ペンの色を青に変えた
+後に 前に20 進み、右に 90曲がり、前に 20 進むという命令を実行した例である。そのあとに
+tt を検査した結果を表示している。
+\begin{breakbox}
+  \begin{verbatim}
+[:spiral|^bin] ./gturtle
+*** WELCOME TO GTURTLE! *** 
+    Author: ai suzuki        
+    Aug. 13 2002             
+    See <help> to usage      
+gturtle> init tt
+gturtle> tt pd 
+gturtle> tt color blue
+gturtle> tt fd 20
+gturtle> tt rt 90
+gturtle> tt fd 20
+gturtle> inspect tt
+--<Turtle Inspector>--
+name     : tt
+now      : x = 20.000000, y = 21.000000
+distance : 90.000000
+pen      : down
+pen color: blue
+command  : 8
+gturtle> q 
+BYE.
+  \end{verbatim}
+\end{breakbox}
+\subsection{実行結果1}
+\begin{center}
+   \includegraphics{tt.eps}
+\end{center}
+\subsection{スクリプトを実行する}
+以下は、サンプルのスクリプトをロードした結果である。
+スクリプトファイル star.gt の内容は
+\begin{verbatim}
+(hoge 
+    color orange
+    pd
+    rt 15
+    fd 60
+    rt 145
+    fd 60
+    rt 145
+    fd 60
+    rt 145
+    fd 60
+    rt 145
+    fd 60
+    rt 145
+)
+\end{verbatim}
+である。
+
+\begin{breakbox}
+  \begin{verbatim}
+gturtle> load ../examples/star.gt
+  \end{verbatim}
+\end{breakbox}
+\subsection{実行結果2}
+\begin{center}
+   \includegraphics{star.eps}
+\end{center}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  感想、展望
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{成果・反省}
+\addcontentsline{toc}{section}{成果・反省}
+MVC を意識して実装した事はとても勉強になったと思う。
+その他、実装する際には 小さなプログラムのテストを重ねて作り上げて行くという
+方法で行ったが、バグが少なく順調に作れたと思う。しかし、設計に
+ついてはそれ程慎重に行わなかったので、今度は設計に力をいれたいと
+思った。
+
+%------------------------------------------------
+\section*{感想} 
+\addcontentsline{toc}{section}{感想}
+楽しかったです。
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  参考文献
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% 「関連図書」を変更する
+% jreport, jbook なら、bibname
+%\renewcommand{\bibname}{変更後の名前}
+%\renewcommand{\bibname}{参考文献}
+
+% 「参考文献」を変更する
+% jarticle なら、refname
+\renewcommand{\refname}{参考文献}
+\begin{thebibliography}{9}
+
+% 目次に参考文献をいれる
+\addcontentsline{toc}{section}{\refname}% 追加
+
+% 参考文献
+\bibitem{ hoge }
+ プログラミング言語 C \\
+ カーニハン , リッチー 著 \\
+ 2000年4月15日 (第2版)
+\bibitem{ piyo }
+ Smalltalk イディオム \\
+ 青木 淳 著 \\
+ 1997年2月25日 (第1版)
+\bibitem{ tekito }
+ Happy Squeaking! \\
+ http://www.ogis-ri.co.jp/otc/hiroba/technical/Squeak/index.html \\
+ 2002年8月5日 (第1版)
+
+\end{thebibliography}
+
+
+\newpage
+\section*{\normalsize 関数の階層構造図}
+\begin{center}
+\includegraphics{functree1.eps}
+\thispagestyle{empty}
+\end{center}
+\newpage
+\begin{center}
+\includegraphics{functree2.eps}
+\thispagestyle{empty}
+\end{center}
+\newpage
+\begin{center}
+\includegraphics{functree3.eps}
+\thispagestyle{empty}
+\end{center}
+\newpage
+
+% 文書の終了
+\end{document} 

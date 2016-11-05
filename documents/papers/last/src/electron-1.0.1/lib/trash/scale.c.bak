@@ -1,0 +1,50 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <assert.h>
+#include "field.h"
+
+#define  SQUARE(n) (n*n) 
+
+ScaleField *
+makeScaleField(ScaleField *scalefield, 
+               anElectron *e)
+{
+    int     x, y, thisX, thisY;
+  
+    thisX = (int)(e->x);
+    thisY = (int)(e->y);
+  
+    for (y=0; y<ny; y++) {
+        for (x=0; x<nx; x++) {
+            scalefield->potential[y][x] += (e->q
+                                         / (sqrt(SQUARE() + SQUARE(j))));
+            }
+        } /* for 'j' */
+    } /* for 'i' */
+    return scalefield;
+}
+
+ScaleField *
+newScaleField(void)
+{
+    ScaleField  *scalefield;
+
+    scalefield = (ScaleField *)malloc(sizeof(ScaleField));
+    if (!scalefield)
+        perror("newScalefield"), exit(1);
+
+    return  scalefield;
+}
+
+ScaleField *
+clearScaleField(ScaleField  *scalefield)
+{
+    int i, j;
+
+    for (i=0; i<FIELD_SIZE; i++)
+        for (j=0; j<FIELD_SIZE; j++)
+            scalefield->potential[i][j] = 0.0;
+
+    return scalefield;
+}

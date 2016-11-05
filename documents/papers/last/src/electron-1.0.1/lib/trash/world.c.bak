@@ -1,0 +1,169 @@
+/*	world.c.bak 									*/
+/*													*/
+/*				  Wed, 25 Sep 2002 20:31:06 +0900	*/
+/*			author: ai suzuki<spiral@soulhack.net>	*/
+
+/* code:           */
+
+
+#include <assert.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <math.h>
+#include "field.h"
+
+#define  ABS(n)  ((n<0) ? -1*n : n)
+#define  FAI(n)  ((n<0) ? -1 : 1)
+#define  SQARE(n) (n*n)
+
+anElectron *
+initElectrons(int n, char *mode, char *modeArg)
+{
+    anElectron  *etmp, *e;
+    int i;
+
+    if (n > 0) {
+        srand(time(0));
+        e = (anElectron *)malloc(sizeof(anElectron));
+        etmp = e;
+        n--;
+
+        for (i = 0; i < n; i++) {
+            etmp->next = (anElectron *)malloc(sizeof(anElectron));
+            etmp = etmp->next;
+        }
+        etmp->next = NULL;
+/**/
+/*        for (etmp = e; etmp != NULL; etmp = etmp->next) {*/
+/*            fprintf(stderr, "-------------------------\n");*/
+/*            etmp->q  =   60.0*RAND-30.0;*/
+/*            etmp->x  = ((double)FIELD_SIZE) * RAND;*/
+/*            etmp->y  = ((double)FIELD_SIZE) * RAND;*/
+/*            etmp->vx = 1.0;*/
+/*            etmp->vy = 1.0;*/
+/**/
+/* test a test. */
+        etmp = e;
+        etmp->q  =  10.0;
+        etmp->x  =  (FIELD_SIZE / 2.0);
+        etmp->y  =  (FIELD_SIZE / 2.0);
+        etmp->vx = 0.0;
+        etmp->vy = 0.0;
+/*        etmp = etmp->next;*/
+/*        etmp->q  =  10.0;*/
+/*        etmp->x  =  (FIELD_SIZE / 2.0) + (FIELD_SIZE / 2.0);*/
+/*        etmp->y  =  (FIELD_SIZE / 2.0) + (FIELD_SIZE / 2.0);*/
+/*        etmp->vx = 0.0;*/
+/*        etmp->vy = 0.0;*/
+
+            fprintf(stderr, "q  = \t%f              \n"
+                            "x  = \t%f              \n"
+                            "y  = \t%f              \n"
+                            "vx = \t%f              \n"
+                            "vy = \t%f              \n", etmp->q, etmp->x,  
+                                                         etmp->y, etmp->vx, 
+                                                         etmp->vy);
+            fprintf(stderr, "-------------------------\n");
+/*        } */
+    return e;
+    } else {
+    /* zero electron. */
+    return NULL;
+    }
+}
+
+void 
+theWorld(char *mode, char *modeArg)
+{
+    anElectron       *e, *etmp;
+    ScaleField  *sfield;
+    VectorField *vfield;
+
+    double        dx,  dy;
+    double       ldx, ldy;  /* local dx, dy. */
+    double       dvx, dvy;
+    double        ax,  ay;
+    double        fx,  fy;
+    double     xmin, xmax;
+    double     ymin, ymax;
+    double     r;
+    int          ti, i, j;
+
+    xmin = ymin = 0.0;
+    xmax = ymax = FIELD_SIZE;
+
+    initWorld();
+
+    /* field initialize. */
+    vfield = newVectorField();
+    sfield = newScaleField();
+    e      = initElectrons(bn, mode, modeArg);
+
+    dt = 0.1;
+    dx = FIELD_SIZE / (double)nx;
+    dy = FIELD_SIZE / (double)ny;
+
+    for (ti=0; ; ti++) {
+        
+/*        printf("plot \"-\" w p\n");*/
+        printf("plot \"-\" w vector\n");
+
+        sfield = makeScaleField(sfield, e);
+        makeVectorField(sfield, vfield);
+
+        for (etmp = e; etmp != NULL; etmp = etmp->next) {
+            fx = 0.0;
+            fy = 0.0;
+
+            fx = FAI(etmp->q) * vfield->pointOf[(int)(etmp->y / dy)][(int)(etmp->x / dx)].x;
+            fy = FAI(etmp->q) * vfield->pointOf[(int)(etmp->y / dy)][(int)(etmp->x / dx)].y;
+
+            ax  = fx / ABS(etmp->q);
+            ay  = fy / ABS(etmp->q);
+
+            dvx = ax * dt;
+            dvy = ay * dt;
+
+            etmp->vx += dvx;
+            etmp->vy += dvy;
+
+            ldx = etmp->vx * dt;
+            ldy = etmp->vy * dt;
+            etmp->x += ldx;
+            etmp->y += ldy;
+
+            if (etmp->x < xmin)
+                etmp->x   = xmax - 1;
+            else if (etmp->x > xmax)
+                etmp->x   = xmin + 1;
+            
+            if (etmp->y < ymin)
+                etmp->y   = ymax - 1;
+            else if (etmp->y > ymax)
+                etmp->y   = ymin + 1;
+
+/*        printf("%f %f\n", e->x, e->y);*/
+            for (i=1; i<ny-1; i++) {  
+                for (j=1; j<nx-1; j++) {  
+                    r = sqrt(SQARE(vfield->pointOf[i][j].x) + SQARE(vfield->pointOf[i][j].y));
+                    if (r == 0.0) {
+                        printf("%f %f %f %f\n", (double)j * dx + (dx * 0.5), 
+                                                (double)i * dy + (dy * 0.5), 0.0, 0.0);
+                    } else {
+                        printf("%f %f %f %f\n", (double)j * dx + (dx * 0.5), 
+                                                (double)i * dy + (dy * 0.5), 
+                                                2.0 * vfield->pointOf[i][j].x / r, 
+                                                2.0 * vfield->pointOf[i][j].y / r);
+                    }
+                } /* for 'j' */
+            printf("\n");
+            } /* for 'i' */
+        } /* for 'e' */
+        clearScaleField(sfield);
+        clearVectorField(vfield);
+        printf("e\n");
+    }/* for 'ti' */
+}
+
+/* file ends here. */

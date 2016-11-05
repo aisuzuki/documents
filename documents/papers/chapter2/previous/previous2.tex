@@ -1,0 +1,317 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  特殊文字 : 
+%    改行 -> \\
+% 
+%  注釈 : 
+%    \footnote[1]{ 注釈の内容 }
+%           
+%  次のページ :
+%    \pagebreak
+%
+%  整形をせずにそのまま出力 :
+%  (ソース等)
+%    \begin{verbatim}  〜内容
+%    \end{verbatim}
+%
+%  整形をせずにそのまま出力：
+%  ( 枠を付ける )
+%   まず、以下のパッケージを使う  
+%   \usepackage{eclbkbox}
+%   そのあとにソースを記述
+%   \begin{breakbox}
+%     \begin{verbatim}
+%        ソース
+%     \end{verbatim}
+%   \end{breakbox}
+%
+%  箇条書 :
+%    \begin{itemize}
+%    \item\hspace*{5mm} 箇条書の内容
+%    \end{itemize}
+%   
+%  画像を張り付ける
+%    \begin{center}
+%    \includegraphics{ 画像ファイル名.eps }
+%    \end{center}
+%
+%  セクションの作成 :
+%    \section{ 内容 }
+%
+%  サブセクションの作成 :
+%    \subsection{ 内容 }
+%
+%--------------------------------------------------
+%  番号の付いていないセクションも目次に出す:
+%    \addcontentsline{toc}{section}{目次に出す名前}
+%
+%  [ 参考文献の場合 ]
+%% (j)article クラスの場合
+%%
+%\begin{thebibliography}{99}
+%\addcontentsline{toc}{section}{\refname}% 追加
+%\bibitem{bibunsho4} 名前
+%                   本の名前
+%\end{thebibliography}
+%
+%% (j)report・(j)book クラスの場合
+%% 
+%\begin{thebibliography}{99}
+%\addcontentsline{toc}{chapter}{\bibname}% 追加
+%\bibitem{bibunsho4} 名前
+%                   本の名前
+%\end{thebibliography}
+%-----------------------------------------------
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% * 概要の書き方
+%    規定字数以内でその論文 の取り扱う範 囲，目的，内容
+%   の要点および主な結論などを記述する
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% documentclass の宣言 % @ 書式
+% \documentclass [ オプション ] { 書式 }
+%
+% [ オプションの種類 ]
+% * 二段組
+% [twocolumn]
+% * 印字の大きさ
+% [a4p]
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% レジュメに使うなら、jarticle
+%
+%\documentclass[twocolumn,a4p]{jarticle}
+
+\documentclass[a4p, epsf]{jarticle}
+\usepackage{multicol}
+% 画像を張り付ける
+\usepackage[dvips]{graphics}
+% 行列が使えるパッケージ
+\usepackage{amsmath}
+% ソースに枠をつける
+\usepackage{epsf}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 余白や文字間の幅の細かい設定
+%
+% 
+%\setlength{\voffset}{65pt}
+%\setlength{\topmargin}{-170pt}
+%\setlength{\textheight}{770pt}
+%\setlength{\oddsidemargin}{-10pt}
+%\setlength{\textwidth}{480pt}
+%\setlength{\headsep}{40pt}
+
+% 文書のはじまり 
+\begin{document}
+
+%---------------------------------------------
+%
+% article の時の表紙を別ページにする
+%
+\vspace*{4cm}
+\begin{center}
+{\LARGE 第 2 章 はじめに \\} 
+\vspace*{1cm}
+{\large 01ca0125 鈴木 藍 \\ 
+  2002年 6月 11日}
+\end{center}
+\thispagestyle{empty}
+\newpage
+%------------------------------------------------
+%========================================
+% ここから文章
+%
+% 1ページ目
+%
+%========================================
+
+%----------------------------------------
+%
+% もくじをつける
+\tableofcontents
+\newpage
+%----------------------------------------
+
+% 概要 (abstract)
+%
+\begin{abstract} 
+\addcontentsline{toc}{section}{概要}
+第 2 章 の主題である 微分方程式 $\frac{dy}{dx} = ky$ の解法を理解し
+実際に 解を導いた。
+
+\end{abstract}
+
+% はじめに
+% section のオプションで、数字を表示させないようにする
+%
+\section*{レポートの目的}
+\addcontentsline{toc}{section}{レポートの目的}
+これから始まる 第 2 章の中心となる 微分方程式の解法を 理解する。
+
+
+%------------------------------------------------------
+% セクション
+%------------------------------------------------------
+\section{ 主題となる微分方程式 }
+%------------------------------------------------------
+\subsection{ モデル }
+この章での基本となる微分方程式は 以下の式である。
+
+\begin{eqnarray*}
+\frac{dy}{dx} = ky
+\end{eqnarray*}
+
+多くの現象や問題は、この式で解けるとのこと。
+
+%-------------------------------------------
+\section{ 微分方程式を解く }
+%-------------------------------------------
+はじめに 16 ページ中程の「変数分離」がわからなかったのでしらべた。
+\subsection{ 変数分離とは }
+右辺が$x$のみの関数と$x$のみの関数の積の形で表される微分方程式
+
+\begin{eqnarray*}
+\frac{dy}{dx} = f(x)g(y)
+\end{eqnarray*}
+
+を変数分離形(separation of variables)という。ただし，$f(x)$ は$x$のみに依存する関数で，
+$y$ には依存しない。同様に $g(y)$ は$y$だけの関数である。
+$g(y) \neq 0$ であれば，この式の両辺を $g(y)$ で割り，さらに$x$で積分することで
+
+\begin{eqnarray*}
+\int \frac{1}{g(y)} dy = \int f(x)dx + C \hspace*{1cm} (C は定数)
+\end{eqnarray*}
+
+が得られる。
+
+\subsection{ 式の展開 }
+変数分離形を用いて 微分方程式を展開する。
+右辺の $y$ を 右辺に移動し、左辺の $dx$ を右辺に移動する。
+
+\begin{eqnarray*}
+\frac{dy}{dx} &=& ky \cr 
+\int \frac{dy}{dx} \frac{1}{y}    &=& \int ky \frac{1}{y} \cr 
+\int \frac{dy}{dx} \frac{1}{y} dx &=& \int k dx \cr 
+\int \frac{dy}{y}                 &=& \int k dx
+\end{eqnarray*}
+
+ここで、$k$ は定数なので、両辺を積分すると
+
+\begin{eqnarray*}
+\int \frac{dy}{y} &=& \int k dx\cr 
+\log y            &=&  kx + A \hspace*{1cm} (A は任意定数) 
+\end{eqnarray*}
+
+ここで、任意定数 $A$ を求める。 $x = x_0$, $y = y_0$ と $x$, $y$ に仮に
+値を入れる。 よって、$A$ は
+
+\begin{eqnarray*}
+\log y_0         &=& k x_0 + A \cr
+\log y_0 - k x_0 &=& A \cr
+\end{eqnarray*}
+
+となる。これを $\log y = kx + A$ に代入して
+
+\begin{eqnarray*}
+\log y             &=&  kx + \log y_0 - k x_0 \cr
+\log y - \log y_0  &=&  kx - k x_0 \cr
+\end{eqnarray*}
+
+これをまとめて
+
+\begin{eqnarray*}
+\log \frac{y}{y_0}  &=&  k(x - x_0) 
+\end{eqnarray*}
+
+となる。これを計算して
+
+\begin{eqnarray*}
+\log \frac{y}{y_0}  &=&  k(x - x_0) \cr
+\log \frac{y}{y_0}  &=&  k(x - x_0) \log_e e \cr
+\log \frac{y}{y_0}  &=&  \log_e e^{k(x - x_0)} \cr
+\frac{y}{y_0}       &=&  e^{k(x - x_0)} \cr
+\frac{y}{y_0} y_0   &=&  e^{k(x - x_0)} y_0 \cr
+y                   &=&  e^{k(x - x_0)} y_0 
+\end{eqnarray*}
+
+よって、$y$ は 
+
+\begin{eqnarray*}
+y(x)  &=&  e^{k(x - x_0)} y_0 
+\end{eqnarray*}
+
+となる。
+このモデルは、序章の 人口モデルで導き出した解と同じ形である。17 ページの図 2.1 も、
+序章で作成したプログラムが描いたグラフと同じ形をしている。
+
+\section{ 疑問点 }
+ここで、なぜ変数分離のテクニックを用いているのかがよくわからない。
+序章で 同じ形の微分方程式を解いた時と同じく、
+
+\begin{eqnarray*}
+\frac{dy}{dx}                     &=& ky \cr 
+\frac{1}{y} \frac{dy}{dx}         &=& k \cr
+\int \frac{1}{y} \frac{dy}{dx} dx &=& \int k dx\cr
+\int \frac{dy}{y}                 &=&  kx + A \hspace*{1cm} \cr
+\log y                            &=&  kx + A \hspace*{1cm} (A は任意定数)\cr
+\end{eqnarray*}
+
+というように導ける。ただ手法を紹介しただけなのだろうか。
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  感想、展望
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{まとめ・結論}
+\addcontentsline{toc}{section}{まとめ・結論}
+序章で使った微分方程式と同じ形をしていたが、解き方は
+以前と別の手法を使っていた。基本的な形は変わらないようである。
+
+%------------------------------------------------
+\section*{感想} 
+\addcontentsline{toc}{section}{感想}
+ただ式があっても、なにを表すのかはよく分からないが
+基本的な解法は ある程度わかった。今後、応用が出来ればいいと思う。
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  参考文献
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% 「関連図書」を変更する
+% jreport, jbook なら、bibname
+%\renewcommand{\bibname}{変更後の名前}
+%\renewcommand{\bibname}{参考文献}
+
+% 「参考文献」を変更する
+% jarticle なら、refname
+\renewcommand{\refname}{参考文献}
+\begin{thebibliography}{9}
+
+% 目次に参考文献をいれる
+\addcontentsline{toc}{section}{\refname}% 追加
+
+% 参考文献
+\bibitem{ hoge }
+ 変数分離形 \\
+ http://www4.justnet.ne.jp/~masema/separation.html
+ 2002年 6月 10日 参照
+
+\bibitem{ piyo }
+ 変数分離形微分方程式 \\
+ http://next1.cc.it-hiroshima.ac.jp/MULTIMEDIA/diffpub/node5.html \\
+ 2002年 6月 10日 参照
+
+\end{thebibliography}
+
+% 文書の終了
+\end{document} 

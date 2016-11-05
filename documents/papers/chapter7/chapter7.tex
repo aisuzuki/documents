@@ -1,0 +1,394 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  特殊文字 : 
+%    改行 -> \\
+% 
+%  注釈 : 
+%    \footnote[1]{ 注釈の内容 }
+%           
+%  次のページ :
+%    \pagebreak
+%
+%  整形をせずにそのまま出力 :
+%  (ソース等)
+%    \begin{verbatim}  〜内容
+%    \end{verbatim}
+%
+%  整形をせずにそのまま出力：
+%  ( 枠を付ける )
+%   まず、以下のパッケージを使う  
+%   \usepackage{eclbkbox}
+%   そのあとにソースを記述
+%   \begin{breakbox}
+%     \begin{verbatim}
+%        ソース
+%     \end{verbatim}
+%   \end{breakbox}
+%
+%  箇条書 :
+%    \begin{itemize}
+%    \item\hspace*{5mm} 箇条書の内容
+%    \end{itemize}
+%   
+%  画像を張り付ける
+%    \begin{center}
+%    \includegraphics{ 画像ファイル名.eps }
+%    \end{center}
+%
+%  数式 (数式モード)
+%   \begin{eqnarray*}
+%    式 ( = を揃える時は &=& )
+%   \end{eqnarray*}
+%
+%  セクションの作成 :
+%    \section{ 内容 }
+%
+%  サブセクションの作成 :
+%    \subsection{ 内容 }
+%
+%--------------------------------------------------
+%  番号の付いていないセクションも目次に出す:
+%    \addcontentsline{toc}{section}{目次に出す名前}
+%
+%  [ 参考文献の場合 ]
+%% (j)article クラスの場合
+%%
+%\begin{thebibliography}{99}
+%\addcontentsline{toc}{section}{\refname}% 追加
+%\bibitem{bibunsho4} 名前
+%                   本の名前
+%\end{thebibliography}
+%
+%% (j)report・(j)book クラスの場合
+%% 
+%\begin{thebibliography}{99}
+%\addcontentsline{toc}{chapter}{\bibname}% 追加
+%\bibitem{bibunsho4} 名前
+%                   本の名前
+%\end{thebibliography}
+%-----------------------------------------------
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% * 概要の書き方
+%    規定字数以内でその論文 の取り扱う範 囲，目的，内容
+%   の要点および主な結論などを記述する
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% documentclass の宣言 % @ 書式
+% \documentclass [ オプション ] { 書式 }
+%
+% [ オプションの種類 ]
+% * 二段組
+% [twocolumn]
+% * 印字の大きさ
+% [a4p]
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% レジュメに使うなら、jarticle
+%
+%\documentclass[twocolumn,a4p]{jarticle}
+
+\documentclass[a4p, epsf]{jarticle}
+\usepackage{multicol}
+% 画像を張り付ける
+\usepackage[dvips]{graphics}
+% 行列が使えるパッケージ
+\usepackage{amsmath}
+% ソースに枠をつける
+\usepackage{eclbkbox}
+\usepackage{epsf}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 余白や文字間の幅の細かい設定
+%
+% 
+%\setlength{\voffset}{65pt}
+%\setlength{\topmargin}{-170pt}
+%\setlength{\textheight}{770pt}
+%\setlength{\oddsidemargin}{-10pt}
+%\setlength{\textwidth}{480pt}
+%\setlength{\headsep}{40pt}
+
+% 文書のはじまり 
+\begin{document}
+
+%---------------------------------------------
+%
+% article の時の表紙を別ページにする
+%
+\vspace*{4cm}
+\begin{center}
+{\LARGE 第 7 章 演習1 競争種 \\} 
+\vspace*{1cm}
+{\large 01ca0125 鈴木 藍 \\ 
+  2002年 7月 16日}
+\end{center}
+\thispagestyle{empty}
+\newpage
+%------------------------------------------------
+%========================================
+% ここから文章
+%
+% 1ページ目
+%
+%========================================
+
+%----------------------------------------
+%
+% もくじをつける
+\tableofcontents
+\newpage
+%----------------------------------------
+
+%----------------------------------------
+% 概要 (abstract)
+%
+\begin{abstract} 
+\addcontentsline{toc}{section}{概要}
+第 7 章 の概要を理解した後に、演習問題を解く。
+
+\end{abstract}
+%----------------------------------------
+
+% はじめに
+% section のオプションで、数字を表示させないようにする
+%
+\section*{レポートの目的}
+\addcontentsline{toc}{section}{レポートの目的}
+今回は、はじめにを理解した後に問題を良く考えて
+解いてみる。
+
+%------------------------------------------------------
+% セクション
+%------------------------------------------------------
+\section{ 章の概要  }
+%------------------------------------------------------
+\subsection{ はじめに }
+ここでは、微分方程式でなりたつ物を扱う。解法としては
+解析的に解く事が困難だということを前提として話を進めていて、
+相平面と言う二つの現象の関係を表す事が出来る座標を使って
+その関数の解が、どのような軌道を取るかを予測する事で解を定
+めている。
+また、平衡点という特殊な点のごく近い所で解がどのように変化するかを
+観測し、スケッチをもとに予測をする。
+
+\subsection{ 競争種：生存闘争 }
+ある同じ食物を巡って争う二つの生物をモデル化している。
+ここではどちらか一方が強いという仮定をしている。
+
+%-------------------------------------------
+\section{ 演習 }
+%-------------------------------------------
+\subsection{ (i) 捕食者 - 被食者 }
+捕食者 - 被食者 の相互作用の単純なモデルは
+\begin{eqnarray*}
+    \frac{dx}{dt} &=& x + y \cr
+    \frac{dy}{dt} &=& -x + y
+\end{eqnarray*}
+であたえられる。
+初期個体数が $x(0) = y(0) = 1000$ であるとして、未来の $x$ と $y$
+を決定せよ。被食者はいつ絶滅するか。 \\
+ここでは、$x$ を捕食者、$y$ を被食者としている。
+\subsection{ 解 }
+まず、この二つの式の形を見て、解を $x = e^{rt}$ と仮定する。
+そして、$r$ は (7.8) 式
+\begin{eqnarray*}
+    r^2 - (a + d)r + ad - bc = 0
+\end{eqnarray*}
+から、
+\begin{eqnarray*}
+    r^2 - 2r + 2 = 0
+\end{eqnarray*}
+となる。判別式で見ると、
+\begin{eqnarray*}
+    \sqrt{-4} = 2i
+\end{eqnarray*}
+となるので、複素解となる。式を解くと、
+\begin{eqnarray*}
+   r &=& \frac{ 2 \pm  \sqrt{4 - 8 }}{2} \cr
+   r &=& \frac{2}{2} \pm \frac{\sqrt{-4}}{2} \cr
+   r &=& 1 \pm \frac{2i}{2}  \cr
+   r &=& 1 \pm i 
+\end{eqnarray*}
+よって、$r$ は 
+\begin{eqnarray*}
+   r = 1 \pm i 
+\end{eqnarray*}
+となり、これを $x$ の解に当てはめると
+\begin{eqnarray*}
+   x &=& A_1 e{(1+i)t} + B_1 e^{(1-i)t} 
+\end{eqnarray*}
+となる。これはオイラーの公式に直すと、
+\begin{eqnarray*}
+   x &=& A_1 e{(1+i)t} + B_1 e^{(1-i)t} \cr
+   x &=& A_1 e{t+it} + B_1 e^{t-it} \cr
+   x &=& A_1 e{t} e^{it} + B_1 e^{t}e^{-it} \cr
+   x &=& e^{t}(A_1 e^{it} + B_1 e^{-it}) \cr
+   x &=& e^{t}(A_1 \cos t + A_1 i \sin t + B_1 \cos t - B_1 i \sin t) \cr
+   x &=& e^{t}((A_1 + B_1) \cos t + i ( A_1 - B_1 ) \sin t ) 
+\end{eqnarray*}
+ここで、$A_1, B_1$ は定数なので、さらに $A, B$ と置き換えて
+\begin{eqnarray*}
+   x &=& e^{t}(A \cos t + B \sin t ) 
+\end{eqnarray*}
+となる。(i は考えない。)
+さらに、$y$ を求める。
+\begin{eqnarray*}
+    \frac{dx}{dt} &=& x + y
+\end{eqnarray*}
+であるから、これを変形して、
+\begin{eqnarray*}
+    \frac{dx}{dt} &=& x + y \cr
+    - y &=& - \frac{dx}{dt} + x \cr
+      y &=&   \frac{dx}{dt} - x 
+\end{eqnarray*}
+この $x$ に、先程求めた式を代入して、
+\begin{eqnarray*}
+   y &=& (e^{t}(A \cos t + B \sin t ))' - e^{t}(A \cos t + B \sin t ) 
+\end{eqnarray*}
+$e^{t}(A \cos t + B \sin t )$ を $t$ で微分すると、
+\begin{eqnarray*}
+   (e^{t}(A \cos t + B \sin t ))' \cr
+   &=& A(e^{t} \cos t)' +  B(e^{t} \sin t )' \cr
+   &=& A(e^{t} \cos t - e^{t} \sin t) + B(e^{t} \sin t + e^{t} \cos t) \cr
+   &=& A e^{t} \cos t - A e^{t} \sin t + B e^{t} \sin t + B e^{t} \cos t 
+\end{eqnarray*}
+$- e^{t} (A \cos t + B \sin t)$ を合わせて、
+\begin{eqnarray*}
+   A e^{t} \cos t - A e^{t} \sin t + B e^{t} \sin t + B e^{t} \cos t  \cr
+   - e^{t} A \cos t - e^{t} B \sin t \cr 
+   &=& - A e^{t} \sin t + B e^{t} \cos t  \cr
+   &=& B e^{t} \cos t - A e^{t} \sin t  \cr
+   &=& e^{t} (B \cos t - A \sin t )
+\end{eqnarray*}
+よって
+\begin{eqnarray*}
+  y = e^{t} (B \cos t - A \sin t )
+\end{eqnarray*}
+となる。
+そして、初期値 は $1000$ なので $A = B = 1000$
+である。
+よって、それぞれの $x, y$ は
+\begin{eqnarray*}
+\left
+\{
+    \begin{array}{c}
+    x = 1000 e^{t}(\cos t + \sin t) \cr
+    y = 1000 e^{t}(\cos t - \sin t)
+    \end{array}
+\right.
+\end{eqnarray*}
+である。ここで、被食者、$y$ が 0 になる時を
+調べるのであるから、$y=0$ となるような式を求める。
+ここで、$e^{t}(\cos t - \sin t)$ の $(\cos t - \sin t)$ が
+0 になればよいのであるが、もし $t$ が 0 になっても 0 にならないので
+どちらかの関数に統一する。
+\begin{eqnarray*}
+a \sin \theta + b \cos \theta = \sqrt{a^2 + b^2} \sin(\theta + \alpha)
+\end{eqnarray*}
+ただし
+\begin{eqnarray*}
+\sin \alpha = \frac{b}{\sqrt{a^2 + b^2}} \cr
+\cos \alpha = \frac{a}{\sqrt{a^2 + b^2}} 
+\end{eqnarray*}
+という公式を用いる。$\theta$は、$t$ なので、
+わからないのは $\sqrt{a^2 + b^2}, \alpha $ である。$\alpha$は
+$\sin \alpha = \frac{b}{\sqrt{a^2 + b^2}}$ から導き出す。
+\begin{eqnarray*}
+- \sin \alpha &=& - \frac{b}{\sqrt{a^2 + b^2}} \cr
+            &=& - \frac{1}{\sqrt{2}} 
+\end{eqnarray*}
+なので、 $\sin \alpha = - \sin 45°$ となる。45°は $\frac{\pi}{4}$ であるので
+$\alpha = - \frac{\pi}{4}$ となる。よって、$y$の式は
+\begin{eqnarray*}
+y = 1000e^{t}(-\sqrt{2} \sin (t - \frac{\pi}{4}))
+\end{eqnarray*}
+と書き換えられる。$y$ が 0 になるような、$t$ の値を求める。括弧の中を $t$ を
+求める式に変形して、
+\begin{eqnarray*}
+- \sqrt{2} \sin (t - \frac{\pi}{4}) &=& 0 \cr
+t - \frac{\pi}{4} &=& 0 \cr
+t &=& \frac{\pi}{4} 
+\end{eqnarray*}
+ここで、答えでは 
+$t = \big( n + \frac{1}{4} \big) \pi \hspace*{2mm}(n = 0,1,2 \hdots )$ としているが、確かに
+$n$ の値を 変化させてゆくと、式全体が $y = 0$ となる。そして、どちらの$x, y$ も
+初期値が$1000$ であるなら、第一象限に座標があるので、$y$ が 0 になるときの $t$ は
+$\frac{\pi}{4}$ の時である。以下は 厳密解をプロットした図である。
+\begin{center}
+  \includegraphics{tekito.eps}
+\end{center}
+範囲指定しないと、渦を巻いているような図になった。
+\begin{center}
+  \includegraphics{tekito2.eps}
+\end{center}
+(ii) 以降 \\
+まだ理解出来ていません。
+
+\section{ 予定 }
+まだ理解できていない部分が溜っているので、予定をまとめる。
+\begin{itemize}
+    \item 第 5 章 の演習問題と、解法を理解する。
+    \item 第 7 章 はじめにの理解と、演習問題を解く。
+\end{itemize}
+理解できた所までをレポートにまとめておきたいと思う。
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  感想、展望
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{まとめ・結論}
+\addcontentsline{toc}{section}{まとめ・結論}
+これまでは、時間とそのモデルの関係を見てきたが、
+この章ではある現象と現象の関係を表す微分方程式に関する章であった。
+解法としては、全体的な関係に常に気を配って解くような形であったが
+前章をしっかり理解していれば、もう少しスマートに理解できたのでは
+ないかと思う。
+
+%------------------------------------------------
+\section*{感想} 
+\addcontentsline{toc}{section}{感想}
+今回も、とくことが出来た問題が 1 つしかなかったが、
+なんとか自力で出来た所がとても多かったので、少し自分で
+問題を解く事が出来る自信がついた。いままで、答えを見てから
+何故そうなるのかを考える事が多かったが、今回は今までの知識を使って
+問題を解く事が出来た。最後の方は、答えを見てから理解をしたが、方針は
+自分で考え、その通りに解いたらいい所まで行きつく事ができた。
+今まで 問題を見てきて、自分で解く自信が全く無かったのだが、今回の演習問題を解いた事は
+とても大きな収穫だと思った。
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  参考文献
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% 「関連図書」を変更する
+% jreport, jbook なら、bibname
+%\renewcommand{\bibname}{変更後の名前}
+%\renewcommand{\bibname}{参考文献}
+
+% 「参考文献」を変更する
+% jarticle なら、refname
+\renewcommand{\refname}{参考文献}
+\begin{thebibliography}{9}
+
+% 目次に参考文献をいれる
+\addcontentsline{toc}{section}{\refname}% 追加
+
+% 参考文献
+\bibitem{ hoge }
+ 物理のための三角関数 \\
+ http://doraneco.pos.to/physics/column/sankaku.html \\
+ 2002年 7月15日 参照
+
+\end{thebibliography}
+
+% 文書の終了
+\end{document} 

@@ -1,0 +1,455 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  特殊文字 : 
+%    改行 -> \\
+% 
+%  注釈 : 
+%    \footnote[1]{ 注釈の内容 }
+%           
+%  次のページ :
+%    \pagebreak
+%
+%  整形をせずにそのまま出力 :
+%  (ソース等)
+%    \begin{verbatim}  〜内容
+%    \end{verbatim}
+%
+%  整形をせずにそのまま出力：
+%  ( 枠を付ける )
+%   まず、以下のパッケージを使う  
+%   \usepackage{eclbkbox}
+%   そのあとにソースを記述
+%   \begin{breakbox}
+%     \begin{verbatim}
+%        ソース
+%     \end{verbatim}
+%   \end{breakbox}
+%
+%  箇条書 :
+%    \begin{itemize}
+%    \item\hspace*{5mm} 箇条書の内容
+%    \end{itemize}
+%   
+%  画像を張り付ける
+%    \begin{center}
+%    \includegraphics{ 画像ファイル名.eps }
+%    \end{center}
+%
+%  セクションの作成 :
+%    \section{ 内容 }
+%
+%  サブセクションの作成 :
+%    \subsection{ 内容 }
+%
+%--------------------------------------------------
+%  番号の付いていないセクションも目次に出す:
+%    \addcontentsline{toc}{section}{目次に出す名前}
+%
+%  [ 参考文献の場合 ]
+%% (j)article クラスの場合
+%%
+%\begin{thebibliography}{99}
+%\addcontentsline{toc}{section}{\refname}% 追加
+%\bibitem{bibunsho4} 名前
+%                   本の名前
+%\end{thebibliography}
+%
+%% (j)report・(j)book クラスの場合
+%% 
+%\begin{thebibliography}{99}
+%\addcontentsline{toc}{chapter}{\bibname}% 追加
+%\bibitem{bibunsho4} 名前
+%                   本の名前
+%\end{thebibliography}
+%-----------------------------------------------
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% * 概要の書き方
+%    規定字数以内でその論文 の取り扱う範 囲，目的，内容
+%   の要点および主な結論などを記述する
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% documentclass の宣言 % @ 書式
+% \documentclass [ オプション ] { 書式 }
+%
+% [ オプションの種類 ]
+% * 二段組
+% [twocolumn]
+% * 印字の大きさ
+% [a4p]
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% レジュメに使うなら、jarticle
+%
+%\documentclass[twocolumn,a4p]{jarticle}
+
+\documentclass[a4p,epsf]{jarticle}
+\usepackage{multicol}
+% 画像を張り付ける
+\usepackage[dvips]{graphics}
+% 行列が使えるパッケージ
+\usepackage{amsmath}
+% ソースに枠をつける
+\usepackage{eclbkbox}
+\usepackage{epsf}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 余白や文字間の幅の細かい設定
+%
+% 
+%\setlength{\voffset}{65pt}
+%\setlength{\topmargin}{-170pt}
+%\setlength{\textheight}{770pt}
+%\setlength{\oddsidemargin}{-10pt}
+%\setlength{\textwidth}{480pt}
+%\setlength{\headsep}{40pt}
+
+% 文書のはじまり 
+\begin{document}
+
+%---------------------------------------------
+%
+% article の時の表紙を別ページにする
+%
+\vspace*{4cm}
+\begin{center}
+{\LARGE 電子の相互作用のシミュレーション \\} 
+\vspace*{1cm}
+{\large 01ca0125 鈴木 藍 \\ 
+  2002年 5月 23日}
+\end{center}
+\thispagestyle{empty}
+\newpage
+%------------------------------------------------
+%========================================
+% ここから文章
+%
+% 1ページ目
+%
+%========================================
+
+%----------------------------------------
+%
+% もくじをつける
+\tableofcontents
+\newpage
+%----------------------------------------
+
+% 概要 (abstract)
+%
+\begin{abstract} 
+\addcontentsline{toc}{section}{概要}
+
+前回作成したスカラー場とベクトル場を作るプログラムを応用して
+電子同士の相互作用を計算する。
+今回は、このシミュレーションの モデルを理解する事と
+プログラムの作成に大幅に時間を使ったため、考察などについては
+盛り込む事が出来なかった。
+
+\end{abstract}
+
+% はじめに
+% section のオプションで、数字を表示させないようにする
+%
+\section*{レポートの目的}
+\addcontentsline{toc}{section}{レポートの目的}
+ある物体の相互作用を、スカラー場を使って計算する。
+
+%------------------------------------------------------
+% セクション
+%------------------------------------------------------
+\section{ 課題 }
+%------------------------------------------------------
+\subsection{ 課題の概要 }
+今回の課題は、前回作成した スカラー場、ベクトル場を作る
+プログラムを応用し、ある n 個の電子が存在するスカラー場
+から、その電子の相互作用をシミュレーションするプログラムを作成する。
+
+%-------------------------------------------
+\section{ 方針 }
+%-------------------------------------------
+結果から言うと、このプログラムでは
+プラスの電価を持つ電子とプラスの電価を持つ電子は
+斥力が働かなければならないが、引力が働いてしまう。
+この原因を採る事が出来なかった。
+
+\subsection{ 計算の方針 }
+\subsubsection{ 電子の相互作用 }
+n 個ある電子のうちの一つである $p$ がうける、他の電子の作用は
+\begin{itemize}
+\item $p$ 以外の電子のスカラー場を作成する
+\item そのスカラー場から、ベクトル場を作成する
+\item ベクトル場の$p$ の座標上の方向ベクトルに $p$ の電価をかける
+\item この方向ベクトルを 他の電子から受ける作用とし、ここから加速度などを求める
+\end{itemize}
+とした。よって、$p$座標上の方向ベクトルを $\vec{E}$, $p$ の電価を $q$, 作用を $\vec{F}$ とすると 
+\[
+\vec{F} = q \cdot \vec{E}
+\]
+となる。 \\
+ここでは $p$ 以外のすべての電子のスカラー場で求めるのではなく、
+一つ一つの電子にこの計算をし、作用を足し込んでいく方法も考え、作ってみたが
+それほど変わらないように感じた。(実際変わらないと思う)
+ 
+\subsubsection{ その他 }
+境界については 、はじまで電子がきたら反対から出て来るように
+した。 
+
+%-------------------------------------------
+\section{ ヘッダファイル  }
+%-------------------------------------------
+今回は 実装のスタイルに気を使っている余裕がなかった。
+
+\begin{breakbox}
+  \begin{verbatim}
+#define   RAND ((double) rand()/(double)RAND_MAX)
+
+typedef struct sfield    ScaleField;
+typedef struct vfield    VectorField;
+typedef struct electron  anElectron;
+/*---------- electron exists ----------------*/
+struct electron {
+  double q;
+  double x, y;
+  double vx, vy;
+};
+/*-------------------------------------------*/
+/*---------- scale field --------------------*/
+struct sfield {
+   double  potential[FIELD_SIZE][FIELD_SIZE];
+};
+/*-------------------------------------------*/
+/*---------- vector field -------------------*/
+struct point {
+   double  x, y;
+   double  x, y;
+};
+struct vfield {
+   struct point pointOf[FIELD_SIZE][FIELD_SIZE];
+};
+/*-------------------------------------------*/
+anElectron  *initElectrons(int n);
+ScaleField  *newScaleField(void);
+VectorField *newVectorField(void);
+ScaleField  *makeScaleField(ScaleField  *scalefield, anElectron  electrons);
+ScaleField  *buildScaleField(ScaleField *scalefield,
+                             anElectron  electrons[], int number);
+VectorField *makeVectorField(ScaleField *scalefield, VectorField *vectorfiled);
+void initWorld(void);
+
+  \end{verbatim}
+\end{breakbox}
+
+%-------------------------------------------
+\section{ 場の作成  }
+%-------------------------------------------
+\subsection{ 電子 }
+テストデータ以外は 乱数を使ってデータを作成した。
+電子を表す構造体のメンバは 
+\begin{itemize}
+\item  q \hspace*{5mm} (電価)
+\item  x \hspace*{5mm} (この電子の $x$ 座標)
+\item  y \hspace*{5mm} (この電子の $y$ 座標)
+\item  vx \hspace*{5mm} ($x$方向の速度)
+\item  vy \hspace*{5mm} ($y$方向の速度)
+\end{itemize}
+である。 $vx$ と $vy$ は それぞれ $0.0$ に、$q$は $-15 〜 15$ までの値に、
+$x$, $y$ はフィールドの範囲内の値を乱数でとるようにした。
+
+\subsection{ スカラー場 }
+スカラー場の電子のポテンシャルを求める式は
+\[
+\varphi = \frac{q}{r}
+\]
+である。ここで、$q$ は電価、$r$ はある点からその電子の
+ある場所までの距離である。
+
+\subsection{ ベクトル場 }
+前回作成した関数をそのまま使った。ただし、少しバグがあったので
+それをなおして使用している。
+
+\newpage
+%-------------------------------------------
+\section{ プログラムの実行 }
+%-------------------------------------------
+テストデータとして、マイナスの電価を持つ電子と
+プラスの電価を持つ電子を用意し、同じ$x$ 軸上に 配置して
+実験した。画像の配置は左上から下へ、ループを 10 ずつ
+実行した結果である。
+
+\begin{figure}[t]
+  \begin{center}
+  \begin{tabular}{cc}
+  \begin{minipage}{0.4\textwidth}
+    \mbox{
+      \epsfxsize = \textwidth
+      \epsfbox{2elec30.eps}
+      }
+  \end{minipage}
+  &
+  \begin{minipage}{0.4\textwidth}
+    \mbox{
+      \epsfxsize = \textwidth
+      \epsfbox{2elec70.eps}
+      }
+  \end{minipage}
+  \\
+  &\\
+  \begin{minipage}{0.4\textwidth}
+    \mbox{
+      \epsfxsize = \textwidth
+      \epsfbox{2elec50.eps}
+      }
+  \end{minipage}
+  &
+  \begin{minipage}{0.4\textwidth}
+    \mbox{
+      \epsfxsize = \textwidth
+      \epsfbox{2elec80.eps}
+      }
+  \end{minipage}
+  \\
+  \begin{minipage}{0.4\textwidth}
+    \mbox{
+      \epsfxsize = \textwidth
+      \epsfbox{2elec60.eps}
+      }
+  \end{minipage}
+  &
+  \begin{minipage}{0.4\textwidth}
+    \mbox{
+      \epsfxsize = \textwidth
+      \epsfbox{2elec90.eps}
+      }
+  \end{minipage}
+  \\
+
+  \end{tabular}
+\end{center}
+\end{figure}
+
+はっきりした違いは分かりにくいが、少しずつ離れてしまっている。
+
+\newpage
+%-------------------------------------------
+\section{ 乱数を使った実験 }
+%-------------------------------------------
+
+ データに乱数を使っている。また、はじにきたときにループを
+している。
+
+\begin{figure}[t]
+  \begin{center}
+  \begin{tabular}{cc}
+  \begin{minipage}{0.4\textwidth}
+    \mbox{
+      \epsfxsize = \textwidth
+      \epsfbox{elec30.eps}
+      }
+  \end{minipage}
+  &
+  \begin{minipage}{0.4\textwidth}
+    \mbox{
+      \epsfxsize = \textwidth
+      \epsfbox{elec70.eps}
+      }
+  \end{minipage}
+  \\
+  &\\
+  \begin{minipage}{0.4\textwidth}
+    \mbox{
+      \epsfxsize = \textwidth
+      \epsfbox{elec50.eps}
+      }
+  \end{minipage}
+  &
+  \begin{minipage}{0.4\textwidth}
+    \mbox{
+      \epsfxsize = \textwidth
+      \epsfbox{elec80.eps}
+      }
+  \end{minipage}
+  \\
+  \begin{minipage}{0.4\textwidth}
+    \mbox{
+      \epsfxsize = \textwidth
+      \epsfbox{elec60.eps}
+      }
+  \end{minipage}
+  &
+  \begin{minipage}{0.4\textwidth}
+    \mbox{
+      \epsfxsize = \textwidth
+      \epsfbox{elec90.eps}
+      }
+  \end{minipage}
+  \\
+
+  \end{tabular}
+\end{center}
+\end{figure}
+一度、反対側から出てきているが、また押しもどされている。
+
+\section{ 考察 }
+このプログラムでは、プラスの電価を持つ電子は マイナスの電価を持つ電子に
+突き放され、マイナスの電価を持つ電子は、プラスの電価を持つ電子に引っ張られて
+いる。 電子同士の電価を比べて、プラスとマイナスで処理を変えるべきだったのかも
+しれないが、マイナスのベクトル場は収束しているので、作用される電子の
+電価をそのまま方向ベクトルにかけても、値は正確なはずである。
+細かい所でバグが潜んでいる可能性があるので、調べる必要がある。
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  感想、展望
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{まとめ・結論}
+\addcontentsline{toc}{section}{まとめ・結論}
+徐々にスカラー場とベクトル場の使い方がわかってきたような気がするが
+実装の設計がさっぱりだった。時間があるのなら、ベクトル場とスカラー場
+を計算するしたり、場そのものを管理する関数を使う場所などのレイヤーを
+しっかり設計したい。
+
+%------------------------------------------------
+\section*{感想} 
+\addcontentsline{toc}{section}{感想}
+今回は、モデルの理解に非常に手間取った。現在もまだ
+整理しきれていない所が多々あるので、早めに理解しておきたい。
+モデルを理解する訓練がもっと必要だと感じた。自分自身で
+考えて理解するのに、制限された時間内では現在はまだ難しいと
+思う。また、対象を考えるための手順も整理しておこうと思った。\\
+今日の卒業研究の前の時間に、プログラムについて相談してみようと
+思う。
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  参考文献
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% 「関連図書」を変更する
+% jreport, jbook なら、bibname
+%\renewcommand{\bibname}{変更後の名前}
+%\renewcommand{\bibname}{参考文献}
+
+% 「参考文献」を変更する
+% jarticle なら、refname
+\renewcommand{\refname}{参考文献}
+\begin{thebibliography}{9}
+
+% 目次に参考文献をいれる
+\addcontentsline{toc}{section}{\refname}% 追加
+
+% 参考文献
+\bibitem{ EMAN の 電磁気学 }
+ http://homepage2.nifty.com/eman/electromag/contents.html \\
+ 2002 年 5 月 22日 参照 
+\end{thebibliography}
+
+% 文書の終了
+\end{document} 

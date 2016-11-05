@@ -1,0 +1,471 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  特殊文字 : 
+%    改行 -> \\
+% 
+%  注釈 : 
+%    \footnote[1]{ 注釈の内容 }
+%           
+%  次のページ :
+%    \pagebreak
+%
+%  整形をせずにそのまま出力 :
+%  (ソース等)
+%    \begin{verbatim}  〜内容
+%    \end{verbatim}
+%
+%  整形をせずにそのまま出力：
+%  ( 枠を付ける )
+%   まず、以下のパッケージを使う  
+%   \usepackage{eclbkbox}
+%   そのあとにソースを記述
+%   \begin{breakbox}
+%     \begin{verbatim}
+%        ソース
+%     \end{verbatim}
+%   \end{breakbox}
+%
+%  箇条書 :
+%    \begin{itemize}
+%    \item\hspace*{5mm} 箇条書の内容
+%    \end{itemize}
+%   
+%  画像を張り付ける
+%    \begin{center}
+%    \includegraphics{ 画像ファイル名.eps }
+%    \end{center}
+%
+%  セクションの作成 :
+%    \section{ 内容 }
+%
+%  サブセクションの作成 :
+%    \subsection{ 内容 }
+%
+%--------------------------------------------------
+%  番号の付いていないセクションも目次に出す:
+%    \addcontentsline{toc}{section}{目次に出す名前}
+%
+%  [ 参考文献の場合 ]
+%% (j)article クラスの場合
+%%
+%\begin{thebibliography}{99}
+%\addcontentsline{toc}{section}{\refname}% 追加
+%\bibitem{bibunsho4} 名前
+%                   本の名前
+%\end{thebibliography}
+%
+%% (j)report・(j)book クラスの場合
+%% 
+%\begin{thebibliography}{99}
+%\addcontentsline{toc}{chapter}{\bibname}% 追加
+%\bibitem{bibunsho4} 名前
+%                   本の名前
+%\end{thebibliography}
+%-----------------------------------------------
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% * 概要の書き方
+%    規定字数以内でその論文 の取り扱う範 囲，目的，内容
+%   の要点および主な結論などを記述する
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% documentclass の宣言 % @ 書式
+% \documentclass [ オプション ] { 書式 }
+%
+% [ オプションの種類 ]
+% * 二段組
+% [twocolumn]
+% * 印字の大きさ
+% [a4p]
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% レジュメに使うなら、jarticle
+%
+%\documentclass[twocolumn,a4p]{jarticle}
+
+\documentclass[a4p, epsf]{jarticle}
+\usepackage{multicol}
+% 画像を張り付ける
+\usepackage[dvips]{graphics}
+% 行列が使えるパッケージ
+\usepackage{amsmath}
+% ソースに枠をつける
+\usepackage{eclbkbox}
+\usepackage{epsf}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 余白や文字間の幅の細かい設定
+%
+% 
+%\setlength{\voffset}{65pt}
+%\setlength{\topmargin}{-170pt}
+%\setlength{\textheight}{770pt}
+%\setlength{\oddsidemargin}{-10pt}
+%\setlength{\textwidth}{480pt}
+%\setlength{\headsep}{40pt}
+
+% 文書のはじまり 
+\begin{document}
+
+%---------------------------------------------
+%
+% article の時の表紙を別ページにする
+%
+\vspace*{4cm}
+\begin{center}
+{\LARGE 第一章 序論 \\1.2 と 1.3 \\} 
+\vspace*{1cm}
+{\large 01ca0125 鈴木 藍 \\ 
+  2002年 6月 6日}
+\end{center}
+\thispagestyle{empty}
+\newpage
+%------------------------------------------------
+%========================================
+% ここから文章
+%
+% 1ページ目
+%
+%========================================
+
+%----------------------------------------
+%
+% もくじをつける
+\tableofcontents
+\newpage
+%----------------------------------------
+
+% 概要 (abstract)
+%
+\begin{abstract} 
+\addcontentsline{toc}{section}{概要}
+
+
+\end{abstract}
+
+% はじめに
+% section のオプションで、数字を表示させないようにする
+%
+\section*{レポートの目的}
+\addcontentsline{toc}{section}{レポートの目的}
+
+
+
+%------------------------------------------------------
+% セクション
+%------------------------------------------------------
+\section{ 1.1 での疑問点 }
+%------------------------------------------------------
+1.1 で出て来た語について、自分なりに解釈した。
+\subsection{ 相互関係 }
+ここでは、ある重要な変数同士の相互作用であると考える。
+ある重要な変数が変化した時、その変化が起こる事によって
+別の変数に変化が起こる。この作用が相互作用である。
+この作用を、数式などにして 変数同士の関係を表しているものが
+相互関係であると考えた。
+
+\subsection{ 相関 }
+goo の辞書で調べた結果は以下の通りであった。\\
+
+■［相関関係］の大辞林第二版からの検索結果　\\
+そうかん-かんけい さうくわんくわん― 【相関関係】\\
+（1）一方が変われば他方も変わるというような関係。相関的な関係。\\
+（2）〔数〕 二つの変量の間で、一方が増加するにつれて、他方が増加または減少する関係。 \\
+
+ある変数や、式の値が互いに関係がある状態(「一定の関係で」変わる状態)を「相関がある」という。
+この関係には、
+「正の相関」と「負の相関」があり、おもに散布図で表される。
+
+%-------------------------------------------
+\section{1.2 人口問題}
+%-------------------------------------------
+人口の変化をマルサスのモデルを使って定式化する。
+それぞれの変数の意味は、教科書に書いてあるので割愛する。
+
+\subsection{ 微分方程式の意味 }
+人口がある時間の間に変化した割合を以下の微分方程式によって表す。
+\[
+\frac{dN}{dt} = \gamma N
+\]
+この微分方程式をみて、ある時間の間に変化した人口は、定数
+$\gamma$ によって一定に増加することがわかる。
+
+\subsection{ N を求める }
+決まった時間 t の時の 人口を求めるには、この微分方程式の不定積分を
+求める。5 ページの式は 3 つめまでは 見た通りの式の変形を行っている。
+4 つめは、公式集から
+$\int \frac{1}{x} dx = \log x$ であるから、
+\[
+\log N = \gamma t + A
+\]
+となる。 ここで、$t = 0$ で、$N=N_0$ であるならば、$\log N_0 = A$
+であるから、$\log x = y$ の時、 $x = e^y$ なので
+\[
+N = e ^{\gamma t + A} \cr
+e^ {\gamma t } \cdot e^A
+\]
+ここで、$\log N_0 = A$ なので、$N_0 = e^A$ であるから、
+\[
+N = e^{ \gamma t} N_0
+\]
+となる。
+t が決まった時の人口は、この式で求める事が出来る。
+
+\subsection{ プログラムの作成 }
+\subsubsection{ 基本となる式 }
+人口 $N$ が ある時間の区間 $dt$ 分変化した時の式は
+\[
+\frac{dN}{dt} = \gamma N \cr
+\frac{N(t+dt)-N(t)}{dt} = \gamma N(t) \cr
+N(t+dt) = \gamma N(t) dt + N(t)
+\]
+となる。この式は、現在の人口に $dt$ 時間を変化の割合に書けたものを
+足している。以降、この式が基本となる。
+
+\subsubsection{ $\gamma$ の求め方 }
+6 ページのとおり、ある区間の $\gamma $ は 時刻 $t = 0$ を 1970年の人口
+に対応させ、 $N_0 = 3.9 \times 10^6$ とする。ここから、時間 $t=1$となった 時の1800年までの $\gamma $は
+$N = e^{ \gamma t} N_0$ から、 
+$N$ を 1800 年の人口 $5.3 \times 10^6$, $N_0$ を 1790 年の人口 $3.9 \times 10^6$
+とすると
+\[
+N(1) = 5.3 \times 10^6 = 3.9 \times 10^6 e^{\gamma} \cr
+\frac{5.3}{3.9} = e^{\gamma} \cr
+\log_e \frac{5.3}{3.9} = \log_e e^{\gamma} \cr
+\log_e \frac{5.3}{3.9} = \gamma
+\]
+となる。よって $\gamma $ は 
+\[
+\gamma = \log ( \frac{5.3}{3.9} ) = 0.307
+\]
+である。
+$\gamma$の求め方は、このように狭い区間で求める方法もあるが
+この狭い区間の $\gamma$ の平均をとるなどの方法もある。
+今回は、このままの $\gamma = 0.307$ を使った。
+
+\subsubsection{ ソース }
+人口の増加を予測する式を プログラム化したものは以下の通りである。可視化は
+gnuplot で行った。また、$\gamma$ は $0.307$, 初期の人口 $N_0$ は 1790 年の人口
+$3.9$, 時間の変化区間 を $dt$ とした。
+\begin{breakbox}
+   \begin{verbatim}
+#include <stdio.h>
+
+int main()
+{
+  double  g, N;
+  int     t, dt;
+  N  = 3.9;
+  dt = 1;
+  g  = 0.307;
+
+  for (t=0; t<15; t+=dt) {
+    printf("%d %f\n", t, g*N*dt+N);
+    N = g*N*dt+N;
+  }
+}
+   \end{verbatim}
+\end{breakbox}
+
+\subsubsection{ 実行結果 }
+tt は $\gamma > 0$, ttt は $\gamma = 0$, tttt は $\gamma<0$, dd は
+7 ページのデータをプロットしたものである。
+\begin{center}
+\includegraphics{test.eps}
+\end{center}
+誤差は激しいが、大方 線にはそっている。
+
+\subsection{ ベアフルスト モデル }
+マルサスモデルが 人口増加の抑制をする要因を考慮に入れていない事もあり、
+無限に人口が増えてゆくモデルとなる。このような増加は起こり得ないので、
+この人口増加を抑制する要因を考慮したモデルを考える必要がある。ベアフルスト
+は、人口は継続しうる限り増加するが、上限($N_\infty$)があるとして、人口変化 $\frac{dN}{dt}$ を
+7 ページ の中盤 (i) (ii) に比例すると仮定した。\\
+よって、このモデルの微分方程式は
+\[
+\frac{dN}{dt} = \gamma N(1- \frac{N}{N_\infty}) 
+\]
+である。\\
+この式の意味は、抑制の要因の部分は$N$ は時間によって増加してゆき、だんだん 上限$N_\infty$ に近付いてゆく。
+この時、$\frac{N}{N_\infty}$ は $1$ に近付く。 $1-\frac{N}{N_\infty}$ を一定の割合で増加してゆく
+人口にかけると、人口は上限に近付くが、それ以上増える事はない。
+\subsubsection{ 微分方程式の計算 }
+\[
+\frac{dN}{dt} = \gamma N(1- \frac{N}{N_\infty}) 
+\]
+の不定積分を計算する。
+\[
+\int \frac{dN}{N(1- \frac{N}{N_\infty}} = \int \gamma dt
+\]
+左辺の被積分関数を部分分数に分解する。
+\[
+\int \big[ \frac{1}{N(1- \frac{N}{N_\infty}} \big] dN= \int \gamma dt \cr
+\frac{1}{N(1- \frac{N}{N_\infty}} = \frac{a}{N} + \frac{b}{1-\frac{N}{N_\infty}} 
+\]
+両辺に $N(1-\frac{N}{N_\infty})$ をかけて
+\[
+\frac{N(1- \frac{N}{N_\infty}}{N(1- \frac{N}{N_\infty}}) = \frac{a}{N} N(1- \frac{N}{N_\infty}) + \frac{b}{1-\frac{N}{N_\infty}} N(1- \frac{N}{N_\infty}) \cr
+1 = a(1- \frac{N}{N_\infty}) + bN 
+\]
+ここで、$N = 0$ の時
+\[
+1 = a(1- \frac{0}{N_\infty}) + b \cdot 0 \cr
+1 = a
+\]
+
+ここで、$N = N_\infty$ の時
+\[
+1 = a(1- \frac{N_\infty}{N_\infty}) + b N_\infty \cr
+1 = b N_\infty \cr
+b = \frac{1}{N_\infty}
+\]
+となるので、
+\[
+\int \Big[\frac{1}{N} + \frac{\frac{1}{N_\infty}}{(1- \frac{N}{N_\infty})} \Big] dN= \gamma dt + A
+\]
+ここで、$A$ は 積分定数である。
+これを部分積分して、
+\[
+\int \frac{1}{N} dN = \log N
+\]
+ここで、
+\[
+\int \frac{\frac{1}{N_\infty}}{(1- \frac{N}{N_\infty})} dN
+\]
+は置換積分をおこなう。
+$(1-\frac{N}{N_\infty})$ を $t$ として
+\[ 
+1-\frac{N}{N_\infty} = t \cr
+\frac{N}{N_\infty} = -t + 1 \cr
+N = -t N_\infty + N_\infty \cr
+\frac{dN}{dt} = -N_\infty \cr
+dN = -dt N_\infty 
+\]
+よって
+\[ 
+\int \frac{\frac{1}{N_\infty}}{t} dN \cr
+\int \frac{\frac{1}{N_\infty}}{t} -dt N_\infty \cr
+\int \frac{1}{t} -dt 
+\]
+となる。
+\[
+\int \frac{1}{t} -dt = - \log t 
+\]
+であるから、
+\[
+- \log t = -log(1-\frac{N}{N_\infty})
+\]
+となる。
+よって
+\[
+\log N - \log (1-\frac{N}{N_\infty}) = \gamma t + A \cr
+\log \frac{N}{(1-\frac{N}{N_\infty})} = \gamma t + A 
+\]
+である。ここで、$t=0$ で、$N=N_0$ ならば、$A=\log (\frac{N_0}{(1-\frac{N_0}{N_\infty})})$ となる。
+ここで、
+\[
+\log \frac{N}{(1-\frac{N}{N_\infty})} = \gamma t + A \cr
+\log \frac{N}{(1-\frac{N}{N_\infty})} = \gamma t + \log (\frac{N_0}{(1-\frac{N_0}{N_\infty})}) \cr
+\log \frac{N}{(1-\frac{N}{N_\infty})} = \gamma t \cdot \log_e e + \log (\frac{N_0}{(1-\frac{N_0}{N_\infty})}) \cr
+\log \frac{N}{(1-\frac{N}{N_\infty})} =  \log_e e^{\gamma t} + \log (\frac{N_0}{(1-\frac{N_0}{N_\infty})}) \cr
+\log \frac{N}{(1-\frac{N}{N_\infty})} =  \log (\frac{e^{\gamma t} N_0}{(1-\frac{N_0}{N_\infty})}) 
+\]
+よって
+\[
+\frac{N}{(1-\frac{N}{N_\infty})} =  \frac{e^{\gamma t} N_0}{(1-\frac{N_0}{N_\infty})}
+\]
+となる。これを $N$ について解くと
+\[
+N = \frac{N_\infty}{1+ [(\frac{N_\infty}{N_0})-1] e^{- \gamma t}}
+\]
+である。
+\subsubsection{ プログラムの実行 }
+基本となる式は
+\[
+N(t+dt) = \gamma N (t) (1- \frac{N}{N_\infty}) dt + N(t) (1- \frac{N}{N_\infty})
+\]
+である。
+ここで、$N_0 = 3.9$, $\gamma = 0.3134$, $N_\infty = 197$ とした。
+\begin{breakbox}
+  \begin{verbatim}
+#include <stdio.h>
+
+int main()
+{
+  double  g, N, N_inf;
+  int     t, dt;
+  N     = 3.9;
+  N_inf = 197;
+  dt    = 1;
+  g     = 0.3134;
+
+  for (t=0; t<12; t+=dt) {
+    printf("%d %f\n", t, g*N*dt*(1-(N/N_inf))+N*(1-(N/N_inf)));
+    N = g*N*dt*(1-(N/N_inf))+N*(1-(N/N_inf));
+  }
+  \end{verbatim}
+\end{breakbox}
+
+\subsubsection{ 実行結果 }
+上記のプログラムの実行結果は以下の通りである。
+\begin{center}
+\includegraphics{test1.eps}
+\end{center}
+限界に近付くにつれて、変化はゆるくなる。
+
+\section{ 1.3 モデル化の為の枠組 }
+藤本先生の言う通り、この工程は ウォーターフォールモデルのように
+流れの枠をはっきりと決め、後戻りするには時間のロスがおおきいのだと
+思う。しかし、この枠組は基本であり、常にこの流れを念頭に置いておけば
+方針などを見失うことはないと思う。
+特に、私のように数学のモデルを作る事に不慣れな者にとっては明確な指標と
+なると思う。
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  感想、展望
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{まとめ・結論}
+\addcontentsline{toc}{section}{まとめ・結論}
+
+
+
+%------------------------------------------------
+\section*{感想} 
+\addcontentsline{toc}{section}{感想}
+
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  参考文献
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% 「関連図書」を変更する
+% jreport, jbook なら、bibname
+%\renewcommand{\bibname}{変更後の名前}
+%\renewcommand{\bibname}{参考文献}
+
+% 「参考文献」を変更する
+% jarticle なら、refname
+\renewcommand{\refname}{参考文献}
+\begin{thebibliography}{9}
+
+% 目次に参考文献をいれる
+\addcontentsline{toc}{section}{\refname}% 追加
+
+% 参考文献
+\bibitem{ タグ }
+ 書名 \\
+ 著者 \\
+ 発行年月日 (第?版)
+\end{thebibliography}
+
+% 文書の終了
+\end{document} 

@@ -1,0 +1,2920 @@
+%!PS-Adobe-3.0
+%%Title: gturtle.c
+%%For: 
+%%Creator: a2ps version 4.13
+%%CreationDate: Sat Aug 31 14:47:45 2002
+%%BoundingBox: 24 24 571 818
+%%DocumentData: Clean7Bit
+%%Orientation: Landscape
+%%Pages: 8
+%%PageOrder: Ascend
+%%DocumentMedia: A4 595 842 0 () ()
+%%DocumentNeededResources: font Courier
+%%+ font Courier-Bold
+%%+ font Courier-BoldOblique
+%%+ font Courier-Oblique
+%%+ font Helvetica
+%%+ font Helvetica-Bold
+%%+ font Symbol
+%%+ font Times-Bold
+%%+ font Times-Roman
+%%DocumentProcessColors: Black 
+%%DocumentSuppliedResources: procset a2ps-a2ps-hdr
+%%+ procset a2ps-black+white-Prolog
+%%+ encoding EUC-JPEncoding
+%%EndComments
+/a2psdict 200 dict def
+a2psdict begin
+%%BeginProlog
+%%Copyright: (c) 1988, 89, 90, 91, 92, 93 Miguel Santana
+%%Copyright: (c) 1995, 96, 97, 98 Akim Demaille, Miguel Santana
+% Check PostScript language level.
+/languagelevel where {
+  pop /gs_languagelevel languagelevel def
+} {
+  /gs_languagelevel 1 def
+} ifelse
+
+% EPSF import as in the Red Book
+/BeginInclude {
+  /b4_Inc_state save def    		% Save state for cleanup
+  /dict_count countdictstack def	% Count objects on dict stack
+  /op_count count 1 sub def		% Count objects on operand stack 
+  userdict begin
+    0 setgray 0 setlinecap
+    1 setlinewidth 0 setlinejoin
+    10 setmiterlimit [ ] 0 setdash newpath
+    gs_languagelevel 1 ne {
+      false setstrokeadjust false setoverprint 
+    } if
+} bind def
+
+/EndInclude {
+  count op_count sub { pos } repeat	% Clean up stacks
+  countdictstack dict_count sub { end } repeat
+  b4_Inc_state restore
+} bind def
+
+/BeginEPSF {
+  BeginInclude
+  /showpage { } def
+} bind def
+
+/EndEPSF {
+  EndInclude
+} bind def
+
+% Page prefeed
+/page_prefeed {         % bool -> -
+  statusdict /prefeed known {
+    statusdict exch /prefeed exch put
+  } {
+    pop
+  } ifelse
+} bind def
+
+/deffont {
+  findfont exch scalefont def
+} bind def
+
+/reencode_font {
+  findfont reencode 2 copy definefont pop def
+} bind def
+
+% Function c-show (str => -)
+% centers text only according to x axis.
+/c-show { 
+  dup stringwidth pop
+  2 div neg 0 rmoveto
+  show
+} bind def
+
+% Function l-show (str => -)
+% prints texts so that it ends at currentpoint
+/l-show {
+  dup stringwidth pop neg 
+  0 
+  rmoveto show
+} bind def
+
+% center-fit show (str w => -)
+% show centered, and scale currentfont so that the width is less than w
+/cfshow {
+  exch dup stringwidth pop
+  % If the title is too big, try to make it smaller
+  3 2 roll 2 copy
+  gt
+  { % if, i.e. too big
+    exch div
+    currentfont exch scalefont setfont
+  } { % ifelse
+    pop pop 
+  }
+  ifelse
+  c-show			% center title
+} bind def
+
+% Return the y size of the current font
+% - => fontsize
+/currentfontsize {
+  currentfont /FontType get 0 eq {
+    currentfont /FontMatrix get 3 get
+  }{
+    currentfont /FontMatrix get 3 get 1000 mul
+  } ifelse
+} bind def
+
+% reencode the font
+% <encoding-vector> <fontdict> -> <newfontdict>
+/reencode { %def
+  dup length 5 add dict begin
+    { %forall
+      1 index /FID ne 
+      { def }{ pop pop } ifelse
+    } forall
+    /Encoding exch def
+
+    % Use the font's bounding box to determine the ascent, descent,
+    % and overall height; don't forget that these values have to be
+    % transformed using the font's matrix.
+    % We use `load' because sometimes BBox is executable, sometimes not.
+    % Since we need 4 numbers an not an array avoid BBox from being executed
+    /FontBBox load aload pop
+    FontMatrix transform /Ascent exch def pop
+    FontMatrix transform /Descent exch def pop
+    /FontHeight Ascent Descent sub def
+
+    % Define these in case they're not in the FontInfo (also, here
+    % they're easier to get to.
+    /UnderlinePosition 1 def
+    /UnderlineThickness 1 def
+    
+    % Get the underline position and thickness if they're defined.
+    currentdict /FontInfo known {
+      FontInfo
+      
+      dup /UnderlinePosition known {
+	dup /UnderlinePosition get
+	0 exch FontMatrix transform exch pop
+	/UnderlinePosition exch def
+      } if
+      
+      dup /UnderlineThickness known {
+	/UnderlineThickness get
+	0 exch FontMatrix transform exch pop
+	/UnderlineThickness exch def
+      } if
+      
+    } if
+    currentdict 
+  end 
+} bind def
+
+% composite fonts for ASCII-EUC mixed string
+% Version 1.2 1/31/1990
+% Orignal Ken'ichi HANDA (handa@etl.go.jp)
+% Modified Norio Katayama (katayama@rd.nacsis.ac.jp),1998
+% Extend & Fix Koji Nakamaru (maru@on.cs.keio.ac.jp), 1999
+% Anyone can freely copy, modify, distribute this program.
+
+/copyfont {	% font-dic extra-entry-count  copyfont  font-dic
+	1 index maxlength add dict begin
+	{	1 index /FID ne 2 index /UniqueID ne and
+		{def} {pop pop} ifelse
+	} forall
+	currentdict
+	end
+} bind def
+
+/compositefont { % ASCIIFontName EUCFontName RomanScale RomanOffset Rot(T/F) compositefont font
+    /RomanRotation exch def
+    /RomanOffset exch def
+    /RomanScale exch def
+    userdict /fixeucfont_dict known not {
+	userdict begin
+	    /fixeucfont_dict 2 dict begin
+		/UpperByteEncoding [
+		    16#00 1 16#20 { pop 0 } for
+		    16#21 1 16#28 { 16#20 sub } for
+		    16#29 1 16#2F { pop 0 } for
+		    16#30 1 16#74 { 16#27 sub } for
+		    16#75 1 16#FF { pop 0 } for
+		] def
+	        /LowerByteEncoding [
+		    16#00 1 16#A0 { pop /.notdef } for
+		    16#A1 1 16#FE { 16#80 sub 16 2 string cvrs
+				    (cXX) dup 1 4 -1 roll
+				    putinterval cvn } for
+		    /.notdef
+		] def
+		currentdict
+	    end def
+	end
+    } if
+    findfont dup /FontType get 0 eq {
+	14 dict begin
+	    %
+	    % 7+8 bit EUC font
+	    %
+	    12 dict begin
+		/EUCFont exch def
+		/FontInfo (7+8 bit EUC font) readonly def
+		/PaintType 0 def
+		/FontType 0 def
+		/FontMatrix matrix def
+		% /FontName
+		/Encoding fixeucfont_dict /UpperByteEncoding get def
+		/FMapType 2 def
+		EUCFont /WMode known
+		{ EUCFont /WMode get /WMode exch def }
+		{ /WMode 0 def } ifelse
+		/FDepVector [
+		    EUCFont /FDepVector get 0 get
+		    [ 16#21 1 16#28 {} for 16#30 1 16#74 {} for ]
+		    {
+			13 dict begin
+			    /EUCFont EUCFont def
+			    /UpperByte exch 16#80 add def	
+			    % /FontName
+			    /FontInfo (EUC lower byte font) readonly def
+			    /PaintType 0 def
+			    /FontType 3 def
+			    /FontMatrix matrix def
+			    /FontBBox {0 0 0 0} def
+			    /Encoding
+				fixeucfont_dict /LowerByteEncoding get def
+			    % /UniqueID
+			    % /WMode
+			    /BuildChar {
+				gsave
+				exch dup /EUCFont get setfont
+				/UpperByte get
+				2 string
+				dup 0 4 -1 roll put
+				dup 1 4 -1 roll put
+				dup stringwidth setcharwidth
+				0 0 moveto show
+				grestore
+			    } bind def
+			    currentdict
+			end
+			/lowerbytefont exch definefont
+		    } forall
+		] def
+		currentdict
+	    end
+	    /eucfont exch definefont
+	    exch
+	    findfont 1 copyfont dup begin
+		RomanRotation {
+			/FontMatrix FontMatrix
+			[ 0 RomanScale neg RomanScale 0 RomanOffset neg 0 ]
+			matrix concatmatrix def
+		}{
+			/FontMatrix FontMatrix
+			[ RomanScale 0 0 RomanScale 0 RomanOffset ] matrix concatmatrix
+			def
+			/CDevProc
+			    {pop pop pop pop 0 exch -1000 exch 2 div 880} def
+		} ifelse
+	    end
+	    /asciifont exch definefont
+	    exch
+	    /FDepVector [ 4 2 roll ] def
+	    /FontType 0 def
+	    /WMode 0 def
+	    /FMapType 4 def
+	    /FontMatrix matrix def
+	    /Encoding [0 1] def
+	    /FontBBox {0 0 0 0} def
+%	    /FontHeight 1.0 def % XXXX
+	    /FontHeight RomanScale 1.0 ge { RomanScale }{ 1.0 } ifelse def
+	    /Descent -0.3 def   % XXXX
+	    currentdict
+	end
+	/tmpfont exch definefont
+	pop
+	/tmpfont findfont
+    }{
+	pop findfont 0 copyfont
+    } ifelse
+} def	
+
+/slantfont {	% FontName slant-degree  slantfont  font'
+    exch findfont 1 copyfont begin
+    [ 1 0 4 -1 roll 1 0 0 ] FontMatrix exch matrix concatmatrix
+    /FontMatrix exch def
+    currentdict
+    end
+} def
+
+% Function print line number (<string> # -)
+/# {
+  gsave
+    sx cw mul neg 2 div 0 rmoveto
+    f# setfont
+    c-show
+  grestore
+} bind def
+
+% -------- Some routines to enlight plain b/w printings ---------
+
+% Underline
+% width --
+/dounderline {
+  currentpoint
+  gsave
+    moveto
+    0 currentfont /Descent get currentfontsize mul rmoveto
+    0 rlineto
+    stroke
+  grestore
+} bind def
+
+% Underline a string
+% string --
+/dounderlinestring {
+  stringwidth pop
+  dounderline
+} bind def
+
+/UL {
+  /ul exch store
+} bind def
+
+% Draw a box of WIDTH wrt current font
+% width --
+/dobox {
+  currentpoint
+  gsave
+    newpath
+    moveto
+    0 currentfont /Descent get currentfontsize mul rmoveto
+    dup 0 rlineto
+    0 currentfont /FontHeight get currentfontsize mul rlineto
+    neg 0 rlineto
+    closepath
+    stroke
+  grestore
+} bind def
+
+/BX {
+  /bx exch store
+} bind def
+
+% Box a string
+% string --
+/doboxstring {
+  stringwidth pop
+  dobox
+} bind def
+
+%
+% ------------- Color routines ---------------
+%
+/FG /setrgbcolor load def
+
+% Draw the background
+% width --
+/dobackground {
+  currentpoint
+  gsave
+    newpath
+    moveto
+    0 currentfont /Descent get currentfontsize mul rmoveto
+    dup 0 rlineto
+    0 currentfont /FontHeight get currentfontsize mul rlineto
+    neg 0 rlineto
+    closepath
+    bgcolor aload pop setrgbcolor
+    fill
+  grestore
+} bind def
+
+% Draw bg for a string
+% string --
+/dobackgroundstring {
+  stringwidth pop
+  dobackground
+} bind def
+
+
+/BG {
+  dup /bg exch store
+  { mark 4 1 roll ] /bgcolor exch store } if
+} bind def
+
+
+/Show {
+  bg { dup dobackgroundstring } if
+  ul { dup dounderlinestring } if
+  bx { dup doboxstring } if
+  show
+} bind def
+
+% Function T(ab), jumps to the n-th tabulation in the current line
+/T {
+  cw mul x0 add
+  bg { dup currentpoint pop sub dobackground } if
+  ul { dup currentpoint pop sub dounderline } if
+  bx { dup currentpoint pop sub dobox } if
+  y0 moveto
+} bind def
+
+% Function n: move to the next line
+/n {
+  /y0 y0 bfs sub store
+  x0 y0 moveto
+} bind def
+
+% Function N: show and move to the next line
+/N {
+  Show
+  /y0 y0 bfs sub store
+  x0 y0 moveto
+} bind def
+
+/S {
+  Show
+} bind def
+
+%%BeginResource: procset a2ps-a2ps-hdr 2.0 2
+%%Copyright: (c) 1988, 89, 90, 91, 92, 93 Miguel Santana
+%%Copyright: (c) 1995, 96, 97, 98 Akim Demaille, Miguel Santana
+% Function title: prints page header.
+% <ct> <rt> <lt> are passed as argument
+/title { 
+  % 1. Draw the background
+  x v get y v get moveto
+  gsave
+    0 th 2 div neg rmoveto 
+    th setlinewidth
+    0.95 setgray
+    pw 0 rlineto stroke
+  grestore
+  % 2. Border it
+  gsave
+    0.7 setlinewidth
+    pw 0 rlineto
+    0 th neg rlineto
+    pw neg 0 rlineto
+    closepath stroke
+  grestore
+  % stk: ct rt lt
+  x v get y v get th sub 1 add moveto
+%%IncludeResource: font Helvetica
+  fHelvetica fnfs 0.8 mul scalefont setfont
+  % 3. The left title
+  gsave
+    dup stringwidth pop fnfs 0.8 mul add exch % leave space took on stack
+    fnfs 0.8 mul hm rmoveto
+    show			% left title
+  grestore
+  exch
+  % stk: ct ltw rt
+  % 4. the right title
+  gsave
+    dup stringwidth pop fnfs 0.8 mul add exch % leave space took on stack
+    dup
+    pw exch stringwidth pop fnfs 0.8 mul add sub
+    hm
+    rmoveto
+    show			% right title
+  grestore
+  % stk: ct ltw rtw
+  % 5. the center title
+  gsave
+    pw 3 1 roll
+    % stk: ct pw ltw rtw
+    3 copy 
+    % Move to the center of the left room
+    sub add 2 div hm rmoveto
+    % What is the available space in here?
+    add sub fnfs 0.8 mul sub fnfs 0.8 mul sub
+    % stk: ct space_left
+%%IncludeResource: font Helvetica-Bold
+  fHelvetica-Bold fnfs scalefont setfont
+    cfshow
+  grestore
+} bind def
+
+% Function border: prints virtual page border
+/border { %def
+  gsave				% print four sides
+    0 setgray
+    x v get y v get moveto
+    0.7 setlinewidth		% of the square
+    pw 0 rlineto
+    0 ph neg rlineto
+    pw neg 0 rlineto
+    closepath stroke
+  grestore
+} bind def
+
+% Function water: prints a water mark in background
+/water { %def
+  gsave
+    scx scy moveto rotate
+%%IncludeResource: font Times-Bold
+  fTimes-Bold 100 scalefont setfont
+    .97 setgray
+    dup stringwidth pop 2 div neg -50 rmoveto
+    show
+  grestore
+} bind def
+
+% Function rhead: prints the right header
+/rhead {  %def
+  lx ly moveto
+  fHelvetica fnfs 0.8 mul scalefont setfont
+  l-show
+} bind def
+
+% Function footer (cf rf lf -> -)
+/footer {
+  fHelvetica fnfs 0.8 mul scalefont setfont
+  dx dy moveto
+  show
+
+  snx sny moveto
+  l-show
+  
+  fnx fny moveto
+  c-show
+} bind def
+%%EndResource
+%%BeginResource: procset a2ps-black+white-Prolog 2.0 1
+
+% Function T(ab), jumps to the n-th tabulation in the current line
+/T { 
+  cw mul x0 add y0 moveto
+} bind def
+
+% Function n: move to the next line
+/n { %def
+  /y0 y0 bfs sub store
+  x0 y0 moveto
+} bind def
+
+% Function N: show and move to the next line
+/N {
+  Show
+  /y0 y0 bfs sub store
+  x0 y0 moveto
+}  bind def
+
+/S {
+  Show
+} bind def
+
+/p {
+  false UL
+  false BX
+  fCourier bfs scalefont setfont
+  Show
+} bind def
+
+/sy {
+  false UL
+  false BX
+  fSymbol bfs scalefont setfont
+  Show
+} bind def
+
+/k {
+  false UL
+  false BX
+  fCourier-Oblique bfs scalefont setfont
+  Show
+} bind def
+
+/K {
+  false UL
+  false BX
+  fCourier-Bold bfs scalefont setfont
+  Show
+} bind def
+
+/c {
+  false UL
+  false BX
+  fCourier-Oblique bfs scalefont setfont
+  Show
+} bind def
+
+/C {
+  false UL
+  false BX
+  fCourier-BoldOblique bfs scalefont setfont
+  Show 
+} bind def
+
+/l {
+  false UL
+  false BX
+  fHelvetica bfs scalefont setfont
+  Show
+} bind def
+
+/L {
+  false UL
+  false BX
+  fHelvetica-Bold bfs scalefont setfont
+  Show 
+} bind def
+
+/str{
+  false UL
+  false BX
+  fTimes-Roman bfs scalefont setfont
+  Show
+} bind def
+
+/e{
+  false UL
+  true BX
+  fHelvetica-Bold bfs scalefont setfont
+  Show
+} bind def
+
+%%EndResource
+%%EndProlog
+%%BeginSetup
+%%IncludeResource: font Courier
+%%IncludeResource: font Courier-Oblique
+%%IncludeResource: font Courier-Bold
+%%IncludeResource: font Times-Roman
+%%IncludeResource: font Symbol
+%%IncludeResource: font Courier-BoldOblique
+%%BeginResource: encoding EUC-JPEncoding
+/EUC-JPEncoding [
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/space /exclam /quotedbl /numbersign /dollar /percent /ampersand /quoteright 
+/parenleft /parenright /asterisk /plus /comma /minus /period /slash 
+/zero /one /two /three /four /five /six /seven 
+/eight /nine /colon /semicolon /less /equal /greater /question 
+/at /A /B /C /D /E /F /G 
+/H /I /J /K /L /M /N /O 
+/P /Q /R /S /T /U /V /W 
+/X /Y /Z /bracketleft /backslash /bracketright /asciicircum /underscore 
+/quoteleft /a /b /c /d /e /f /g 
+/h /i /j /k /l /m /n /o 
+/p /q /r /s /t /u /v /w 
+/x /y /z /braceleft /bar /braceright /asciitilde /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/space /exclamdown /cent /sterling /currency /yen /brokenbar /section 
+/dieresis /copyright /ordfeminine /guillemotleft /logicalnot /hyphen /registered /macron 
+/degree /plusminus /twosuperior /threesuperior /acute /mu /paragraph /bullet 
+/cedilla /onesuperior /ordmasculine /guillemotright /onequarter /onehalf /threequarters /questiondown 
+/Agrave /Aacute /Acircumflex /Atilde /Adieresis /Aring /AE /Ccedilla 
+/Egrave /Eacute /Ecircumflex /Edieresis /Igrave /Iacute /Icircumflex /Idieresis 
+/Eth /Ntilde /Ograve /Oacute /Ocircumflex /Otilde /Odieresis /multiply 
+/Oslash /Ugrave /Uacute /Ucircumflex /Udieresis /Yacute /Thorn /germandbls 
+/agrave /aacute /acircumflex /atilde /adieresis /aring /ae /ccedilla 
+/egrave /eacute /ecircumflex /edieresis /igrave /iacute /icircumflex /idieresis 
+/eth /ntilde /ograve /oacute /ocircumflex /otilde /odieresis /divide 
+/oslash /ugrave /uacute /ucircumflex /udieresis /yacute /thorn /ydieresis 
+] def
+%%EndResource
+% Initialize page description variables.
+/sh 595 def
+/sw 842 def
+/llx 24 def
+/urx 818 def
+/ury 571 def
+/lly 24 def
+/#copies 1 def
+/th 15.000000 def
+/fnfs 11 def
+/bfs 8.005733 def
+/cw 4.803440 def
+
+% Dictionary for EUC-JP support
+/euc-jpdict 18 dict begin
+  /fCourier EUC-JPEncoding /Courier reencode_font
+  /fCourier-Bold EUC-JPEncoding /Courier-Bold reencode_font
+  /fCourier-BoldOblique EUC-JPEncoding /Courier-BoldOblique reencode_font
+  /fCourier-Oblique EUC-JPEncoding /Courier-Oblique reencode_font
+  /fHelvetica EUC-JPEncoding /Helvetica reencode_font
+  /fHelvetica-Bold EUC-JPEncoding /Helvetica-Bold reencode_font
+  /fTimes-Bold EUC-JPEncoding /Times-Bold reencode_font
+  /fTimes-Roman EUC-JPEncoding /Times-Roman reencode_font
+  /Ryumin-Light-EUC-H-Italic /Ryumin-Light-EUC-H 0.200000 slantfont  definefont pop
+  /GothicBBB-Medium-EUC-H-Italic /GothicBBB-Medium-EUC-H 0.200000 slantfont  definefont pop
+  /fCourier /fCourier /Ryumin-Light-EUC-H 1.100000 0.000000 false  compositefont 0.909091 scalefont def
+  /fCourier-Bold /fCourier-Bold /GothicBBB-Medium-EUC-H 1.100000 0.000000 false  compositefont 0.909091 scalefont def
+  /fCourier-BoldOblique /fCourier-BoldOblique /GothicBBB-Medium-EUC-H-Italic 1.100000 0.000000 false  compositefont 0.909091 scalefont def
+  /fCourier-Oblique /fCourier-Oblique /Ryumin-Light-EUC-H-Italic 1.100000 0.000000 false  compositefont 0.909091 scalefont def
+  /fHelvetica /fHelvetica /GothicBBB-Medium-EUC-H 1.100000 0.000000 false  compositefont 0.909091 scalefont def
+  /fHelvetica-Bold /fHelvetica-Bold /GothicBBB-Medium-EUC-H 1.100000 0.000000 false  compositefont 0.909091 scalefont def
+  /fTimes-Bold /fTimes-Bold /GothicBBB-Medium-EUC-H 1.100000 0.000000 false  compositefont 0.909091 scalefont def
+  /fTimes-Roman /fTimes-Roman /Ryumin-Light-EUC-H 1.100000 0.000000 false  compositefont 0.909091 scalefont def
+currentdict end def
+/bgcolor [ 0 0 0 ] def
+/bg false def
+/ul false def
+/bx false def
+% The font for line numbering
+/f# /Helvetica findfont bfs .6 mul scalefont def
+/fSymbol /Symbol findfont def
+/hm fnfs 0.25 mul def
+/pw
+   cw 81.400000 mul
+def
+/ph
+   501.959430 th add
+def
+/pmw urx llx sub pw 2 mul sub 1 div def
+/pmh 0 def
+/v 0 def
+/x [
+  0
+  dup pmw add pw add
+] def
+/y [
+  pmh ph add 0 mul ph add
+  dup
+] def
+/scx sw 2 div def
+/scy sh 2 div def
+/snx urx def
+/sny lly 2 add def
+/dx llx def
+/dy sny def
+/fnx scx def
+/fny dy def
+/lx snx def
+/ly ury fnfs 0.8 mul sub def
+/sx 0 def
+/tab 8 def
+/x0 0 def
+/y0 0 def
+%%EndSetup
+
+%%Page: (1-2) 1
+%%BeginPageSetup
+/pagesave save def
+sh 0 translate 90 rotate
+%%EndPageSetup
+euc-jpdict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 3.362408 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(/*) c n
+( * file: gturtle.c,v) N
+( * Revision: 0.1) N
+( * Author: ai suzuki) N
+( * Date: 2002/08/27 18:06:02) N
+( * Description: Turtle graphics for GNU/Linux) N
+( *) N
+( * Copyright \(C\) 2002  ai suzuki <spiral@soulhack.net>) N
+( *) N
+( * This program is free software; you can redistribute it and/or modify) N
+( * it under the terms of the GNU General Public License as published by) N
+( * the Free Software Foundation; either version 2 of the License, or) N
+( * \(at your option\) any later version.) N
+( *) N
+( */) N
+() p n
+(#include) K
+( <sys/types.h>) p n
+(#include) K
+( <sys/stat.h>) p n
+(#include) K
+( <unistd.h>) p n
+(#include) K
+( <stdio.h>) p n
+(#include) K
+( <stdlib.h>) p n
+(#include) K
+( <string.h>) p n
+(#include) K
+( <math.h>) p n
+() N
+(#ifndef) K
+( M_PI) p n
+(#define) K
+( M_PI 3.1415927) p n
+(#endif) K n
+() p n
+(#define) K
+( NAME_SIZE   32) p n
+(#define) K
+( BUF_SIZE    128) p n
+(#define) K
+( COLORS      8) p n
+() N
+(#define) K
+( UP    0) p n
+(#define) K
+( DOWN  1) p n
+(typedef) K
+( ) p
+(int) k
+( boolean;) p n
+() N
+(static) K
+( ) p
+(char) k
+( welcome[] = ") p
+(*** WELCOME TO GTURTLE! *** \\n) str
+(") p n
+(                        ") S
+(    Author: ai suzuki        \\n) str
+(") p n
+(                        ") S
+(    Aug. 13 2002             \\n) str
+(") p n
+(                        ") S
+(    See <help> to usage      \\n) str
+(";) p n
+() N
+(static) K
+( ) p
+(char) k
+( usage[] = ") p
+(<command list>                                            \\n) str
+(") p n
+(                      ") S
+( << System Command >>                                     \\n) str
+(") p n
+(                      ") S
+(init    <name>             : Generate <name>              \\n) str
+(") p n
+(                      ") S
+(delete  <name>             : Delete <name>                \\n) str
+(") p n
+(                      ") S
+(inspect <name>             : Inspect <name>               \\n) str
+(") p n
+(                      ") S
+(inspectall                 : Inspect all turtles          \\n) str
+(") p n
+(                      ") S
+(history <name>             : Command History              \\n) str
+(") p n
+(                      ") S
+(load    <file>             : Load a command file          \\n) str
+(") p n
+(                      ") S
+(save <turtle> <file>       : Save <turtle> to <file>      \\n) str
+(") p n
+(                      ") S
+(saveall <file>             : Save all turtles to <file>   \\n) str
+(") p n
+(                      ") S
+(ls                         : List directory contents      \\n) str
+(") p n
+(                      ") S
+(bye \(or q\)                 : Exit gturtle                 \\n) str
+(") p n
+(                      ") S
+(list                       : List turtles                 \\n) str
+(") p n
+(                      ") S
+(colorlist                  : List colors \(8 colors\)       \\n) str
+(") p n
+(                      ") S
+(help                       : Show this menu               \\n) str
+(") p n
+(                      ") S
+( << Messages >>                                           \\n) str
+(") p n
+(                      ") S
+( <turtle> pd               : <turtle> lowers his pen      \\n) str
+(") p n
+(                      ") S
+( <turtle> pu               : <turtle> lifts his pen       \\n) str
+(") p n
+(                      ") S
+( <turtle> home             : <turtle> goes home           \\n) str
+(") p n
+(                      ") S
+( <turtle> fd <length>      : <turtle> goes ahead          \\n) str
+(") p n
+(                      ") S
+( <turtle> bk <length>      : <turtle> goes back           \\n) str
+(") p n
+(gturtle.c) (1/16 \245\332\241\274\245\270) (02\307\257  8\267\35631\306\374 12:00) title
+border
+/v 1 store
+/x0 x v get 3.362408 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(                      ") p
+( <turtle> rt <theta>       : <turtle> turns right         \\n) str
+(") p n
+(                      ") S
+( <turtle> lt <theta>       : <turtle> turns left          \\n) str
+(") p n
+(                      ") S
+( <turtle> color <colorname>: <turtle> get <colorname> pen \\n) str
+(") p n
+(                      ") S
+( <turtle> undo             : Undoing a command            \\n) str
+(";) p n
+() N
+(static) K
+( ) p
+(char) k
+( errorMessage[] = ") p
+(ERROR: BAD COMMAND. \\n) str
+(";) p n
+() N
+(static) K
+( ) p
+(char) k
+( colorName[COLORS][NAME_SIZE] = {  ") p
+(red) str
+(",     ") p
+(green) str
+(",   ") p
+(blue) str
+(", ") p
+(purple) str
+(",) p n
+( ) N
+(                                             ") S
+(cyan) str
+(", ") p
+(darkbrown) str
+(", ") p
+(orange) str
+(",  ") p
+(brown) str
+(") p n
+( };) N
+(static) K
+( ) p
+(int) k
+( fieldsize; ) p n
+() N
+(/*----------------------------------------------------------------------*/) c
+( ) p n
+(/*                                                                      */) c n
+(/* < Model >                                                            */) S
+( ) p n
+(/* Class Category: Turtle                                               */) c
+( ) p n
+(/*                                                                      */) c n
+(/* Class Methods                                                        */) S
+( ) p n
+(/*    Category: Instance Creation                                       */) c
+( ) p n
+(/*        + newTurtle                                                   */) c n
+(/*    Category: Initialize                                              */) S
+( ) p n
+(/*        + MakeTurtle                                                  */) c n
+(/* Instance Methods                                                     */) S
+( ) p n
+(/*    Category: Accessing                                               */) c
+( ) p n
+(/*        + locationX\(Turtle *tp\)                                       */) c n
+(/*        + locationY\(Turtle *tp\)                                       */) N
+(/*        + setX\(Turtle *tp, double x\)                                  */) N
+(/*        + setY\(Turtle *tp, double y\)                                  */) N
+(/*        + yourAngle\(Turtle *tp\)                                       */) N
+(/*        + setColor\(Turtle *tp, char *colorname\)                       */) N
+(/*        + *penColor\(Turtle *tp\)                                       */) N
+(/*        + history\(Turtle *tp\)                                         */) N
+(/*        + setAngle\(Turtle *tp, double th\)                             */) N
+(/*        + setName\(Turtle *tp, char *name\)                             */) N
+(/*        + *self\(Turtle *tp\)                                           */) N
+(/*    Category: Testing                                                 */) S
+( ) p n
+(/*        + isDown\(Turtle *tp\)                                          */) c n
+(/*        + isUp\(Turtle *tp\)                                            */) N
+(/*    Category: Drawing                                                 */) N
+(/*        + turnRight\(Turtle *tp, double th\)                            */) N
+(/*        + turnLeft\(Turtle *tp, double th\)                             */) N
+(/*        + Forward\(Turtle *tp, double len\)                             */) N
+(/*        + Back\(Turtle *tp, double len\)                                */) N
+(/*        + home\(Turtle *tp\)                                            */) N
+(/*        + penDown\(Turtle *tp\)                                         */) N
+(/*        + penUp\(Turtle *tp\)                                           */) N
+(/*    Category: Private                                                 */) N
+(/*        + line\(int color, double x1, double y1, double x2, double y2\) */) N
+(/*        + undo\(Turtle *tp\)                                            */) N
+(/*        + isExistColor\(char *colorname\)                               */) N
+(/*        + Replot\(void\)                                                */) N
+(/*                                                                      */) N
+(/*----------------------------------------------------------------------*/) N
+() p n
+(/*--------- Instance Variable. ----------------*/) c
+( ) p n
+(struct) k
+( _turtle {) p n
+() N
+(    ) S
+(double) k
+(          x, y, angle;) p n
+(    ) S
+(int) k
+(             pen;) p n
+(    ) S
+(int) k
+(             color;) p n
+(    ) S
+(int) k
+(             commandNumber;) p n
+(gturtle.c) (2/16 \245\332\241\274\245\270) (02\307\257  8\267\35631\306\374 12:00) title
+border
+grestore
+(\245\346\241\274\245\266\314\276: ) rhead
+(gturtle.c) (1/8) (2002\307\257  8\267\35631\306\374 \305\332\315\313\306\374) footer
+end % of euc-jpdict
+pagesave restore
+showpage
+%%Page: (3-4) 2
+%%BeginPageSetup
+/pagesave save def
+sh 0 translate 90 rotate
+%%EndPageSetup
+euc-jpdict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 3.362408 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(    ) p
+(char) k
+(            name[NAME_SIZE];) p n
+(    ) S
+(char) k
+(            command[BUF_SIZE][BUF_SIZE];) p n
+(    ) S
+(char) k
+(            parameter[BUF_SIZE][BUF_SIZE];) p n
+(    ) S
+(struct) k
+( _turtle *prev, *next;) p n
+() N
+(};) N
+() N
+(typedef) K
+( ) p
+(struct) k
+( _turtle Turtle;) p n
+() N
+(/* ^Instance Variable */) c n
+(/*--------------------------------------------- */) N
+() p n
+(/*----------- Class Variable. -------------------*/) c n
+() p n
+(/* ^Class Variable */) c n
+(/*-----------------------------------------------*/) N
+() p n
+(/*----------Message Selectors -------------------*/) c n
+(/* Class Message  */) N
+() p n
+(Turtle *newTurtle\() S
+(void) k
+(\);) p n
+(Turtle *MakeTurtle\() S
+(char) k
+( *name\);) p n
+() N
+(/* ^Class Message  */) c n
+(/*----------------------------------------------*/) S
+( ) p n
+(/* Instance Message  */) c n
+() p n
+(double) k
+(   locationX\(Turtle *tp\);) p n
+(double) k
+(   locationY\(Turtle *tp\);) p n
+(void) k
+(     setX\(Turtle *tp, ) p
+(double) k
+( x\);) p n
+(void) k
+(     setY\(Turtle *tp, ) p
+(double) k
+( y\);) p n
+(void) k
+(     setAngle\(Turtle *tp, ) p
+(double) k
+( th\);) p n
+(double) k
+(   yourAngle\(Turtle *tp\);) p n
+(void) k
+(     setColor\(Turtle *tp, ) p
+(char) k
+( *colorname\);) p n
+(char) k
+(    *penColor\(Turtle *tp\);) p n
+(void) k
+(     setName\(Turtle *tp, ) p
+(char) k
+( *name\);) p n
+(char) k
+(    *self\(Turtle *tp\);) p n
+(void) k
+(     history\(Turtle *tp\);) p n
+(boolean  isDown\(Turtle *tp\);) N
+(boolean  isUp\(Turtle *tp\);) N
+(void) k
+(     turnRight\(Turtle *tp, ) p
+(double) k
+( th\);) p n
+(void) k
+(     turnLeft\(Turtle *tp, ) p
+(double) k
+( th\);) p n
+(void) k
+(     Forward\(Turtle *tp, ) p
+(double) k
+( len\);) p n
+(void) k
+(     Back\(Turtle *tp, ) p
+(double) k
+( len\);) p n
+(void) k
+(     home\(Turtle *tp\);) p n
+(void) k
+(     penDown\(Turtle *tp\);) p n
+(void) k
+(     penUp\(Turtle *tp\);) p n
+(void) k
+(     undo\(Turtle *tp\);) p n
+(void) k
+(     Do\(Turtle *tp, ) p
+(int) k
+( index\);) p n
+(void) k
+(     line\() p
+(int) k
+( color, ) p
+(double) k
+( x1, ) p
+(double) k
+( y1, ) p
+(double) k
+( x2, ) p
+(double) k
+( y2\);) p n
+(int) k
+(      isExistColor\() p
+(char) k
+( *colorname\);) p n
+(void) k
+(     Replot\() p
+(void) k
+(\);) p n
+() N
+(/* ^Instance Message  */) c n
+(/*----------------------------------------------*/) S
+( ) p n
+() N
+() N
+(/*-------------- Class Method ------------------*/) c n
+(/*----------------------------------------------*/) N
+(/*                                              */) S
+( ) p n
+(/*   Message Category:                          */) c
+( ) p n
+(/*     Initialization                           */) c n
+(gturtle.c) (3/16 \245\332\241\274\245\270) (02\307\257  8\267\35631\306\374 12:00) title
+border
+/v 1 store
+/x0 x v get 3.362408 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(/*                                              */) c
+( ) p n
+(/*----------------------------------------------*/) c n
+() p n
+(/* Instance Creation. */) c n
+(Turtle *) p n
+(newTurtle\() S
+(void) k
+(\)) p n
+({) N
+(    Turtle  *tp;) N
+() N
+(    tp = \(Turtle *\)malloc\() S
+(sizeof) K
+(\(Turtle\)\);) p n
+(    ) S
+(if) K
+( \(!tp\)) p n
+(        perror\(") S
+(initialize: turtle) str
+("\), exit\(1\);) p n
+() N
+(    ) S
+(return) K
+( tp;) p n
+(}) N
+() N
+(/* Initialize. */) c n
+(Turtle *) p n
+(MakeTurtle\() S
+(char) k
+( *name\)) p n
+({) N
+(    Turtle  *tp;) N
+() N
+(    tp = newTurtle\(\);) N
+(    ) N
+(    setX\(tp, 0.0\);) N
+(    setY\(tp, 0.0\);) N
+(    setAngle\(tp, 0.0\);) N
+(    tp->commandNumber = 0;) N
+(    setName\(tp, name\);) N
+(    setColor\(tp, ") S
+(red) str
+("\);) p n
+(    tp->next = ) S
+(NULL) K
+(;) p n
+() N
+(    penDown\(tp\);) N
+(    Forward\(tp, 1.0\);) N
+(    penUp\(tp\);) N
+(    strcpy\(tp->command[ tp->commandNumber++ ],   ") S
+(pd) str
+("  \);) p n
+(    strcpy\(tp->command[ tp->commandNumber   ],   ") S
+(fd) str
+("  \);) p n
+(    strcpy\(tp->parameter[ tp->commandNumber++ ], ") S
+(1.0) str
+(" \);) p n
+(    strcpy\(tp->command[ tp->commandNumber++ ],   ") S
+(pu) str
+("  \); ) p n
+() N
+(    ) S
+(return) K
+( tp;) p n
+(}) N
+() N
+(/* ^Class Method. */) c n
+(/*-----------------------------------------------*/) N
+() p n
+(/*-------------- Instance Method ----------------*/) c n
+(/*-----------------------------------------------*/) N
+(/*                                               */) S
+( ) p n
+(/*   Message Category:                           */) c
+( ) p n
+(/*         Acsessing                             */) c n
+(/*                                               */) S
+( ) p n
+(/*-----------------------------------------------*/) c n
+() p n
+(double) k n
+(locationX\(Turtle *tp\) { ) p
+(return) K
+( tp->x; }) p n
+(double) k n
+(locationY\(Turtle *tp\) { ) p
+(return) K
+( tp->y; }) p n
+(void) k n
+(setX\(Turtle *tp, ) p
+(double) k
+( x\) { tp->x = x; }) p n
+(void) k n
+(setY\(Turtle *tp, ) p
+(double) k
+( y\) { tp->y = y; }) p n
+(gturtle.c) (4/16 \245\332\241\274\245\270) (02\307\257  8\267\35631\306\374 12:00) title
+border
+grestore
+(\245\346\241\274\245\266\314\276: ) rhead
+(gturtle.c) (2/8) (2002\307\257  8\267\35631\306\374 \305\332\315\313\306\374) footer
+end % of euc-jpdict
+pagesave restore
+showpage
+%%Page: (5-6) 3
+%%BeginPageSetup
+/pagesave save def
+sh 0 translate 90 rotate
+%%EndPageSetup
+euc-jpdict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 3.362408 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+() p n
+(void) k n
+(setAngle\(Turtle *tp, ) p
+(double) k
+( th\) { tp->angle = th; }) p n
+(double) k n
+(yourAngle\(Turtle *tp\) { ) p
+(return) K
+( tp->angle; }) p n
+() N
+(void) k n
+(setColor\(Turtle *tp, ) p
+(char) k
+( *colorname\)) p n
+({ ) N
+(    ) S
+(int) k
+( index;) p n
+() N
+(    ) S
+(if) K
+( \(\(index = isExistColor\(colorname\)\) < 0\)) p n
+(        fprintf\(stderr, ") S
+(no such a color: %s\\n) str
+(", colorname\);) p n
+(    ) S
+(else) K n
+(        tp->color = index+1;) p n
+(}) N
+(char) k
+( *) p n
+(penColor\(Turtle *tp\) { ) S
+(return) K
+( colorName[tp->color-1]; }) p n
+() N
+(void) k n
+(setName\(Turtle *tp, ) p
+(char) k
+( *name\) { strcpy\(tp->name, name\); }) p n
+(char) k
+( *) p n
+(self\(Turtle *tp\) { ) S
+(return) K
+( tp->name; }) p n
+() N
+(void) k n
+(history\(Turtle *tp\)) p n
+({) N
+(    ) S
+(int) k
+( i;) p n
+() N
+(    fprintf\(stderr, ") S
+(name: \\"%s\\"\\n) str
+(", self\(tp\)\);) p n
+(    ) S
+(for) K
+( \(i = 0; i < tp->commandNumber; i++\)) p n
+(        fprintf\(stderr, ") S
+(%s %s\\n) str
+(", tp->command[i], tp->parameter[i]\);) p n
+() N
+(    fprintf\(stderr, ") S
+(command: %d\\n) str
+(", tp->commandNumber\);) p n
+(}) N
+() N
+(/* Accessing.  */) c n
+(/*------------------------------------------------*/) N
+() p n
+(/*-----------------------------------------------*/) c n
+(/*                                               */) S
+( ) p n
+(/*   Message Category:                           */) c
+( ) p n
+(/*         Testing                               */) c n
+(/*                                               */) S
+( ) p n
+(/*-----------------------------------------------*/) c n
+() p n
+(boolean) N
+(isDown\(Turtle *tp\)  { ) S
+(return) K
+( tp->pen ? DOWN : UP; }) p n
+(boolean) N
+(isUp\(Turtle *tp\)    { ) S
+(return) K
+( !isDown\(tp\); }) p n
+() N
+(/* Testing.  */) c n
+(/*------------------------------------------------*/) N
+() p n
+(/*-----------------------------------------------*/) c n
+(/*                                               */) S
+( ) p n
+(/*   Message Category:                           */) c
+( ) p n
+(/*         Drawing                               */) c n
+(/*                                               */) S
+( ) p n
+(/*-----------------------------------------------*/) c n
+() p n
+(/* TurnRight  */) c n
+(gturtle.c) (5/16 \245\332\241\274\245\270) (02\307\257  8\267\35631\306\374 12:00) title
+border
+/v 1 store
+/x0 x v get 3.362408 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(void) k n
+(turnRight\(Turtle *tp, ) p
+(double) k
+( th\)) p n
+({) N
+(    tp->angle += th;) N
+(    ) S
+(if) K
+( \(th <   0.0\) tp->angle += 360.0;) p n
+(    ) S
+(if) K
+( \(th > 360.0\) tp->angle -= 360.0;    ) p n
+(}) N
+() N
+(/* TurnLeft  */) c n
+(void) k n
+(turnLeft\(Turtle *tp, ) p
+(double) k
+( th\)) p n
+({) N
+(    turnRight\(tp, -th\);) N
+(}) N
+() N
+(void) k n
+(Forward\(Turtle *tp, ) p
+(double) k
+( len\)) p n
+({) N
+(    ) S
+(double) k
+(  tx, ty;) p n
+() N
+(    tx = tp->x + len*sin\(tp->angle*M_PI/180.0\);) N
+(    ty = tp->y + len*cos\(tp->angle*M_PI/180.0\);) N
+(    ) S
+(if) K
+( \(isDown\(tp\)\)) p n
+(        line\(tp->color, tp->x, tp->y, tx, ty\);) N
+(    tp->x = tx;) N
+(    tp->y = ty;) N
+(}) N
+() N
+(void) k n
+(Back\(Turtle *tp, ) p
+(double) k
+( len\)) p n
+({) N
+(    Forward\(tp, -len\);) N
+(}) N
+() N
+(void) k n
+(home\(Turtle *tp\)) p n
+({) N
+(    setX\(tp, 0.0\);) N
+(    setY\(tp, 0.0\);) N
+(}) N
+() N
+(void) k n
+(undo\(Turtle *tp\)) p n
+({) N
+(    ) S
+(if) K
+( \(tp->commandNumber < 2\) {) p n
+(        tp->commandNumber = 0;) N
+(    } ) S
+(else) K
+( {) p n
+(        tp->commandNumber -= 2;) N
+(        Replot\(\);) N
+(    }) N
+(}) N
+() N
+(void) k n
+(Do\(Turtle *tp, ) p
+(int) k
+( index\)) p n
+({) N
+(    ) S
+(float) k
+( len, th;) p n
+() N
+(    ) S
+(if) K
+( \(strcmp\(tp->command[tp->commandNumber-1], ") p
+(undo) str
+("\) == 0\) {) p n
+(        undo\(tp\);) N
+(    } ) S
+(else) K
+( ) p
+(if) K
+( \(strcmp\(tp->command[index], ") p
+(fd) str
+("\) == 0\) {) p n
+(        sscanf\(tp->parameter[index], ") S
+(%f) str
+(", &len\);) p n
+(        Forward\(tp, len\);) N
+(gturtle.c) (6/16 \245\332\241\274\245\270) (02\307\257  8\267\35631\306\374 12:00) title
+border
+grestore
+(\245\346\241\274\245\266\314\276: ) rhead
+(gturtle.c) (3/8) (2002\307\257  8\267\35631\306\374 \305\332\315\313\306\374) footer
+end % of euc-jpdict
+pagesave restore
+showpage
+%%Page: (7-8) 4
+%%BeginPageSetup
+/pagesave save def
+sh 0 translate 90 rotate
+%%EndPageSetup
+euc-jpdict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 3.362408 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(    } ) p
+(else) K
+( ) p
+(if) K
+( \(strcmp\(tp->command[index], ") p
+(bk) str
+("\) == 0\) {) p n
+(        sscanf\(tp->parameter[index], ") S
+(%f) str
+(", &len\);) p n
+(        Back\(tp, len\);) N
+(    } ) S
+(else) K
+( ) p
+(if) K
+( \(strcmp\(tp->command[index], ") p
+(rt) str
+("\) == 0\) {) p n
+(        sscanf\(tp->parameter[index], ") S
+(%f) str
+(", &th\);) p n
+(        turnRight\(tp, th\);) N
+(    } ) S
+(else) K
+( ) p
+(if) K
+( \(strcmp\(tp->command[index], ") p
+(lt) str
+("\) == 0\) {) p n
+(        sscanf\(tp->parameter[index], ") S
+(%f) str
+(", &th\);) p n
+(        turnLeft\(tp, th\);) N
+(    } ) S
+(else) K
+( ) p
+(if) K
+( \(strcmp\(tp->command[index], ") p
+(pd) str
+("\) == 0\) {) p n
+(        penDown\(tp\);) N
+(    } ) S
+(else) K
+( ) p
+(if) K
+( \(strcmp\(tp->command[index], ") p
+(pu) str
+("\) == 0\) {) p n
+(        penUp\(tp\);) N
+(    } ) S
+(else) K
+( ) p
+(if) K
+( \(strcmp\(tp->command[index], ") p
+(color) str
+("\) == 0\) {) p n
+(        setColor\(tp, tp->parameter[index]\);) N
+(    } ) S
+(else) K
+( ) p
+(if) K
+( \(strcmp\(tp->command[index], ") p
+(home) str
+("\) == 0\) {) p n
+(        home\(tp\);) N
+(    } ) S
+(else) K
+( ) p
+(if) K
+( \(strcmp\(tp->command[index], ") p
+(history) str
+("\) == 0\) {) p n
+(        history\(tp\);) N
+(    } ) S
+(else) K
+( {) p n
+(        fprintf\(stderr, ") S
+(%s) str
+(", errorMessage\);) p n
+(        tp->commandNumber -= 1;) N
+(    }) N
+(}) N
+() N
+(void) k n
+(penDown\(Turtle *tp\) { tp->pen = DOWN; }) p n
+(void) k n
+(penUp\(Turtle *tp\)   { tp->pen = UP; }) p n
+() N
+(/* Drawing.  */) c n
+(/*------------------------------------------------*/) N
+() p n
+(/*-----------------------------------------------*/) c n
+(/*                                               */) S
+( ) p n
+(/*   Message Category:                           */) c
+( ) p n
+(/*         Private                               */) c n
+(/*                                               */) S
+( ) p n
+(/*-----------------------------------------------*/) c n
+() p n
+(void) k n
+(line\() p
+(int) k
+( color, ) p
+(double) k
+( x1, ) p
+(double) k
+( y1, ) p
+(double) k
+( x2, ) p
+(double) k
+( y2\)) p n
+({) N
+(    printf\(") S
+(plot \\"-\\" w lp %d \\n) str
+(", color\); ) p n
+(    printf\(") S
+(%f %f \\n) str
+(", x1, y1\);) p n
+(    printf\(") S
+(%f %f \\n) str
+(", x2, y2\);) p n
+(    printf\(") S
+(e\\n) str
+("\);   ) p n
+(    fflush\(stdout\);) N
+(}) N
+() N
+(int) k n
+(isExistColor\() p
+(char) k
+( *colorname\)) p n
+({) N
+(    ) S
+(int) k
+(  i;) p n
+() N
+(    ) S
+(for) K
+( \(i = 0; i < COLORS; i++\) {) p n
+(        ) S
+(if) K
+( \(strcmp\(colorName[i], colorname\) == 0\)) p n
+(            ) S
+(return) K
+( i;) p n
+(    }    ) N
+(    ) S
+(/* color not found. */) c n
+(    ) p
+(return) K
+( -1;) p n
+(}) N
+(gturtle.c) (7/16 \245\332\241\274\245\270) (02\307\257  8\267\35631\306\374 12:00) title
+border
+/v 1 store
+/x0 x v get 3.362408 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+() p n
+(/* Private.  */) c n
+(/*------------------------------------------------*/) N
+() p n
+(/*---------------------------------------------------------------------*/) c
+( ) p n
+(/*                                                                     */) c n
+(/* < Controller >                                                      */) S
+( ) p n
+(/* Class Category: Turtle Controller                                   */) c
+( ) p n
+(/*                                                                     */) c n
+(/* Class Methods                                                       */) S
+( ) p n
+(/*                                                                     */) c n
+(/* Instance Methods                                                    */) S
+( ) p n
+(/*    Category: Initialize                                             */) c
+( ) p n
+(/*        + SystemInit\(void\)                                           */) c n
+(/*    Category: Control Defaults                                       */) S
+( ) p n
+(/*        + getCommand\(void\)                                           */) c n
+(/*    Category: Command Accessing                                      */) S
+( ) p n
+(/*        + init\(char *name\)                                           */) c n
+(/*        + delete\(char *name\)                                         */) N
+(/*        + inspectIt\(char *name\)                                      */) N
+(/*        + inspectAll\(void\)                                           */) N
+(/*        + showColors\(void\)                                           */) N
+(/*        + Save\(char *name, char *filename, char *mode\)               */) N
+(/*        + SaveAll\(char *filename\)                                    */) N
+(/*        + Load\(char *filename\)                                       */) N
+(/*        + ls\(void\)                                                   */) N
+(/*        + help\(void\)                                                 */) N
+(/*        + bye\(void\)                                                  */) N
+(/*        + TurtleList\(Turtle *tp\)                                     */) N
+(/*    Category: Testing                                                */) S
+( ) p n
+(/*        + isEmpty\(void\)                                              */) c n
+(/*        + isSame\(Turtle *tp, char *name\)                             */) N
+(/*    Category: Private                                                */) S
+( ) p n
+(/*        + fileCheck\(char *filename\)                                  */) c n
+(/*        + *addTurtle\(Turtle *tp\)                                     */) N
+(/*        + deleteTurtle\(Turtle *tp\)                                   */) N
+(/*        + clearData\(Turtle *tp\)                                      */) N
+(/*        + *searchTurtle\(char *name\)                                  */) N
+(/*                                                                     */) N
+(/*---------------------------------------------------------------------*/) N
+() p n
+(/*---------------------------------------------------------------------*/) c
+( ) p n
+(/*                                                                     */) c n
+(/* < View >                                                            */) S
+( ) p n
+(/* Class Category: Turtle View                                         */) c
+( ) p n
+(/*                                                                     */) c n
+(/* Class Methods                                                       */) S
+( ) p n
+(/*                                                                     */) c n
+(/* Instance Methods                                                    */) S
+( ) p n
+(/*    Category: Drawings                                               */) c
+( ) p n
+(/*        + Draw\(void\)                                                 */) c n
+(/*        + WindowClear\(void\)                                          */) N
+(/*                                                                     */) N
+(/*---------------------------------------------------------------------*/) N
+(void) k
+(     Draw\() p
+(void) k
+(\);) p n
+(void) k
+(     WindowClear\() p
+(void) k
+(\);) p n
+() N
+(boolean  isEmpty\() S
+(void) k
+(\);) p n
+(boolean  isSame\(Turtle *tp, ) S
+(char) k
+( *name\);) p n
+(Turtle  *addTurtle\(Turtle *tp\);) N
+(void) k
+(     deleteTurtle\(Turtle *tp\);) p n
+(void) k
+(     ls\() p
+(void) k
+(\);) p n
+(gturtle.c) (8/16 \245\332\241\274\245\270) (02\307\257  8\267\35631\306\374 12:00) title
+border
+grestore
+(\245\346\241\274\245\266\314\276: ) rhead
+(gturtle.c) (4/8) (2002\307\257  8\267\35631\306\374 \305\332\315\313\306\374) footer
+end % of euc-jpdict
+pagesave restore
+showpage
+%%Page: (9-10) 5
+%%BeginPageSetup
+/pagesave save def
+sh 0 translate 90 rotate
+%%EndPageSetup
+euc-jpdict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 3.362408 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(void) k
+(     help\() p
+(void) k
+(\);) p n
+(void) k
+(     bye\() p
+(void) k
+(\);) p n
+(void) k
+(     init\() p
+(char) k
+( *name\);) p n
+(void) k
+(     delete\() p
+(char) k
+( *name\);) p n
+(void) k
+(     showColors\() p
+(void) k
+(\);) p n
+(void) k
+(     inspectIt\() p
+(char) k
+( *name\);) p n
+(void) k
+(     inspectAll\() p
+(void) k
+(\);) p n
+(boolean  getCommand\() S
+(void) k
+(\);) p n
+(Turtle  *searchTurtle\() S
+(char) k
+( *name\);) p n
+(void) k
+(     clearData\(Turtle *tp\);) p n
+(void) k
+(     SystemInit\() p
+(void) k
+(\);) p n
+(void) k
+(     TurtleList\(Turtle *tp\);) p n
+(void) k
+(     Save\() p
+(char) k
+( *name, ) p
+(char) k
+( *filename, ) p
+(char) k
+( *mode\);) p n
+(void) k
+(     SaveAll\() p
+(char) k
+( *filename\);) p n
+(void) k
+(     Load\() p
+(char) k
+( *filename\);) p n
+(int) k
+(      fileCheck\() p
+(char) k
+( *filename\);) p n
+() N
+(/*----------- Class Variable. -------------------*/) c n
+() p n
+(Turtle     *frontPointer  = ) S
+(NULL) K
+(;) p n
+(Turtle     *rearPointer   = ) S
+(NULL) K
+(;) p n
+(Turtle     *activeTurtle  = ) S
+(NULL) K
+(;) p n
+() N
+(/* ^ClassVariable */) c n
+(/*-----------------------------------------------*/) N
+() p n
+(boolean isEmpty\(\) { ) S
+(return) K
+( rearPointer == ) p
+(NULL) K
+(; }) p n
+() N
+(/* if 'tp's name is 'name', return 1, otherwise 0 */) c n
+(boolean isSame\(Turtle *tp, ) p
+(char) k
+( *name\) { ) p
+(return) K
+( !strcmp\(tp->name, name\); }) p n
+() N
+(Turtle *) N
+(addTurtle\(Turtle *tp\)) N
+(/* ) c n
+(   Useage:) N
+(   Make a new turtle "hoge" and ) N
+(   add the list of end.) N
+() N
+(   addTurtle\(MakeTurtle\("hoge"\)\);) N
+(*/) N
+({) p n
+(    ) S
+(if) K
+( \(isEmpty\(\)\) {) p n
+(        frontPointer = tp;) N
+(        tp->prev     = ) S
+(NULL) K
+(;) p n
+(    } ) S
+(else) K
+( {) p n
+(        rearPointer->next = tp;) N
+(        tp->prev          = rearPointer;) N
+(    }) N
+(    rearPointer = tp;) N
+(    ) S
+(return) K
+( tp;) p n
+(}) N
+() N
+(void) k n
+(deleteTurtle\(Turtle *tp\)) p n
+({) N
+(    ) S
+(/* if there is no more than 'tp'. */) c n
+(    ) p
+(if) K
+( \(frontPointer == rearPointer\) {) p n
+(        frontPointer = rearPointer = ) S
+(NULL) K
+(; ) p n
+(        WindowClear\(\);) N
+() N
+(    ) S
+(/* if 'tp' is top of list */) c n
+(    } ) p
+(else) K
+( ) p
+(if) K
+( \(tp->prev == ) p
+(NULL) K
+(\) {) p n
+(gturtle.c) (9/16 \245\332\241\274\245\270) (02\307\257  8\267\35631\306\374 12:00) title
+border
+/v 1 store
+/x0 x v get 3.362408 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(        tp->next->prev = ) p
+(NULL) K
+(;) p n
+(        frontPointer   = tp->next; ) N
+(    ) N
+(    ) S
+(/* if 'tp' is rear of list */) c n
+(    } ) p
+(else) K
+( ) p
+(if) K
+( \(tp->next == ) p
+(NULL) K
+(\) {) p n
+(        tp->prev->next = ) S
+(NULL) K
+(;) p n
+(        rearPointer    = tp->prev;) N
+(    } ) S
+(else) K
+( {) p n
+(        tp->prev->next = tp->next;) N
+(        tp->next->prev = tp->prev;) N
+(    }) N
+(    free\(tp\);) N
+(}) N
+() N
+(void) k
+( ls\() p
+(void) k
+(\) { system\(") p
+(ls -F --color=auto > /dev/stderr ) str
+("\); }) p n
+(void) k
+( help\() p
+(void) k
+(\) { fprintf\(stderr, ") p
+(%s) str
+(", usage\); }) p n
+() N
+(void) k
+( ) p n
+(bye\() S
+(void) k
+(\)) p n
+({) N
+(    fprintf\(stderr, ") S
+(BYE.\\n) str
+("\);) p n
+(    exit\(0\);) N
+(}) N
+() N
+(void) k
+( ) p n
+(init\() S
+(char) k
+( *name\)) p n
+({) N
+(    ) S
+(if) K
+( \(*name == ') p
+(\\0) str
+('\)) p n
+(        fprintf\(stderr, ") S
+(ERROR: please name a turtle.\\n) str
+("\); ) p n
+(    ) S
+(else) K
+( ) p
+(if) K
+( \(searchTurtle\(name\)\) ) p n
+(        fprintf\(stderr, ") S
+(ERROR: %s is exist. name other.\\n) str
+(", name\); ) p n
+(    ) S
+(else) K
+(     ) p n
+(        addTurtle\(MakeTurtle\(name\)\);) N
+(}) N
+() N
+(void) k
+( ) p n
+(delete\() S
+(char) k
+( *name\)) p n
+({) N
+(    Turtle *tp;) N
+(    ) S
+(if) K
+( \(!\(tp = searchTurtle\(name\)\)\)) p n
+(        fprintf\(stderr, ") S
+(ERROR: no such a turtle.\\n) str
+("\); ) p n
+(    ) S
+(else) K n
+(        deleteTurtle\(tp\);) p n
+(}) N
+() N
+(void) k n
+(showColors\() p
+(void) k
+(\)) p n
+({) N
+(    ) S
+(int) k
+( i;) p n
+() N
+(    fprintf\(stderr, ") S
+(<color list>:) str
+("\);    ) p n
+(    ) S
+(for) K
+( \(i = 0; i < COLORS; i++\) {) p n
+(        ) S
+(if) K
+( \(\(i%4\) == 0\)) p n
+(            fprintf\(stderr, ") S
+(\\n) str
+("\);) p n
+(        fprintf\(stderr, ") S
+(  \\"%s\\" ) str
+(", colorName[i]\);) p n
+(    }) N
+(    fprintf\(stderr, ") S
+(\\n) str
+("\);) p n
+(}) N
+() N
+(void) k n
+(inspectIt\() p
+(char) k
+( *name\)) p n
+({) N
+(gturtle.c) (10/16 \245\332\241\274\245\270) (02\307\257  8\267\35631\306\374 12:00) title
+border
+grestore
+(\245\346\241\274\245\266\314\276: ) rhead
+(gturtle.c) (5/8) (2002\307\257  8\267\35631\306\374 \305\332\315\313\306\374) footer
+end % of euc-jpdict
+pagesave restore
+showpage
+%%Page: (11-12) 6
+%%BeginPageSetup
+/pagesave save def
+sh 0 translate 90 rotate
+%%EndPageSetup
+euc-jpdict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 3.362408 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(    Turtle *tp;) p n
+(    ) S
+(if) K
+( \(!\(tp = searchTurtle\(name\)\)\) {) p n
+(        fprintf\(stderr, ") S
+(ERROR: no such a turtle.\\n) str
+("\); ) p n
+(    } ) S
+(else) K
+( {) p n
+(    fprintf\(stderr, ") S
+(--<Turtle Inspector>--\\n) str
+("\);) p n
+(    fprintf\(stderr, ") S
+(name     : %s\\n) str
+(", self\(tp\)\);) p n
+(    fprintf\(stderr, ") S
+(now      : x = %f, y = %f\\n) str
+(", locationX\(tp\), locationY\(tp\)\);) p n
+(    fprintf\(stderr, ") S
+(distance : %f\\n) str
+(", yourAngle\(tp\)\);) p n
+(    fprintf\(stderr, ") S
+(pen      : %s\\n) str
+(", isDown\(tp\) ? ") p
+(down) str
+(" : ") p
+(up) str
+("\);) p n
+(    fprintf\(stderr, ") S
+(pen color: %s\\n) str
+(", penColor\(tp\)\);) p n
+(    fprintf\(stderr, ") S
+(command  : %d\\n) str
+(", tp->commandNumber\);) p n
+(    }) N
+(}) N
+() N
+(void) k n
+(inspectAll\() p
+(void) k
+(\)) p n
+({) N
+(    Turtle *tp;) N
+(    ) S
+(if) K
+( \(isEmpty\(\)\)) p n
+(        fprintf\(stderr, ") S
+(no turtle.\\n) str
+("\); ) p n
+(    ) S
+(else) K n
+(        ) p
+(for) K
+( \(tp = frontPointer; tp != ) p
+(NULL) K
+(; tp = tp->next\)) p n
+(            inspectIt\(self\(tp\)\);) N
+(}) N
+() N
+(boolean) N
+(getCommand\(\)) N
+({) N
+(    Turtle *tp;) N
+(    ) N
+(    ) S
+(char) k
+( s[BUF_SIZE];) p n
+(    ) S
+(char) k
+( car[BUF_SIZE];) p n
+(    ) S
+(char) k
+( cdr[BUF_SIZE];) p n
+(    ) S
+(char) k
+( cddr[BUF_SIZE];) p n
+() N
+(    ) S
+(/* initialization. no garbage */) c n
+(/*    memset\(car, '\\0', BUF_SIZE\);*/) N
+(/*    memset\(cdr, '\\0', BUF_SIZE\);*/) N
+(/*    memset\(cddr,'\\0', BUF_SIZE\);*/) N
+(    *car  = ') p
+(\\0) str
+(';) p n
+(    *cdr  = ') S
+(\\0) str
+(';) p n
+(    *cddr = ') S
+(\\0) str
+(';) p n
+(    ) N
+(    fprintf\(stderr, ") S
+(gturtle> ) str
+("\);) p n
+(    fgets\(s, BUF_SIZE, stdin\);) N
+(    sscanf\(s, ") S
+(%s %s %s) str
+(", car, cdr, cddr\);) p n
+() N
+(    ) S
+(/* System Command */) c n
+(    ) p
+(if) K
+( \(strcmp\(car, ") p
+(ls) str
+("\) == 0\) {) p n
+(        ls\(\);) N
+(    } ) S
+(else) K
+( ) p
+(if) K
+( \(strcmp\(car, ") p
+(list) str
+("\) == 0\) {) p n
+(        tp = frontPointer;) N
+(        TurtleList\(tp\);) N
+(    } ) S
+(else) K
+( ) p
+(if) K
+( \(strcmp\(car, ") p
+(load) str
+("\) == 0\) {) p n
+(        Load\(cdr\);) N
+(    } ) S
+(else) K
+( ) p
+(if) K
+( \(strcmp\(car, ") p
+(save) str
+("\) == 0\) {) p n
+(        Save\(cdr, cddr, ") S
+(w+) str
+("\);) p n
+(    } ) S
+(else) K
+( ) p
+(if) K
+( \(strcmp\(car, ") p
+(saveall) str
+("\) == 0\) {) p n
+(        SaveAll\(cdr\);) N
+(    } ) S
+(else) K
+( ) p
+(if) K
+( \(strcmp\(car, ") p
+(help) str
+("\) == 0\) {) p n
+(        help\(\);) N
+(    } ) S
+(else) K
+( ) p
+(if) K
+( \(strcmp\(car, ") p
+(colorlist) str
+("\) == 0\) {) p n
+(gturtle.c) (11/16 \245\332\241\274\245\270) (02\307\257  8\267\35631\306\374 12:00) title
+border
+/v 1 store
+/x0 x v get 3.362408 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(        showColors\(\);) p n
+(    } ) S
+(else) K
+( ) p
+(if) K
+( \(\(strcmp\(car, ") p
+(bye) str
+("\) == 0\) ||) p n
+(               \(strcmp\(car, ") S
+(q) str
+("\) == 0\)\) {) p n
+(        bye\(\);) N
+() N
+(    } ) S
+(else) K
+( ) p
+(if) K
+( \(strcmp\(car, ") p
+(init) str
+("\) == 0\) {) p n
+(        init\(cdr\);) N
+(    } ) S
+(else) K
+( ) p
+(if) K
+( \(strcmp\(car, ") p
+(delete) str
+("\) == 0\) {) p n
+(        delete\(cdr\);) N
+(    } ) S
+(else) K
+( ) p
+(if) K
+( \(strcmp\(car, ") p
+(inspect) str
+("\) == 0\) {) p n
+(        inspectIt\(cdr\);) N
+(    } ) S
+(else) K
+( ) p
+(if) K
+( \(strcmp\(car, ") p
+(inspectall) str
+("\) == 0\) {) p n
+(        inspectAll\(\);) N
+() N
+(    ) S
+(/* Message Sending */) c n
+(    } ) p
+(else) K
+( ) p
+(if) K
+( \(!\(activeTurtle = searchTurtle\(car\)\)\) {) p n
+(        fprintf\(stderr, ") S
+(ERROR: no such a turtle %s\\n) str
+(", car\);) p n
+(    } ) S
+(else) K
+( {) p n
+(        strcpy\(activeTurtle->command[activeTurtle->commandNumber], cdr\);) N
+(        strcpy\(activeTurtle->parameter[activeTurtle->commandNumber], cddr\);) N
+(        activeTurtle->commandNumber++;) N
+(        ) S
+(return) K
+( 1;) p n
+(    }) N
+(    ) S
+(return) K
+( 0;) p n
+(}) N
+() N
+(Turtle *) N
+(searchTurtle\() S
+(char) k
+( *name\)) p n
+({) N
+(    Turtle *tp;) N
+(    tp = frontPointer;) N
+() N
+(    ) S
+(for) K
+( \(; tp != ) p
+(NULL) K
+(; \) {) p n
+(        ) S
+(if) K
+( \(isSame\(tp, name\)\)) p n
+(            ) S
+(return) K
+( tp;) p n
+(        tp = tp->next; ) N
+(    }) N
+(    ) S
+(return) K
+( ) p
+(NULL) K
+(;) p n
+(}) N
+() N
+(void) k n
+(Replot\() p
+(void) k
+(\)) p n
+({) N
+(    Turtle  *tp, *last;) N
+(    ) S
+(int) k
+(     i;) p n
+() N
+(    tp = last = frontPointer;) N
+(    clearData\(tp\);) N
+(    WindowClear\(\);) N
+(    ) S
+(if) K
+( \(!isEmpty\(\)\) {) p n
+(        tp = last = frontPointer;) N
+() N
+(    ) S
+(/* \244\263\244\263\244\351\244\330\244\363\273\340\244\314\304\370\267\371\241\243 */) c n
+(        ) p
+(for) K
+( \(i = 0; i < last->commandNumber; i++\) {) p n
+(            ) S
+(for) K
+( \(tp = frontPointer; tp != ) p
+(NULL) K
+(; tp = tp->next\) {) p n
+(                ) S
+(if) K
+( \(i < tp->commandNumber\) {) p n
+(                    Do\(tp, i\);) N
+(                    ) S
+(if) K
+( \(i+1 < tp->commandNumber\)) p n
+(                        last = tp;) N
+(                }) N
+(            } ) S
+(/* for: \(tp..  */) c n
+(        } ) p
+(/* for: \(i=..  */) c n
+(gturtle.c) (12/16 \245\332\241\274\245\270) (02\307\257  8\267\35631\306\374 12:00) title
+border
+grestore
+(\245\346\241\274\245\266\314\276: ) rhead
+(gturtle.c) (6/8) (2002\307\257  8\267\35631\306\374 \305\332\315\313\306\374) footer
+end % of euc-jpdict
+pagesave restore
+showpage
+%%Page: (13-14) 7
+%%BeginPageSetup
+/pagesave save def
+sh 0 translate 90 rotate
+%%EndPageSetup
+euc-jpdict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 3.362408 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(    }) p n
+(}) N
+() N
+(void) k n
+(clearData\(Turtle *tp\)) p n
+({) N
+(    ) S
+(if) K
+( \(tp == ) p
+(NULL) K
+(\)) p n
+(        ) S
+(return) K
+(;) p n
+() N
+(    home\(tp\);) N
+(    tp->angle = 0.0;) N
+(    setColor\(tp, ") S
+(red) str
+("\);) p n
+(    clearData\(tp->next\);) N
+(}) N
+() N
+(void) k n
+(SystemInit\() p
+(void) k
+(\)) p n
+({) N
+(    ) S
+(int) k
+( h;) p n
+() N
+(    h = fieldsize / 2;) N
+(    fprintf\(stderr, ") S
+(%s) str
+(", welcome\);) p n
+(    printf\(") S
+(set multiplot                         \\n) str
+(") p n
+(           ") S
+(set xrange[-%d:%d]                    \\n) str
+(") p n
+(           ") S
+(set yrange[-%d:%d]                    \\n) str
+(") p n
+(           ") S
+(set nokey                             \\n) str
+(") p n
+(           ") S
+(set nolabel                           \\n) str
+(") p n
+(           ") S
+(set grid                              \\n) str
+(") p n
+(           ") S
+(set title \\"turtle graphics\\"         \\n) str
+(") p n
+(           ") S
+(set size square                       \\n) str
+(") p n
+(           ") S
+(set xtics 10                          \\n) str
+(") p n
+(           ") S
+(set ytics 10                          \\n) str
+(", h, h, h, h\);) p n
+(    WindowClear\(\);) N
+(}) N
+() N
+(void) k n
+(TurtleList\(Turtle *tp\)) p n
+({) N
+(    ) S
+(if) K
+( \(tp == ) p
+(NULL) K
+(\)) p n
+(        ) S
+(return) K
+(;) p n
+() N
+(    fprintf\(stderr, ") S
+(%s\\n) str
+(", self\(tp\)\); ) p n
+(    TurtleList\(tp->next\);) N
+(}) N
+() N
+(void) k n
+(Save\() p
+(char) k
+( *name, ) p
+(char) k
+( *filename, ) p
+(char) k
+( *mode\)) p n
+({) N
+(    ) S
+(FILE) k
+(    *fp;) p n
+(    Turtle  *tp;) N
+(    ) S
+(int) k
+(       i;) p n
+(    ) N
+(    ) S
+(if) K
+( \(!\(tp = searchTurtle\(name\)\)\) {) p n
+(        fprintf\(stderr, ") S
+(ERROR: no such a turtle %s\\n) str
+(", name\);) p n
+(    } ) S
+(else) K
+( ) p
+(if) K
+( \(!\(fp = fopen\(filename, mode\)\)\) {) p n
+(        perror\(") S
+(<Save>) str
+("\);) p n
+(        fprintf\(stderr, ") S
+(see help \\"save\\".\\n) str
+("\);) p n
+(    } ) S
+(else) K
+( {) p n
+(        fprintf\(fp, ") S
+(\(%s \\n) str
+(", name\);) p n
+(        ) S
+(for) K
+( \(i=3; i<tp->commandNumber; i++\) {) p n
+(            fprintf\(fp, ") S
+(\\t%s %s\\n) str
+(", tp->command[i], tp->parameter[i]\);) p n
+(        }) N
+(gturtle.c) (13/16 \245\332\241\274\245\270) (02\307\257  8\267\35631\306\374 12:00) title
+border
+/v 1 store
+/x0 x v get 3.362408 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(        fprintf\(fp, ") p
+(\)\\n) str
+("\);) p n
+(        fclose\(fp\);) N
+(    }) N
+(}) N
+() N
+(void) k n
+(SaveAll\() p
+(char) k
+( *filename\)) p n
+({) N
+(    Turtle      *tp;) N
+(    ) S
+(struct) k
+( stat  stbuf;) p n
+(    ) N
+(    ) S
+(if) K
+( \(isEmpty\(\)\) {) p n
+(        fprintf\(stderr, ") S
+(no turtle.\\n) str
+("\);) p n
+(    } ) S
+(else) K
+( {) p n
+(        ) S
+(/* 'saveall' can not over write a file. */) c
+( ) p n
+(        ) S
+(if) K
+( \(stat\(filename, &stbuf\) == -1\) {) p n
+(            ) S
+(for) K
+( \(tp = frontPointer; tp != ) p
+(NULL) K
+(; tp = tp->next\) {) p n
+(                Save\(self\(tp\), filename, ") S
+(a) str
+("\);) p n
+(            }) N
+(        } ) S
+(else) K
+( {) p n
+(            fprintf\(stderr, ") S
+(%s is exist. name another.\\n) str
+(", filename\);) p n
+(        }) N
+(    }) N
+(}) N
+() N
+(void) k n
+(Load\() p
+(char) k
+( *filename\)) p n
+({) N
+(    ) S
+(FILE) k
+(   *fp;) p n
+(    Turtle *tp;) N
+(    ) S
+(char) k
+(     s[BUF_SIZE];) p n
+(    ) S
+(char) k
+(  name[BUF_SIZE];) p n
+(    ) S
+(char) k
+(   car[BUF_SIZE];) p n
+(    ) S
+(char) k
+(   cdr[BUF_SIZE];) p n
+() N
+(    ) S
+(if) K
+( \(fileCheck\(filename\)\) {) p n
+(        fp = fopen\(filename, ") S
+(r) str
+("\);) p n
+(        ) S
+(if) K
+( \(!fp\) {) p n
+(            perror\(") S
+(<Load>) str
+("\),) p n
+(            fprintf\(stderr, ") S
+(see help \\"load\\".\\n) str
+("\);) p n
+(        } ) S
+(else) K
+( {) p n
+(            ) S
+(for) K
+( \(*car = ') p
+(\\0) str
+(', *cdr = ') p
+(\\0) str
+(' ; fgets\(s, BUF_SIZE, fp\) != ) p
+(NULL) K
+(; *car ) p n
+(= ') S
+(\\0) str
+(', *cdr = ') p
+(\\0) str
+('\){) p n
+(                sscanf\(s, ") S
+(%s, %s) str
+(", car, cdr\);) p n
+(                ) S
+(if) K
+( \(*car == ') p
+(\() str
+('\) {) p n
+(                    strcpy\(name, car+1\);) N
+(                    ) S
+(if) K
+( \(!\(tp = searchTurtle\(name\)\)\)) p n
+(                        tp = addTurtle\(MakeTurtle\(name\)\);) N
+() N
+(                    ) S
+(for) K
+( \(*car = ') p
+(\\0) str
+(', *cdr = ') p
+(\\0) str
+(' ; ; *car = ') p
+(\\0) str
+(', *cdr = ') p
+(\\0) str
+('\){) p n
+(                        fgets\(s, BUF_SIZE, fp\);) N
+(                        sscanf\(s, ") S
+(%s %s) str
+(", car, cdr\);) p n
+(                        ) S
+(if) K
+( \(*car == ') p
+(\)) str
+('\)) p n
+(                            ) S
+(break) K
+(;) p n
+(                        strcpy\(tp->command[tp->commandNumber], car\);) N
+(                        strcpy\(tp->parameter[tp->commandNumber], cdr\);) N
+(                        tp->commandNumber++; ) N
+(                        Do\(tp, tp->commandNumber-1\);) N
+(                    }) N
+(                }    ) N
+(            }) N
+(        }) N
+(gturtle.c) (14/16 \245\332\241\274\245\270) (02\307\257  8\267\35631\306\374 12:00) title
+border
+grestore
+(\245\346\241\274\245\266\314\276: ) rhead
+(gturtle.c) (7/8) (2002\307\257  8\267\35631\306\374 \305\332\315\313\306\374) footer
+end % of euc-jpdict
+pagesave restore
+showpage
+%%Page: (15-16) 8
+%%BeginPageSetup
+/pagesave save def
+sh 0 translate 90 rotate
+%%EndPageSetup
+euc-jpdict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 3.362408 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(    fclose\(fp\);) p n
+(    }) N
+(}) N
+() N
+(int) k n
+(fileCheck\() p
+(char) k
+( *filename\)) p n
+({) N
+(    ) S
+(FILE) k
+( *fp; ) p n
+(    ) S
+(char) k
+(  s[BUF_SIZE];) p n
+(    ) S
+(int) k
+(   index;) p n
+(    ) S
+(int) k
+(   i, openPar, closePar;) p n
+( ) N
+(    openPar = closePar = 0;) N
+(    index = strlen\(filename\)-3;) N
+() N
+(    ) S
+(if) K
+( \(\(strcmp\(&filename[index], ") p
+(.gt) str
+("\) == 0\)\) {) p n
+(        fp = fopen\(filename, ") S
+(r) str
+("\);) p n
+(        ) S
+(if) K
+( \(!fp\)) p n
+(            perror\(") S
+(fileCheck) str
+("\);) p n
+() N
+(        ) S
+(for) K
+( \(; fgets\(s, 128, fp\) != ) p
+(NULL) K
+(;\) {) p n
+(            ) S
+(for) K
+( \(i = 0; s[i] != ') p
+(\\0) str
+('; i++\){) p n
+(                ) S
+(if) K
+( \(s[i] == ') p
+(\() str
+('\)) p n
+(                    openPar++;) N
+(                ) S
+(else) K
+( ) p
+(if) K
+( \(s[i] == ') p
+(\)) str
+('\)) p n
+(                    closePar++;) N
+(            }) N
+(        }) N
+(        ) S
+(if) K
+( \(openPar == closePar\) {) p n
+(            fclose\(fp\);) N
+(            ) S
+(return) K
+( 1;) p n
+(        } ) S
+(else) K
+( {) p n
+(            fprintf\(stderr, ") S
+(parse error: no mach '\(' and '\)'\\n) str
+(") p n
+(                            ") S
+(check \\"%s\\".\\n) str
+(", filename\);) p n
+(            fclose\(fp\);) N
+(            ) S
+(return) K
+( 0;) p n
+(        } ) N
+(    } ) S
+(else) K
+( {) p n
+(        fprintf\(stderr, ") S
+(bad file. enter \\"*.gt\\". \\n) str
+("\);) p n
+(        ) S
+(return) K
+( 0;) p n
+(    }) N
+(}) N
+() N
+(void) k n
+(WindowClear\() p
+(void) k
+(\)) p n
+({) N
+(    printf\(") S
+(clear\\n) str
+("\);) p n
+(    printf\(") S
+(plot \\"-\\" w lp\\n) str
+("\); ) p n
+(    printf\(") S
+(-1000 1000\\n) str
+("\);) p n
+(    printf\(") S
+(-1001 1001 \\n) str
+("\);) p n
+(    printf\(") S
+(e\\n) str
+("\);   ) p n
+(    fflush\(stdout\);) N
+(}) N
+() N
+(void) k n
+(Draw\(\)) p n
+({) N
+(    ) S
+(if) K
+( \(!isEmpty\(\)\)) p n
+(        Do\(activeTurtle, activeTurtle->commandNumber-1\);) N
+(}) N
+() N
+() N
+(gturtle.c) (15/16 \245\332\241\274\245\270) (02\307\257  8\267\35631\306\374 12:00) title
+border
+/v 1 store
+/x0 x v get 3.362408 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(int) k
+( main\() p
+(int) k
+( argc, ) p
+(char) k
+( **argv\)) p n
+({) N
+(    fieldsize = atoi\(*\(argv+1\)\);) N
+(    SystemInit\(\);) N
+(    ) S
+(while) K
+( \(1\) {) p n
+(        ) S
+(if) K
+( \(getCommand\(\)\)) p n
+(            Draw\(\);) N
+(    }) N
+(    ) S
+(return) K
+( 0;) p n
+(}) N
+() N
+(/* File ends here. */) c n
+(gturtle.c) (16/16 \245\332\241\274\245\270) (02\307\257  8\267\35631\306\374 12:00) title
+border
+grestore
+(\245\346\241\274\245\266\314\276: ) rhead
+(gturtle.c) (8/8) (2002\307\257  8\267\35631\306\374 \305\332\315\313\306\374) footer
+end % of euc-jpdict
+pagesave restore
+showpage
+
+%%Trailer
+end
+%%EOF

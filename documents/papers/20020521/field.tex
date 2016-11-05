@@ -1,0 +1,400 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  特殊文字 : 
+%    改行 -> \\
+% 
+%  注釈 : 
+%    \footnote[1]{ 注釈の内容 }
+%           
+%  次のページ :
+%    \pagebreak
+%
+%  整形をせずにそのまま出力 :
+%  (ソース等)
+%    \begin{verbatim}  〜内容
+%    \end{verbatim}
+%
+%  整形をせずにそのまま出力：
+%  ( 枠を付ける )
+%   まず、以下のパッケージを使う  
+%   \usepackage{eclbkbox}
+%   そのあとにソースを記述
+%   \begin{breakbox}
+%     \begin{verbatim}
+%        ソース
+%     \end{verbatim}
+%   \end{breakbox}
+%
+%  箇条書 :
+%    \begin{itemize}
+%    \item\hspace*{5mm} 箇条書の内容
+%    \end{itemize}
+%   
+%  画像を張り付ける
+%    \begin{center}
+%    \includegraphics{ 画像ファイル名.eps }
+%    \end{center}
+%
+%  セクションの作成 :
+%    \section{ 内容 }
+%
+%  サブセクションの作成 :
+%    \subsection{ 内容 }
+%
+%--------------------------------------------------
+%  番号の付いていないセクションも目次に出す:
+%    \addcontentsline{toc}{section}{目次に出す名前}
+%
+%  [ 参考文献の場合 ]
+%% (j)article クラスの場合
+%%
+%\begin{thebibliography}{99}
+%\addcontentsline{toc}{section}{\refname}% 追加
+%\bibitem{bibunsho4} 名前
+%                   本の名前
+%\end{thebibliography}
+%
+%% (j)report・(j)book クラスの場合
+%% 
+%\begin{thebibliography}{99}
+%\addcontentsline{toc}{chapter}{\bibname}% 追加
+%\bibitem{bibunsho4} 名前
+%                   本の名前
+%\end{thebibliography}
+%-----------------------------------------------
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% * 概要の書き方
+%    規定字数以内でその論文 の取り扱う範 囲，目的，内容
+%   の要点および主な結論などを記述する
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% documentclass の宣言 % @ 書式
+% \documentclass [ オプション ] { 書式 }
+%
+% [ オプションの種類 ]
+% * 二段組
+% [twocolumn]
+% * 印字の大きさ
+% [a4p]
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% レジュメに使うなら、jarticle
+%
+%\documentclass[twocolumn,a4p]{jarticle}
+
+\documentclass[a4p]{jarticle}
+\usepackage{multicol}
+% 画像を張り付ける
+\usepackage[dvips]{graphics}
+% 行列が使えるパッケージ
+\usepackage{amsmath}
+% ソースに枠をつける
+\usepackage{eclbkbox}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 余白や文字間の幅の細かい設定
+%
+% 
+%\setlength{\voffset}{65pt}
+%\setlength{\topmargin}{-170pt}
+%\setlength{\textheight}{770pt}
+%\setlength{\oddsidemargin}{-10pt}
+%\setlength{\textwidth}{480pt}
+%\setlength{\headsep}{40pt}
+
+% 文書のはじまり 
+\begin{document}
+
+%---------------------------------------------
+%
+% article の時の表紙を別ページにする
+%
+\vspace*{4cm}
+\begin{center}
+{\LARGE スカラー場 ベクトル場の作成 \\} 
+\vspace*{1cm}
+{\large 01ca0125 鈴木 藍 \\ 
+  2002年 5月 21日}
+\end{center}
+\thispagestyle{empty}
+\newpage
+%------------------------------------------------
+%========================================
+% ここから文章
+%
+% 1ページ目
+%
+%========================================
+
+%----------------------------------------
+%
+% もくじをつける
+\tableofcontents
+\newpage
+%----------------------------------------
+
+% 概要 (abstract)
+%
+\begin{abstract} 
+\addcontentsline{toc}{section}{概要}
+スカラー場、ベクトル場の定義をまとめた。今回の課題である
+「スカラー場からベクトル場を作成する」を、図形的に解釈しながら
+作成した。
+
+\end{abstract}
+
+% はじめに
+% section のオプションで、数字を表示させないようにする
+%
+\section*{レポートの目的}
+\addcontentsline{toc}{section}{レポートの目的}
+スカラー場、ベクトル場が何であるかを整理する。
+また、それに付随する事柄も調べ、知識としてつけておく。
+プログラムに関しては、前回から継続して オブジェクト指向風に書く。
+
+%------------------------------------------------------
+% セクション
+%------------------------------------------------------
+\section{ 場の定義  }
+%------------------------------------------------------
+\subsection{ スカラー場とは }
+空間全体、または 一部の領域において、各点$(x, y, z)$ に対して
+スカラー関数 $\varphi (x, y)$ が一意的に決まる時、$\varphi (x, y)$  
+を、その空間のスカラー場という。
+これは、大きさのみを持っていて、方向は持たない。また、場とは空間の事であり
+スカラー場とは大きさのみを表す空間のことである。
+この空間を 3 次元で考えると、この大きさを $x , y$ が決まった時の高さとしたとき
+、 空間をプロットすると勾配が出来る。この勾配は、ある点に近づけていったときの傾き
+となる。\\
+この勾配を求めるには、$x$ が決まった時の 大きさと、$y$ が決まった時の大きさをそれぞれ
+微分する。(偏微分)  \\
+$x$ 軸方向の勾配は $x$ に関する 偏微分なので
+\[
+\frac{\partial \varphi (x, y)}{\partial x}
+\]
+$y$ 軸方向の勾配は $y$ に関する偏微分なので 
+\[
+\frac{\partial \varphi (x, y)}{\partial y}
+\]
+となる。 これを$ \nabla \varphi$ または $grad \varphi$ と書き、
+\[
+\nabla \varphi (x, y) = grad \varphi (x, y) = \Big( \frac{\partial \varphi (x, y)}{\partial x}, \frac{\partial \varphi (x, y)}{\partial x} \Big)
+\]
+となる。
+
+\subsection{ ベクトル場とは }
+スカラー場は勾配を表していたが、この勾配を方向ベクトルで表した場が ベクトル場である。
+また、ベクトル場には以下の種類がある。
+\begin{itemize}
+\item 中心へ向かっていくベクトルを持つ場
+\item 中心から外へ向かっていくベクトルの場
+\item 回転するベクトルの場
+\end{itemize}
+これらはそれぞれ、収縮、発散、回転と呼ばれている。
+今回プログラムで作成した物は、発散である。
+
+\subsubsection{ 発散とは }
+\begin{center}
+\includegraphics{div1.eps}
+\end{center}
+この図は、$a$ 点の発散を表す。この発散の大きさは、$x$ の大きさ $(x, 0)$ と
+ $y$ の大きさ$(0, y)$の和である。 このある点までの長さが勾配であるから、
+これは $x$ 軸の偏微分と $y$ 軸の偏微分の和になり、
+\[
+\frac{\partial \varphi (x,y)}{ \partial x} + \frac{\partial \varphi (x, y)}{\partial y}
+\]
+と書く。また、このベクトルの発散を表記する際に、$"div"$ を用い、
+\[
+div \varphi (x, y) = \frac{\partial \varphi (x,y)}{ \partial x} + \frac{\partial \varphi (x, y)}{\partial y} = \Big(\frac{\partial}{\partial x}, \frac{\partial}{\partial y} \Big) \cdot (\varphi x(x,y), \varphi y (x,y)) 
+\]
+と表現できる。
+これは、ベクトルとベクトルの内積であるから、スカラー場を表している。
+
+\subsubsection{ 回転とは }
+完全には理解出来なかった。
+まず、式は
+\[
+\Big( \frac{\partial \varphi y(x, y)}{\partial x} - \frac{\partial \varphi x(x, y)}{\partial y} \Big)
+\]
+となる。 これは 
+\[
+\varphi (x, y) = (-y, x) = -y i + xj
+\]
+で、$x$のベクトルが $-y$ , $y$ のベクトルが $x$ であり、この和をとったものである。この式は回転を表す。
+さらに、これは
+\[
+\frac{\partial}{\partial x}  \varphi y(x, y)- \frac{\partial}{\partial y} \varphi x(x, y)
+\]
+であり、
+\[
+\nabla = \Big(  \frac{\partial}{\partial x} , \frac{\partial}{\partial y} , \frac{\partial}{\partial z} \Big)
+\]
+であるから、これを回転を表す $rot$ を使い、
+\[
+rot \varphi (x, y, z) = \nabla \times \varphi (x, y, z)
+\]
+と表現することができる。 これは、$\nabla$ と スカラー場の外積である。また、$rot$ は $z$ 軸方向になるので
+\[
+\Big( 0, 0, \frac{\partial}{\partial x} \varphi y(x, y) - \frac{\partial}{\partial y} \varphi x (x, y) \Big)
+\]
+となる。
+
+%-------------------------------------------
+\section{ 作成したプログラム }
+%-------------------------------------------
+\subsection{ ヘッダファイルの内容 }
+\begin{breakbox}
+ \begin{verbatim}
+   #define FIELD_SIZE    10
+
+   typedef struct sfield    ScaleField;
+   typedef struct vfield    VectorField;
+   typedef struct cultivate FieldMaker;
+
+   /*---------- scale field --------------------*/
+   struct sfield {
+      double  potential[FIELD_SIZE][FIELD_SIZE];
+   };
+   /*-------------------------------------------*/
+   /*---------- vector field -------------------*/
+   struct point {
+      double  x, y;
+   };
+   struct vfield {
+      struct point pointOf[FIELD_SIZE][FIELD_SIZE];
+   };
+   /*-------------------------------------------*/
+   /*--------- cultivate the fields! ------------*/
+   struct cultivate {
+      ScaleField  *(*makeScaleField)(ScaleField *field);
+      VectorField *(*makeVectorField)(ScaleField *scalefield);
+   };
+   /*-------------------------------------------*/
+
+   ScaleField  *lambda1(ScaleField *field);
+   VectorField *lambda2(ScaleField *scalefield);
+   FieldMaker  *newFieldMaker(void);
+ \end{verbatim}
+\end{breakbox}
+データの扱いは以下のようにした。
+\begin{center}
+\includegraphics{header.eps}
+\end{center}
+ベクトル場を作る際には、一つの点に対して 二つのデータを持たせるようにした。
+
+\subsection{ スカラー場を作る関数 }
+ある点のポテンシャルを $\varphi (r) = \frac{1}{r}$ とし、スカラー場を作成した。
+\begin{center}
+\includegraphics{scale1.eps}
+\end{center}
+ある点は、非常に値が大きくなる。この点から離れる程、分母の$r$ が大きくなり、
+ある点のポテンシャルが小さくなる。
+また、スカラー場の図形的な解釈は以下の通りである。
+\begin{center}
+\includegraphics{scale2.eps}
+\end{center}
+
+プログラムを実行し、プロットした結果は以下の通りである。
+また、フィールドの大きさは $10 \times 10$ とした。
+\begin{center}
+\includegraphics{scalefield.eps}
+\end{center}
+
+\subsection{ ベクトル場を作る関数 }
+ある点のポテンシャル から、ベクトル場を計算する。
+この計算の図形的な解釈は以下の通りである。
+\begin{center}
+\includegraphics{vector1.eps}
+\end{center}
+
+ある点のポテンシャルを偏微分したものと隣のポテンシャルを偏微分したものの差を両隣
+で求め、それらの平均をとったものを、一つの点のベクトル場と考える。
+また、プログラムでは両隣の距離は 配列 1 つ分であるが、本当は 微小に狭くした長さとなる。
+式は以下の通りである。\\
+ある点が、$x$ 軸へ変化したベクトルは
+\[
+\frac{ \frac{\varphi (x-dx, y) - \varphi (x, y)} {dx } + \frac{\varphi (x, y) - \varphi (x+dx, y)}{dx}}{2}
+\]
+ある点が、$y$ 軸へ変化したベクトルは
+\[
+\frac{ \frac{\varphi (x, y-dy) - \varphi (x, y)} {dy } + \frac{\varphi (x, y) - \varphi (x+dy, y)}{dy}}{2}
+\]
+となる。
+この $dx$, $dy$ は $1.0$ とした。フィールドの一番はじは計算しないものとし、どのベクトルの変化も $0.0$ とした。\\
+プログラムの実行結果し、プロットした結果は以下の通りである。
+\begin{center}
+\includegraphics{vector.eps}
+\end{center}
+添字に 0 か、フィールドの大きさの最大値が来る時は ベクトルの変化は $0.0$となっている。そのため、はじの方に空白が出来ている。
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  感想、展望
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{まとめ・結論}
+\addcontentsline{toc}{section}{まとめ・結論}
+スカラー場とは、大きさ(ポテンシャル)を表す場、ベクトル場はある点の
+ポテンシャルの変化をベクトルで表した場のことであった。
+また、ベクトル場には種類があり、今回は 発散をプロットした。
+最近、キーワードとして出て来る「回転」が非常に気になる。
+回転を表す為に、どのようにプロットすればよいか 是非調べてみたい。\\
+
+この文書と作成したプログラムは以下のURLからダウンロード出来る。\\
+http://www.soulhack.net/TeX/field
+
+%------------------------------------------------
+\section*{感想} 
+\addcontentsline{toc}{section}{感想}
+回転が気になって仕方がない。 きっと、とても面白い絵が出てくるはず
+である。前回の外積でも回転を表すことがわかったが、実際のプロットの方法が
+分からないのが悔しい。\\
+また、前回から試している オブジェクト指向風の記述方法は
+なかなか使っていて気分がいいので今回も使用した。しばらくは
+この方法を使っていこうと思う。
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  参考文献
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% 「関連図書」を変更する
+% jreport, jbook なら、bibname
+%\renewcommand{\bibname}{変更後の名前}
+%\renewcommand{\bibname}{参考文献}
+
+% 「参考文献」を変更する
+% jarticle なら、refname
+\renewcommand{\refname}{参考文献}
+\begin{thebibliography}{9}
+
+% 目次に参考文献をいれる
+\addcontentsline{toc}{section}{\refname}% 追加
+
+% 参考文献
+\bibitem{ hoge }
+ 電磁気学 \\
+  http://homepage2.nifty.com/eman/electromag/contents.html\\
+ 2002 年 5 月 20 参照 
+
+\bibitem{ piyo }
+ ベクトル解析 \\
+ http://www5.plala.or.jp/h-fuchi/index2.htm \\
+ 2002 年 5 月 20 参照 
+
+\bibitem{ mona }
+ 電気学講義録 \\
+ http://www.ese.yamanashi.ac.jp/~itoyo/lecture/denkigaku/denki00.htm \\
+ 2002 年 5 月 20 参照 
+
+\end{thebibliography}
+
+% 文書の終了
+\end{document} 

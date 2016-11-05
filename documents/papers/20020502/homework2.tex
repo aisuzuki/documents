@@ -1,0 +1,455 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  特殊文字 : 
+%    改行 -> \\
+% 
+%  注釈 : 
+%    \footnote[1]{ 注釈の内容 }
+%           
+%  次のページ :
+%    \pagebreak
+%
+%  整形をせずにそのまま出力 :
+%  (ソース等)
+%    \begin{verbatim}  〜内容
+%    \end{verbatim}
+%
+%  箇条書 :
+%    \begin{itemize}
+%    \item\hspace*{5mm} 箇条書の内容
+%    \end{itemize}
+%
+%  セクションの作成 :
+%    \section{ 内容 }
+%
+%  サブセクションの作成 :
+%    \subsection{ 内容 }
+%
+%--------------------------------------------------
+%  番号の付いていないセクションも目次に出す:
+%    \addcontentsline{toc}{section}{目次に出す名前}
+%
+%  [ 参考文献の場合 ]
+%% (j)article クラスの場合
+%%
+%\begin{thebibliography}{99}
+%\addcontentsline{toc}{section}{\refname}% 追加
+%\bibitem{bibunsho4} 名前
+%                   本の名前
+%\end{thebibliography}
+%
+%% (j)report・(j)book クラスの場合
+%% 
+%\begin{thebibliography}{99}
+%\addcontentsline{toc}{chapter}{\bibname}% 追加
+%\bibitem{bibunsho4} 名前
+%                   本の名前
+%\end{thebibliography}
+%-----------------------------------------------
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% * 概要の書き方
+%    規定字数以内でその論文 の取り扱う範 囲，目的，内容
+%   の要点および主な結論などを記述する
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% documentclass の宣言 % @ 書式
+% \documentclass [ オプション ] { 書式 }
+%
+% [ オプションの種類 ]
+% * 二段組
+% [twocolumn]
+% * 印字の大きさ
+% [a4p]
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% レジュメに使うなら、jarticle
+%
+%\documentclass[twocolumn,a4p]{jarticle}
+
+\documentclass[a4p]{jarticle}
+\usepackage{multicol}
+\usepackage[dvips]{graphics}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 余白や文字間の幅の細かい設定
+%
+% 
+%\setlength{\voffset}{65pt}
+%\setlength{\topmargin}{-170pt}
+%\setlength{\textheight}{770pt}
+%\setlength{\oddsidemargin}{-10pt}
+%\setlength{\textwidth}{480pt}
+%\setlength{\headsep}{40pt}
+
+% 文書のはじまり 
+\begin{document}
+
+%---------------------------------------------
+%
+% article の時の表紙を別ページにする
+%
+\vspace*{4cm}
+\begin{center}
+{\LARGE 部分積分と置換積分の計算 \\} 
+\vspace*{1cm}
+{\large 01ca0125 鈴木藍 \\ 
+  2002年 5月 2日}
+\end{center}
+\thispagestyle{empty}
+\newpage
+%------------------------------------------------
+%========================================
+% ここから文章
+%
+% 1ページ目
+%
+%========================================
+
+%----------------------------------------
+%
+% 表紙を付ける
+\tableofcontents
+\newpage
+%----------------------------------------
+
+% 概要 (abstract)
+%
+\begin{abstract} 
+\addcontentsline{toc}{section}{概要}
+授業中出された練習問題を、部分積分、置換積分を使って解く。
+また、置き換えや 式の変形などは、細かく言葉で書くようにした。
+
+\end{abstract}
+
+% はじめに
+% section のオプションで、数字を表示させないようにする
+%
+\section*{レポートの目的}
+\addcontentsline{toc}{section}{レポートの目的}
+前回まで勉強してきた微分積分を、実際に公式を使って計算する。
+この練習問題で、積分の計算過程での式の変形に慣れる。
+
+
+%------------------------------------------------------
+% 1から始まるセクション
+%------------------------------------------------------
+\section{今回使う基本的な公式}
+%------------------------------------------------------
+\subsection{部分積分}
+積分の式を計算するために、掛け算の微分の公式を使って積分の公式
+の形に変形してゆく手法。\\
+微分の掛け算の公式は
+\begin{eqnarray*}
+(f(x)g(x))' = f'(x)g(x) + f(x)g'(x)
+\end{eqnarray*}
+である。この式の両辺を x で微分すると、
+\begin{eqnarray*}
+\int (f(x)g(x))'dx = \int f'(x)g(x)dx + \int f(x)g'(x)dx
+\end{eqnarray*}
+微分したものを積分すると、もとの関数になるので
+\begin{eqnarray*}
+f(x)g(x) = \int f'(x)g(x)dx + \int f(x)g'(x)dx
+\end{eqnarray*}
+これを移行して
+\begin{eqnarray*}
+\int f'(x)g(x)dx = f(x)g(x)- \int f(x)g'(x)dx 
+\end{eqnarray*}
+$\int x \cos(x) dx$ などの式の形に近いのでこの公式を
+使って計算することが出来る。
+
+\subsection{置換積分}
+置換積分では、微分の公式である合成関数の公式を使って
+積分の公式で計算できる形に変形させる。$\int f(x)dx$ を
+$F(t)dt$ のような形にして解く。
+
+合成関数の公式は
+\begin{eqnarray*}
+(F(x(t)))' = F'(x(t)) x'(t) 
+\end{eqnarray*}
+これに両辺を t で積分したものが公式である。
+\begin{eqnarray*}
+\int (F(x)) dx = \int F'(x(t)) x'(t) dt
+\end{eqnarray*}
+\newpage
+
+%-------------------------------------------
+\section{宿題}
+%-------------------------------------------
+授業中に出された 部分積分と置換積分のそれぞれ 2 問づつと
+もう一問、あわせて 5 問を計算する。
+\subsection{部分積分}
+\begin{itemize}
+\item $\int e^x \cos x dx$
+\item $\int x^2 e^x dx$
+\end{itemize}
+
+\subsection{置換積分}
+\begin{itemize}
+\item $\int (2x+1)^{15} dx$
+\item $\int \cos(3x+1) dx$ \\
+\end{itemize}
+\begin{itemize}
+\item $\int x (\log x)^2 dx$
+\end{itemize}
+以上
+
+%-------------------------------------------
+\section{部分積分}
+%-------------------------------------------
+\subsection{$\int e^x \cos x dx$}
+まず、公式にあてはめる為に $f(x)=\cos x$, $g(x)= e^x$ とおく。
+また、$e^x$ を積分したものは$e^x$, $\cos(x)$ を積分したものは
+$\sin(x)$である。
+
+\begin{eqnarray*}
+\int e^x \cos x dx = e^x \sin x - \int e^x -\sin x dx  
+\end{eqnarray*}
+ここで、$\int e^x -\sin x dx$ をさらに部分積分する。
+$f(x)= -\sin x$, $g(x)=e^x$ とおいて、
+\begin{eqnarray*}
+\int e^x -\sin x dx &=& e^x (-\cos x) - \int e^x(-\cos x) dx 
+\end{eqnarray*}
+
+もとの式に戻って
+\begin{eqnarray*}
+\int e^x \cos x dx = e^x \sin x - (e^x (-\cos x) + \int e^x \cos x dx) \\
+\int e^x \cos x dx = e^x \sin x + e^x \cos x - \int e^x \cos x dx 
+\end{eqnarray*}
+ここで 右辺と左辺の $\int e^x \cos x dx$ が同じなので、右辺の式を移項すると
+\begin{eqnarray*}
+2\int e^x \cos x dx = e^x \sin x + e^x \cos x
+\end{eqnarray*}
+左辺の 2 をとって
+\begin{eqnarray*}
+\int e^x \cos x dx = \frac{1}{2} e^x \sin x + e^x \cos x
+\end{eqnarray*}
+右辺の$e^x$をくくって
+\begin{eqnarray*}
+\int e^x \cos x dx = \frac{1}{2} e^x(\sin x + \cos x)
+\end{eqnarray*}
+よってこの式は
+\begin{eqnarray*}
+\int e^x \cos x dx = \frac{1}{2} e^x(\sin x + \cos x)
+\end{eqnarray*}
+となる。
+
+%----------------------------------------------------------
+\subsection{$\int x^2 e^x dx$}
+まず、公式にあてはめる為に $f(x)= e^x $, $g(x)= x^2$ とおく。
+これを当てはめて
+\begin{eqnarray*}
+\int x^2 e^x dx = e^x x^2 - \int e^x 2x dx
+\end{eqnarray*}
+ここで k が定数の時、$\int k f(x)dx = k \int f(x)dx$ だから
+\begin{eqnarray*}
+\int x^2 e^x dx = e^x x^2 - 2\int e^x x dx
+\end{eqnarray*}
+となる。さらに $\int e^x x dx $ を部分積分して、
+$f(x) = e^x$, $g(x) = x$ とおくと 
+\begin{eqnarray*}
+\int e^x x dx = e^x x - \int e^x dx \\
+\int e^x x dx = e^x x - e^x 
+\end{eqnarray*}
+これを先程の式に戻して
+\begin{eqnarray*}
+\int x^2 e^x dx = e^x x^2 - 2(e^x x - e^x)
+\end{eqnarray*}
+$e^x$ でくくって
+\begin{eqnarray*}
+\int x^2 e^x dx = e^x (x^2 - 2x + 2)
+\end{eqnarray*}
+
+よってこの式は
+\begin{eqnarray*}
+\int x^2 e^x dx = e^x (x^2 - 2x + 2)
+\end{eqnarray*}
+となる。
+
+%-------------------------------------------
+\section{置換積分}
+%-------------------------------------------
+\subsection{$\int(2x+1)^{15} dx$}
+公式に当てはめるために $t = 2x+1$ とする。
+さらに、関数 $F(x) = x^{15}$ とする。
+\begin{eqnarray*}
+\int (F(x)) dx = \int (t)^{15} dt \\
+\int (F(x)) dx = \int F'(t)・x'(t) dt 
+\end{eqnarray*}
+この式を使って、$dx$ と $dt$ の関係を調べる。
+\begin{eqnarray*}
+\frac{dt}{dx} = \frac{d(2x+1)}{dx}\\
+\frac{dt}{dx} = 2\\
+dx = \frac{1}{2}dt
+\end{eqnarray*}
+この$dx$を、問題の式にあてはめると
+\begin{eqnarray*}
+\int t^{15} \frac{1}{2} dt  \\
+\frac{1}{2}\int t^{15} dt 
+\end{eqnarray*}
+積分して
+\begin{eqnarray*}
+\frac{1}{2}・\frac{t^{16}}{16}  \\
+frac{1}{32} t^{16} 
+\end{eqnarray*}
+$t$ を元に戻して
+\begin{eqnarray*}
+frac{1}{32} (2x+1)^{16} 
+\end{eqnarray*}
+
+よって、この式は
+\begin{eqnarray*}
+frac{1}{32} (2x+1)^{16} 
+\end{eqnarray*}
+となる。
+
+%-----------------------------------------------------
+\subsection{$\int \cos(3x+1) dx$}
+公式に当てはめる為に、$t=3x+1$ とする。
+公式
+\begin{eqnarray*}
+\int (F(x)) dx = \int F'(t)・x'(t) dt 
+\end{eqnarray*}
+この $x'(t)$ について解けば、$dx$と$dt$ の関係を得ることが
+出来るから、
+\begin{eqnarray*}
+\frac{dt}{dx} = \frac{d(3x+1)}{dx}\\
+\frac{dt}{dx} = 3 \\
+dx = \frac{1}{3}dt
+\end{eqnarray*}
+これを
+\begin{eqnarray*}
+\int cos(t) dt 
+\end{eqnarray*}
+に当てはめると
+\begin{eqnarray*}
+\int cos(t) \frac{1}{3}dt \\
+\frac{1}{3} \int cos(t)dt \\
+\end{eqnarray*}
+積分して
+\begin{eqnarray*}
+\frac{1}{3} sin(t)
+\end{eqnarray*}
+t を元に戻して
+\begin{eqnarray*}
+\frac{1}{3} sin(3x+1)
+\end{eqnarray*}
+よってこの式は
+\begin{eqnarray*}
+\frac{1}{3} sin(3x+1)
+\end{eqnarray*}
+となる。
+
+%-------------------------------------------
+\section{追加の問題}
+%-------------------------------------------
+\subsection{$\int x (\log x)^2 dx$}
+まず、公式に当てはめるために $f'(x) = x$, $g(x)= (\log x)^2$
+とする。また、$f(x)=\frac{x^2}{2}$となる。
+この式を部分積分して
+\begin{eqnarray}
+\int x(\log x)^2 dx = \frac{x^2}{2}(\log x)^2 - \int \frac{x^2}{2}((\log x)^2)' dx
+\end{eqnarray}
+また、$((\log x)^2)'$ は合成関数であるから、$F(x)=x^2$ とおいてこれを解く。
+\begin{eqnarray*}
+((\log x)^2)'= F'(\log x) \log 'x \\
+((\log x)^2)'= 2\log x \frac{1}{x} \\
+((\log x)^2)'= \frac{2\log x}{x} 
+\end{eqnarray*}
+
+そして
+$\int \frac{x^2}{2}((\log x)^2)' dx$
+を解くと、
+\begin{eqnarray*}
+\int \frac{x^2}{2}((\log x)^2)' dx= \int x \log x dx
+\end{eqnarray*}
+
+さらに、$\int x \log x dx$ を部分積分すると
+$f'(x)=x$, $g(x)=\log x$ とおいて
+\begin{eqnarray*}
+\int x \log x dx = \frac{x^2}{2} \log x - \int \frac{x^2}{2} \frac{1}{x} dx \\
+\int x \log x dx = \frac{x^2}{2} \log x - \int \frac{x}{2} dx \\
+\int x \log x dx = \frac{x^2}{2} \log x - \int \frac{1}{2}x dx \\
+\int x \log x dx = \frac{x^2}{2} \log x - \frac {1}{2} \int x dx 
+\end{eqnarray*}
+$\int x dx$ を積分して
+\begin{eqnarray*}
+\int x dx = \frac{x^2}{2}
+\end{eqnarray*}
+これを戻して
+\begin{eqnarray*}
+\int x \log x dx = \frac{x^2}{2} \log x - \frac {1}{2}・\frac{x^2}{2} \\
+\int x \log x dx = \frac{x^2}{2} \log x - \frac {x^2}{4}
+\end{eqnarray*}
+この式が
+\begin{eqnarray*}
+\int \frac{x^2}{2}((\log x)^2)' dx = \frac{x^2}{2} \log x - \frac{x^2}{4}
+\end{eqnarray*}
+となる。
+これを 1 の式に当てはめると
+\begin{eqnarray}
+\int x(\log x)^2 dx = \frac{x^2}{2}(\log x)^2 - (\frac{x^2}{2}\log x - \frac{x^2}{4}) \\
+\int x(\log x)^2 dx = \frac{x^2}{2}(\log x)^2 - \frac{x^2}{2}\log x + \frac{x^2}{4} 
+\end{eqnarray}
+$\frac{x^2}{4}$で全体をくくって
+\begin{eqnarray}
+\int x(\log x)^2 dx =  \frac{x^2}{4}( 2 (\log x)^2 - 2\log x + 1)
+\end{eqnarray}
+よって、この式は
+\begin{eqnarray}
+\int x(\log x)^2 dx =  \frac{x^2}{4}( 2 (\log x)^2 - 2\log x + 1)
+\end{eqnarray}
+となる。
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  感想、展望
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{まとめ・結論}
+\addcontentsline{toc}{section}{まとめ・結論}
+まだ何に使うのかは分からないが、部分積分や置換積分
+を使えば、複雑な積分の計算が行えることがわかった。
+しかし、理解度はまだ低いので練習をさらに重ねることが
+必要だと感じた。
+
+\section*{感想} 
+\addcontentsline{toc}{section}{感想}
+はじめは何をやっているかわからなかった。記号の置き換えが
+複雑であることと、目的がよく分からないことが原因だと感じたが、
+ある程度なれて、作業として行えるようになった。\\
+ここまでの理解を助けてくれた原君に感謝したい。
+
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  参考文献
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% 「関連図書」を変更する
+% jreport, jbook なら、bibname
+%\renewcommand{\bibname}{変更後の名前}
+%\renewcommand{\bibname}{参考文献}
+
+% 「参考文献」を変更する
+% jarticle なら、refname
+\renewcommand{\refname}{参考文献}
+
+\begin{thebibliography}{9}
+\addcontentsline{toc}{section}{\refname}% 追加
+
+\bibitem{ piyo }
+定積分と不定積分\\
+ http://www.toyota-ct.ac.jp/~math/katsu/text/cal1/c66.pdf \\
+ 2002/ 5/1 参照 
+\end{thebibliography}
+
+% 文書の終了
+\end{document} 

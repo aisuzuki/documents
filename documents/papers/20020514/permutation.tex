@@ -1,0 +1,580 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  特殊文字 : 
+%    改行 -> \\
+% 
+%  注釈 : 
+%    \footnote[1]{ 注釈の内容 }
+%           
+%  次のページ :
+%    \pagebreak
+%
+%  整形をせずにそのまま出力 :
+%  (ソース等)
+%    \begin{verbatim}  〜内容
+%    \end{verbatim}
+%
+%  箇条書 :
+%    \begin{itemize}
+%    \item\hspace*{5mm} 箇条書の内容
+%    \end{itemize}
+%   
+%  画像を張り付ける
+%    \begin{center}
+%    \includegraphics{ 画像ファイル名.eps }
+%    \end{center}
+%
+%  セクションの作成 :
+%    \section{ 内容 }
+%
+%  サブセクションの作成 :
+%    \subsection{ 内容 }
+%
+%--------------------------------------------------
+%  番号の付いていないセクションも目次に出す:
+%    \addcontentsline{toc}{section}{目次に出す名前}
+%
+%  [ 参考文献の場合 ]
+%% (j)article クラスの場合
+%%
+%\begin{thebibliography}{99}
+%\addcontentsline{toc}{section}{\refname}% 追加
+%\bibitem{bibunsho4} 名前
+%                   本の名前
+%\end{thebibliography}
+%
+%% (j)report・(j)book クラスの場合
+%% 
+%\begin{thebibliography}{99}
+%\addcontentsline{toc}{chapter}{\bibname}% 追加
+%\bibitem{bibunsho4} 名前
+%                   本の名前
+%\end{thebibliography}
+%-----------------------------------------------
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% * 概要の書き方
+%    規定字数以内でその論文 の取り扱う範 囲，目的，内容
+%   の要点および主な結論などを記述する
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% documentclass の宣言 % @ 書式
+% \documentclass [ オプション ] { 書式 }
+%
+% [ オプションの種類 ]
+% * 二段組
+% [twocolumn]
+% * 印字の大きさ
+% [a4p]
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% レジュメに使うなら、jarticle
+%
+%\documentclass[twocolumn,a4p]{jarticle}
+
+\documentclass[a4p]{jarticle}
+\usepackage{multicol}
+\usepackage[dvips]{graphics}
+\usepackage{amsmath}
+\usepackage{eclbkbox}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 余白や文字間の幅の細かい設定
+%
+% 
+%\setlength{\voffset}{65pt}
+%\setlength{\topmargin}{-170pt}
+%\setlength{\textheight}{770pt}
+%\setlength{\oddsidemargin}{-10pt}
+%\setlength{\textwidth}{480pt}
+%\setlength{\headsep}{40pt}
+
+% 文書のはじまり 
+\begin{document}
+
+%---------------------------------------------
+%
+% article の時の表紙を別ページにする
+%
+\vspace*{4cm}
+\begin{center}
+{\LARGE 置換の回数を求める算法 \\} 
+\vspace*{1cm}
+{\large 01ca0125 鈴木 藍 \\ 
+  2002年 5月 14日}
+\end{center}
+\thispagestyle{empty}
+\newpage
+%------------------------------------------------
+%========================================
+% ここから文章
+%
+% 1ページ目
+%
+%========================================
+
+%----------------------------------------
+%
+% 表紙を付ける
+\tableofcontents
+\newpage
+%----------------------------------------
+
+% 概要 (abstract)
+%
+\begin{abstract} 
+\addcontentsline{toc}{section}{概要}
+行列式で使う 符号を表す関数 $sign$ を C 言語を使って実装した。
+また、実際にテストデータを 2 つ使って動作を確認した。
+\end{abstract}
+
+% はじめに
+% section のオプションで、数字を表示させないようにする
+%
+\section*{レポートの目的}
+\addcontentsline{toc}{section}{レポートの目的}
+欠席した授業内容に関する調査を行い、行列式の理解を深める。
+また、置換と互換の関係について調べた。
+
+%------------------------------------------------------
+% セクション
+%------------------------------------------------------
+\section{ 置換と互換について }
+%------------------------------------------------------
+欠席中に行われた講義の内容を調査した。
+\subsection{ 置換 }
+ある集合 $M_1$ から、ある集合$M_2$ の 1 対 1の写像を置換という。また、$M_1$ の集合の要素の数を $n$ とする。
+$M_1$ の置換をすべて集めた集合を$S(n)$と書くとすると、この$S(n)$は順列と同一視する事が出来るので、$S(n)$ の要素の個数は $n!$ 個になる。
+\subsection{ 行列式 }
+例として、3 次の正方行列 $A$ に対して、その行列式 $detA$, または$|A|$ を
+\[
+det A = |A| = \sum_{\sigma \in S(3)} sign \sigma a_{1 \sigma(1)} a_{2 \sigma(2)} a_{3 \sigma(3)} 
+\]
+で定義する。
+これは、行列の第 1 行から 第 3 行まで各行から一つずつ成分を取り出して掛け合わせている。ただし、これらの成分を取り出す時に、同じ列から取り出さないようにするという制約がある。これは、1 対 1 の写像で表すことが出来る。\\
+そして、このような 3 個の要素の取り出し方は全部で $3!$ 通りあるので、和は$3!$ 個の和となる。 
+また、それぞれの 3 個の要素の積には $sign \sigma$ となる係数がかけてあり、これは $\sigma$ の性質により、$+1$ か$-1$ の値をとる。 $+1$か $-1$ のどちらの値を取るかは、$\sigma$ が偶置換であるか奇置換であるかによって決まる。
+
+\subsection{ 置換の集合$S(n)$ }
+例として、$1, 2, 3$ のすべての置換を 外延的に示すと
+\begin{center}
+   \begin{tabular}{cccccc}
+$\begin{pmatrix}
+       1 & 2 & 3 \cr
+       1 & 2 & 3 
+  \end{pmatrix}
+$
+&
+$\begin{pmatrix}
+       1 & 2 & 3 \cr
+       1 & 3 & 2 
+  \end{pmatrix}
+$
+&
+$\begin{pmatrix}
+       1 & 2 & 3 \cr
+       2 & 1 & 3 
+  \end{pmatrix}
+$
+&
+$\begin{pmatrix}
+       1 & 2 & 3 \cr
+       2 & 3 & 1 
+  \end{pmatrix}
+$
+&
+$\begin{pmatrix}
+       1 & 2 & 3 \cr
+       3 & 1 & 2 
+  \end{pmatrix}
+$
+&
+$\begin{pmatrix}
+       1 & 2 & 3 \cr
+       3 & 2 & 1  
+  \end{pmatrix}
+$
+
+   \end{tabular}
+\end{center}
+の 6 つになる。
+このうち、
+$\begin{pmatrix}
+       1 & 2 & 3 \cr
+       1 & 2 & 3  
+  \end{pmatrix}
+$
+は、実際には置き換えがされていないが、置換の一つと考え、これを恒等置換という。
+
+\subsection{ 互換 }
+置換のうちで、$1, 2, 3$の ふたつの要素のみが互いに対応しあい、他の要素が不変であるものを互換と言う。互換は、互いに対応しあう要素、$i$ $j$ のとき、それを括弧で括って$(i, j)$とあらわす。どのような置換も、互換の合成されたもの(積)として表すことが出来る。
+特に,偶数個の互換の合成で表される置換を偶置換、奇数個の互換の合成で表される置換を奇置換という。
+
+\subsection{ 符号 $sign \sigma$ }
+ある置換 $\sigma$ に対し、その符号 $sign \sigma$ を
+
+\[
+sign \sigma =
+\begin{cases}
+      \hspace*{2.5mm} 1 & \sigma が偶置換  \cr
+      -1 & \sigma が奇置換
+\end{cases}
+\]
+と定義する。
+一般的に $sign (\tau \sigma) = (sign \tau)(sign \sigma)$ が成り立つ。
+
+%-------------------------------------------
+\section{ $sign (\sigma)$ の計算 }
+%-------------------------------------------
+\subsection{ 課題の内容 }
+ある置換 $\sigma$ を与えた時、 $sign (\sigma)$  を計算する方法、
+またプログラムを作る。もととなるものは恒等置換とする。
+また、プログラムのテストは 5 文字からなる 置換で実行する。
+
+\subsection{ 方針 }
+置換を、2 次元配列で表現し、
+配列の各要素の添字を $j$ とする。
+恒等置換とは、2 次元配列 1 行目と 2 行目の すべての要素が
+同じ並びで格納されている状態とする。
+1 行目の$j$番目の要素 と2 行目の$j$番目の要素を比べ、
+異なる要素であるなら、1 行目の $j$ 番目と同じ要素を
+2 行目から捜し出す。見付かったら その要素と入れ換え、これを
+配列の長さ分繰り返す。
+入れ換えが行われた回数を数え、偶数回入れ換えを行ったら
+$1$を、奇数回入れ換えを行ったら $-1$ を返し、終了する。
+アルゴリズムの時間に習った 線形探索を使って求める。
+
+\subsection{ 作業環境 }
+\begin{itemize}
+\item OS       : VineLinux 2.1.5
+\item 使用言語 : C 言語
+\item 処理系   : GNU C compiler
+\end{itemize}
+
+\newpage
+\subsection{ 計算方法 }
+$sign (\sigma)$ を求める関数の流れ図は以下の通りである。
+\begin{figure}[htbp]
+  \begin{center}
+  \includegraphics{flow.eps}
+  \end{center}
+   \caption{$sign (\sigma)$ を求める流れ図 }
+   \label{ hoge }
+ \end{figure}
+\newpage
+
+\section{ 関数の実装 }
+\subsection{ ヘッダファイル }
+ヘッダファイルに置換を表す構造体を定義した。
+\begin{breakbox}
+\begin{verbatim} 
+    #define  PERMUTATION_SIZE  64
+    #define  ROW                2
+    #define  UPPER              0
+    #define  LOWER              1
+    #define  EVEN               1
+    #define  ODD               -1
+    typedef struct expresson Permutation;
+    struct expresson {
+       int  expressonSize;
+       int  row[ROW][PERMUTATION_SIZE];
+    };
+    int           sign(Permutation *exp);
+    Permutation  *swap(Permutation *exp, int from, int to);
+    Permutation  *init(Permutation *exp, int size);
+\end{verbatim}
+\end{breakbox}
+
+\subsection{ $sign$ 関数 }
+$sign$関数の実装は以下の通りである。置換を格納した構造体を受け取り、
+入れ換えが偶数回行われれば $1$を、奇数回行われれば $-1$を返す。
+また、配列の要素の入れ換えは swap 関数が行う。
+\begin{breakbox}
+\begin{verbatim} 
+    int sign(Permutation *exp)
+    {
+       int i, j, change;
+       change = 0;
+       for (i=0; i<exp->expressonSize; i++) {
+         if (exp->row[UPPER][i]
+             != exp->row[LOWER][i]) {
+          for (j=1; exp->row[UPPER][i]
+               != exp->row[LOWER][i+j]; j++)
+            if(j>exp->expressonSize) exit(NULL);
+          exp     = swap(exp, i, (i+j));
+          change += 1;
+          } /* for 'j' */
+       }/* for 'i' */
+       return  (change%2) ? EVEN : ODD;
+    }
+\end{verbatim}
+\end{breakbox}
+
+\newpage
+\subsection{ その他の関数 }
+それぞれの関数には、関数の動作を確認するために 置換の要素の値を
+表示する記述がある。これは、ヘッダファイルに定義されている 
+\begin{verbatim} 
+#define TRACE
+\end{verbatim}
+をコメントアウトすることで表示しないようにすることが出来る。
+\subsubsection{ $init$ 関数 }
+置換を表す配列に、実際に値を代入する。
+\subsubsection{ $swap$ 関数 }
+配列の要素の入れ換えを行う。
+
+\section{ 実行結果 }
+\subsection{ main 関数の概要 }
+main 関数では、以下のように $sign$ 関数を呼び出している。
+sibma は 置換を表す構造体、answer は、$sign$ 関数の返却値を格納する int 型の変数である。
+\begin{verbatim} 
+answer = sign(sigma);
+\end{verbatim}
+また、返却値を視覚的に確認するために 返却値に応じたメッセージを
+表示するようにした。
+
+\subsection{ テストデータ }
+テストデータは、授業内容にあったものと 5 行からなる置換を用意した。
+また、値の格納は、関数 $init$ に記述されている。
+\[
+test A =
+\begin{pmatrix}
+       1 & 2 & 3 & 4 & 5\cr
+       1 & 4 & 2 & 3 & 5
+  \end{pmatrix}
+\]
+$A$置換は、偶置換である。
+\[
+test B =
+\begin{pmatrix}
+       1 & 2 & 3 & 4 & 5\cr
+       3 & 4 & 2 & 1 & 5
+  \end{pmatrix}
+\]
+
+\newpage
+\subsection{ $A$ の実行結果 }
+\begin{breakbox}
+\begin{verbatim} 
+    [spiral: ~/simulation/permutation/src]$ make 
+    gcc -Wall -o Permutation -c sign.c
+    gcc -Wall main.c Permutation && \
+      a.out
+    initing for calculation: 
+    permutation 1th atom is 1
+    permutation 2th atom is 4
+    permutation 3th atom is 2
+    permutation 4th atom is 3
+    permutation 5th atom is 5
+    and permutations size is 5
+
+    calculation is starting... 
+    >
+    change! 
+    permutation 2th atom to 3th.
+    now, permutation atoms are
+    1th is 1
+    2th is 2
+    3th is 4
+    4th is 3
+    5th is 5
+    change! 
+    permutation 3th atom to 4th.
+    now, permutation atoms are
+    1th is 1
+    2th is 2
+    3th is 3
+    4th is 4
+    5th is 5
+    permutation changes ODD  times to constant permutation.
+\end{verbatim}
+\end{breakbox}
+テストデータ $A$ の実行結果は、偶置換である。
+
+\newpage
+\subsection{ $B$ の実行結果 }
+ \begin{breakbox}
+\begin{verbatim} 
+    [spiral: ~/simulation/permutation/src]$ make 
+    gcc -Wall -o Permutation -c sign.c
+    gcc -Wall main.c Permutation && \
+      a.out
+    initing for calculation: 
+    permutation 1th atom is 3
+    permutation 2th atom is 4
+    permutation 3th atom is 2
+    permutation 4th atom is 1
+    permutation 5th atom is 5
+    and permutations size is 5
+
+    calculation is starting... 
+    >
+    change! 
+    permutation 1th atom to 4th.
+    now, permutation atoms are
+    1th is 1
+    2th is 4
+    3th is 2
+    4th is 3
+    5th is 5
+    change! 
+    permutation 2th atom to 3th.
+    now, permutation atoms are
+    1th is 1
+    2th is 2
+    3th is 4
+    4th is 3
+    5th is 5
+    change! 
+    permutation 3th atom to 4th.
+    now, permutation atoms are
+    1th is 1
+    2th is 2
+    3th is 3
+    4th is 4
+    5th is 5
+    permutation changes EVEN times to constant permutation.
+\end{verbatim}
+\end{breakbox}
+
+テストデータ $B$ の実行結果は、奇置換である。
+\subsubsection{ テストデータ $B$ の確認 }
+実際に互換で確認した。互換は $(i, j)$ で表す。\\
+1回目の入れ換え
+\begin{center}
+ \begin{tabular}{cc}
+$
+ (1, 4)
+\begin{pmatrix}
+       1 & 2 & 3 & 4 & 5\cr
+       3 & 4 & 2 & 1 & 5
+\end{pmatrix}
+$
+&
+$
+=
+\begin{pmatrix}
+       1 & 2 & 3 & 4 & 5\cr
+       1 & 4 & 2 & 3 & 5
+\end{pmatrix}
+$
+\end{tabular}
+\end{center}
+
+2回目の入れ換え
+\begin{center}
+ \begin{tabular}{cc}
+$
+ (2, 3)
+\begin{pmatrix}
+       1 & 2 & 3 & 4 & 5\cr
+       1 & 4 & 2 & 3 & 5
+\end{pmatrix}
+$
+&
+$
+=
+\begin{pmatrix}
+       1 & 2 & 3 & 4 & 5\cr
+       1 & 2 & 4 & 3 & 5
+\end{pmatrix}
+$
+\end{tabular}
+\end{center}
+
+3回目の入れ換え
+\begin{center}
+ \begin{tabular}{cc}
+$
+ (3, 4)
+\begin{pmatrix}
+       1 & 2 & 3 & 4 & 5\cr
+       1 & 2 & 4 & 3 & 5
+\end{pmatrix}
+$
+&
+$
+=
+\begin{pmatrix}
+       1 & 2 & 3 & 4 & 5\cr
+       1 & 2 & 3 & 4 & 5
+\end{pmatrix}
+$
+\end{tabular}
+\end{center}
+よって、$B$ は 奇数個の置換で表される。
+積の形で表すと
+\begin{center}
+ \begin{tabular}{cc}
+$
+\begin{pmatrix}
+       1 & 2 & 3 & 4 & 5\cr
+       3 & 4 & 2 & 1 & 5
+\end{pmatrix}
+$
+&
+$
+=
+ (1, 4)(2, 3)(3, 4)
+\begin{pmatrix}
+       1 & 2 & 3 & 4 & 5\cr
+       1 & 2 & 3 & 4 & 5
+\end{pmatrix}
+$
+\end{tabular}
+\end{center}
+となる。\\
+
+このプログラムは、以下のURL からダウンロードが出来る。\\
+http://www.soulhack.net/TeX/permutation/
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  感想、展望
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{まとめ・結論}
+\addcontentsline{toc}{section}{まとめ・結論}
+行列式の性質は 1 年次に習ったものと、それ以外の物があった。 
+$sign$ はその名の通り符号であり、行列式の計算をおこなったときに
+なぜ符号が入れ替わり $+$ と $-$ で変わっているのかがわかった。
+
+%------------------------------------------------
+\section*{感想} 
+\addcontentsline{toc}{section}{感想}
+まだ、これらの行列に関するプログラムをいつ使うのか
+検討が付かないが、早く何かに活用できればと思う。
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  参考文献
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% 「関連図書」を変更する
+% jreport, jbook なら、bibname
+%\renewcommand{\bibname}{変更後の名前}
+%\renewcommand{\bibname}{参考文献}
+
+% 「参考文献」を変更する
+% jarticle なら、refname
+\renewcommand{\refname}{参考文献}
+\begin{thebibliography}{9}
+
+% 目次に参考文献をいれる
+\addcontentsline{toc}{section}{\refname}% 追加
+
+% 参考文献
+\bibitem{ hoge }
+ 線形台数 : 行列式の定義 \\
+  http://www.fbc.keio.ac.jp/~hkomiya/education/senkei\_daisu\_2001-0.2.pdf\\
+  2002年 5月 13 日参照
+\end{thebibliography}
+
+% 文書の終了
+\end{document} 

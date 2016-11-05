@@ -1,0 +1,2 @@
+#!/bin/sh
+(/home/spiral/tmp/turtle/gturtle-0.1b/bin/gturtle-bin 200)| gnuplot

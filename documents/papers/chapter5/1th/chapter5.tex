@@ -1,0 +1,318 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  特殊文字 : 
+%    改行 -> \\
+% 
+%  注釈 : 
+%    \footnote[1]{ 注釈の内容 }
+%           
+%  次のページ :
+%    \pagebreak
+%
+%  整形をせずにそのまま出力 :
+%  (ソース等)
+%    \begin{verbatim}  〜内容
+%    \end{verbatim}
+%
+%  整形をせずにそのまま出力：
+%  ( 枠を付ける )
+%   まず、以下のパッケージを使う  
+%   \usepackage{eclbkbox}
+%   そのあとにソースを記述
+%   \begin{breakbox}
+%     \begin{verbatim}
+%        ソース
+%     \end{verbatim}
+%   \end{breakbox}
+%
+%  箇条書 :
+%    \begin{itemize}
+%    \item\hspace*{5mm} 箇条書の内容
+%    \end{itemize}
+%   
+%  画像を張り付ける
+%    \begin{center}
+%    \includegraphics{ 画像ファイル名.eps }
+%    \end{center}
+%
+%  数式 (数式モード)
+%   \begin{eqnarray*}
+%    式 ( = を揃える時は &=& )
+%   \end{eqnarray*}
+%
+%  セクションの作成 :
+%    \section{ 内容 }
+%
+%  サブセクションの作成 :
+%    \subsection{ 内容 }
+%
+%--------------------------------------------------
+%  番号の付いていないセクションも目次に出す:
+%    \addcontentsline{toc}{section}{目次に出す名前}
+%
+%  [ 参考文献の場合 ]
+%% (j)article クラスの場合
+%%
+%\begin{thebibliography}{99}
+%\addcontentsline{toc}{section}{\refname}% 追加
+%\bibitem{bibunsho4} 名前
+%                   本の名前
+%\end{thebibliography}
+%
+%% (j)report・(j)book クラスの場合
+%% 
+%\begin{thebibliography}{99}
+%\addcontentsline{toc}{chapter}{\bibname}% 追加
+%\bibitem{bibunsho4} 名前
+%                   本の名前
+%\end{thebibliography}
+%-----------------------------------------------
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% * 概要の書き方
+%    規定字数以内でその論文 の取り扱う範 囲，目的，内容
+%   の要点および主な結論などを記述する
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% documentclass の宣言 % @ 書式
+% \documentclass [ オプション ] { 書式 }
+%
+% [ オプションの種類 ]
+% * 二段組
+% [twocolumn]
+% * 印字の大きさ
+% [a4p]
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% レジュメに使うなら、jarticle
+%
+%\documentclass[twocolumn,a4p]{jarticle}
+
+\documentclass[a4p, epsf]{jarticle}
+\usepackage{multicol}
+% 画像を張り付ける
+\usepackage[dvips]{graphics}
+% 行列が使えるパッケージ
+\usepackage{amsmath}
+% ソースに枠をつける
+\usepackage{eclbkbox}
+\usepackage{epsf}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 余白や文字間の幅の細かい設定
+%
+% 
+%\setlength{\voffset}{65pt}
+%\setlength{\topmargin}{-170pt}
+%\setlength{\textheight}{770pt}
+%\setlength{\oddsidemargin}{-10pt}
+%\setlength{\textwidth}{480pt}
+%\setlength{\headsep}{40pt}
+
+% 文書のはじまり 
+\begin{document}
+
+%---------------------------------------------
+%
+% article の時の表紙を別ページにする
+%
+\vspace*{4cm}
+\begin{center}
+{\LARGE 第 5 章 演習 力学的振動 \\} 
+\vspace*{1cm}
+{\large 01ca0125 鈴木 藍 \\ 
+  2002年 7月 2日}
+\end{center}
+\thispagestyle{empty}
+\newpage
+%------------------------------------------------
+%========================================
+% ここから文章
+%
+% 1ページ目
+%
+%========================================
+
+%----------------------------------------
+%
+% もくじをつける
+\tableofcontents
+\newpage
+%----------------------------------------
+
+% 概要 (abstract)
+%
+\begin{abstract} 
+\addcontentsline{toc}{section}{概要}
+線形2解微分方程式について、理解できている範囲までで
+問題を解く。また、理解できていない点について、何故
+理解出来なかったかを挙げ、反省点をはっきりさせる。
+
+\end{abstract}
+
+% はじめに
+% section のオプションで、数字を表示させないようにする
+%
+\section*{レポートの目的}
+\addcontentsline{toc}{section}{レポートの目的}
+線形2解微分方程式の解法は、ほとんど理解が出来なかったが
+わかっている点をあげてまとめる。
+
+%------------------------------------------------------
+% セクション
+%------------------------------------------------------
+\section{ 演習 1.力学的振動 }
+%------------------------------------------------------
+5.2 節で述べた力学的振動モデルを用いて、抵抗を無視し(k=0)
+a, b の時予測される運動を決定する。抵抗を無視したモデルは
+以下の式になる
+\begin{eqnarray*}
+  \ddot{x} + \omega^2 x = F(t)
+\end{eqnarray*}
+
+\subsection{ a. }
+すべての $t>0$ に対して、 $F=0, t=0$ で $x=a, \frac{dx}{dt}=0$
+\subsection{ 解 }
+$\ddot{x} + \omega^2 x = F(t)$ について解く。この式の一般解は
+111 頁 式(5.10) の
+\begin{eqnarray*}
+  x = A \cos \omega t + B \sin \omega t
+\end{eqnarray*}
+を持つ。(決まりなのか？) この一般解に 値を定め、
+$x$ を求める。
+これに、あたえられた初期値を当てはめ、解くと
+\begin{eqnarray*}
+  x(0) &=& A \cos \omega 0 \cr
+  a    &=& A \cos \omega 0 
+\end{eqnarray*}
+
+\begin{eqnarray*}
+  \dot{x}(0) &=& B \sin \omega 0 \cr
+  0          &=& B \cos \omega 0 
+\end{eqnarray*}
+なぜか$\sin \omega 0$ だけ微分された形になっている。
+また、加法定理により、
+\begin{eqnarray*}
+  x &=& A \cos \omega t + B \sin \omega t \cr
+  x &=& \alpha \cos (\omega t + \beta)
+\end{eqnarray*}
+となる。これを展開して
+\begin{eqnarray*}
+  x = \alpha \cos \omega t \cos \beta - \alpha \sin \omega t \sin \beta
+\end{eqnarray*}
+となる。ここで、 $\alpha \cos \beta = A$, $\alpha \sin \beta = B$ とすると
+$A = a$, $B = 0$ であったから(？) これを代入して
+\begin{eqnarray*}
+  x = a \cos \omega t
+\end{eqnarray*}
+となる。
+
+\subsubsection{ ソース }
+\begin{breakbox}
+  \begin{verbatim}
+#include <stdio.h>
+#include <math.h>
+
+int main()
+{
+  double  t, dt, a, omega;
+  dt    = 1.0;
+  a     = 5.0;  /* 縦軸の幅 */
+  omega = 50.0;
+  for (t=0.0; t<100; t+=dt) {
+    printf("%f %f \n", t, a*cos(omega*t));
+  }
+}
+  \end{verbatim}
+\end{breakbox}
+
+\subsubsection{ 実行結果 }
+a は 縦の振幅の幅で、$\omega$ は横の周波数という感じがする。
+\begin{center}
+\includegraphics{plot.eps}
+\end{center}
+
+\subsection{ b. }
+まだ理解できていない。
+\begin{itemize}
+\item 答えの欄に、$x = A \cos at$ とあるが、どこからでて来たのか？
+\item その $x = A \cos at$ は一般解なのか？
+\end{itemize}
+変形に関しては、なんとかなっているように思える。
+
+%-------------------------------------------
+\section{ 理解できていない点 }
+%-------------------------------------------
+\subsection{ 線形2階微分方程式について }
+まず、この本を見た限りではどこで積分しているのか
+わからない。解法については、もう方法が決まっているのだから
+それを使うということで納得するにしても、今までの
+流れから解法が全く違うように感じる。「微分方程式を
+解くことは積分する事」であるのに、この文面をみても
+一見積分しているところが見当たらない、という事が
+今回非常に手間取った。
+新たに購入した本で調べたところ、計算過程のどこかで積分しているような
+記述があった。以降、これについて調べたい。(ロンスキアンという
+行列式を使っていた。)\\
+また、何故ここでは「試行錯誤」を行っているのかが疑問である。
+一般解が、突然でて来ているようにみえる。
+
+\subsection{ これからの予定 }
+試行錯誤を 何故しているかを考える。
+「試行錯誤」の方法について、ある程度だけ理解した後、
+「正確なテクニック」と言われる方法を調べ、理解する。
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  感想、展望
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{まとめ・結論}
+\addcontentsline{toc}{section}{まとめ・結論}
+まず、この微分方程式の解法について理解がたらない。
+解が常にどのような形を取るかや、解く流れのようなものは
+なんとなくわかるにしても、これを何故、このような解き方
+をしているのか、最後の最後まではっきりしなかった。
+あまり意味にこだわって考えない方がいいのだろうか。
+
+%------------------------------------------------
+\section*{感想} 
+\addcontentsline{toc}{section}{感想}
+解法が納得いかなかったが、理解出来るまでどうしても
+やりたいと思った。理解出来た所や経過などを、適宜報告してゆきたいと
+思う。
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  参考文献
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% 「関連図書」を変更する
+% jreport, jbook なら、bibname
+%\renewcommand{\bibname}{変更後の名前}
+%\renewcommand{\bibname}{参考文献}
+
+% 「参考文献」を変更する
+% jarticle なら、refname
+\renewcommand{\refname}{参考文献}
+\begin{thebibliography}{9}
+
+% 目次に参考文献をいれる
+\addcontentsline{toc}{section}{\refname}% 追加
+
+% 参考文献
+\bibitem{ タグ }
+ キーポイント微分方程式 \\
+ 著者 佐野 理 \\
+ 2001年 7月16日 発行 (第11版)
+
+\end{thebibliography}
+
+% 文書の終了
+\end{document} 

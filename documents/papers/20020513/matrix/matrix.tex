@@ -1,0 +1,575 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  特殊文字 : 
+%    改行 -> \\
+% 
+%  注釈 : 
+%    \footnote[1]{ 注釈の内容 }
+%           
+%  次のページ :
+%    \pagebreak
+%
+%  整形をせずにそのまま出力 :
+%  (ソース等)
+%    \begin{verbatim}  〜内容
+%    \end{verbatim}
+%
+%  箇条書 :
+%    \begin{itemize}
+%    \item\hspace*{5mm} 箇条書の内容
+%    \end{itemize}
+%   
+%  画像を張り付ける
+%    \begin{center}
+%    \includegraphics{ 画像ファイル名.eps }
+%    \end{center}
+%
+%  セクションの作成 :
+%    \section{ 内容 }
+%
+%  サブセクションの作成 :
+%    \subsection{ 内容 }
+%
+%--------------------------------------------------
+%  番号の付いていないセクションも目次に出す:
+%    \addcontentsline{toc}{section}{目次に出す名前}
+%
+%  [ 参考文献の場合 ]
+%% (j)article クラスの場合
+%%
+%\begin{thebibliography}{99}
+%\addcontentsline{toc}{section}{\refname}% 追加
+%\bibitem{bibunsho4} 名前
+%                   本の名前
+%\end{thebibliography}
+%
+%% (j)report・(j)book クラスの場合
+%% 
+%\begin{thebibliography}{99}
+%\addcontentsline{toc}{chapter}{\bibname}% 追加
+%\bibitem{bibunsho4} 名前
+%                   本の名前
+%\end{thebibliography}
+%-----------------------------------------------
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% * 概要の書き方
+%    規定字数以内でその論文 の取り扱う範 囲，目的，内容
+%   の要点および主な結論などを記述する
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% documentclass の宣言 % @ 書式
+% \documentclass [ オプション ] { 書式 }
+%
+% [ オプションの種類 ]
+% * 二段組
+% [twocolumn]
+% * 印字の大きさ
+% [a4p]
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% レジュメに使うなら、jarticle
+%
+%\documentclass[twocolumn,a4p]{jarticle}
+
+\documentclass[a4p]{jarticle}
+\usepackage{multicol}
+\usepackage[dvips]{graphics}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 余白や文字間の幅の細かい設定
+%
+% 
+%\setlength{\voffset}{65pt}
+%\setlength{\topmargin}{-170pt}
+%\setlength{\textheight}{770pt}
+%\setlength{\oddsidemargin}{-10pt}
+%\setlength{\textwidth}{480pt}
+%\setlength{\headsep}{40pt}
+
+% 文書のはじまり 
+\begin{document}
+
+%---------------------------------------------
+%
+% article の時の表紙を別ページにする
+%
+\vspace*{4cm}
+\begin{center}
+{\LARGE 積の規則の確認 \\} 
+\vspace*{1cm}
+{\large 01ca0125 鈴木 藍 \\ 
+  2001年 5月 13日}
+\end{center}
+\thispagestyle{empty}
+\newpage
+%------------------------------------------------
+%========================================
+% ここから文章
+%
+% 1ページ目
+%
+%========================================
+
+%----------------------------------------
+%
+% 表紙を付ける
+\tableofcontents
+\newpage
+%----------------------------------------
+
+% 概要 (abstract)
+%
+\begin{abstract} 
+\addcontentsline{toc}{section}{概要}
+行列の和、差、実数倍、積、転置行列 を求める関数を C 言語で作成し、
+行列の積の規則を確認する。実際に行列のデータを用意し規則を
+プログラムで実行し、確認した。
+\end{abstract}
+
+% はじめに
+% section のオプションで、数字を表示させないようにする
+%
+\section*{レポートの目的}
+\addcontentsline{toc}{section}{レポートの目的}
+行列の演算を行う関数を久しぶりの C 言語で実装する。
+また、行列の演算を 配列で行う練習をする。
+
+%------------------------------------------------------
+% セクション
+%------------------------------------------------------
+\section{ 行列の規則 }
+%------------------------------------------------------
+\subsection{ 積の規則 }
+作成した関数で以下の規則を確認する。
+\begin{itemize}
+\item $(AB)C = A(BC)$
+\item $ AE = A \hspace*{5mm}EA = A  $ となるような E の存在
+\item $A(B+C) = AB+BC$
+\item $(A+B)C = AC+BC$
+\end{itemize}
+
+%-------------------------------------------
+\section{ 作成した関数 }
+%-------------------------------------------
+\subsection{ 作成の環境 }
+\begin{itemize}
+\item OS         : VineLinux 2.1.5 
+\item コンパイラ : gcc 
+\end{itemize}
+
+\subsection{ データの扱い }
+行列を表す構造体 Matrix を定義する。
+メンバとして、行列のデータを格納する2次元配列、行の数と
+列の数を行列の情報として持つ。
+
+\newpage
+\subsection{ 関数名とその内容 }
+\subsubsection{ matplus }
+行列の和を求める関数。引数に、演算される行列 A,演算する行列 B,
+結果を格納する行列 ans をとり、演算結果 ans を返す。
+\begin{verbatim}
+Matrix *matplus(Matrix *A, Matrix *B, Matrix *ans)
+{
+   int i, j;
+
+    for (i=0; i<A->rowsize; i++)
+      for (j=0; j<A->columnsize; j++)
+        ans->row[i][j] = A->row[i][j] + B->row[i][j];
+
+    ans->rowsize    = A->rowsize;
+    ans->columnsize = A->columnsize;
+    return ans;
+}
+\end{verbatim}
+
+\subsubsection{ mattake }
+行列の差を求める関数。引数に、演算される行列 A,演算する行列 B,
+結果を格納する行列 ans をとり、演算結果 ans を返す。
+\begin{verbatim}
+Matrix *mattake(Matrix *A, Matrix *B, Matrix *ans)
+{
+   int i, j;
+
+   for (i=0; i<A->rowsize; i++)
+     for (j=0; j<A->columnsize; j++)
+       ans->row[i][j] = A->row[i][j] - B->row[i][j];
+
+   ans->rowsize    = A->rowsize;
+   ans->columnsize = A->columnsize;
+   return ans;
+}
+\end{verbatim}
+
+\newpage
+\subsubsection{ matmul }
+行列の実数倍を求める。引数に演算される行列 mat, 結果を格納する行列 ans,
+演算する実数 k をとり、演算結果 ans を返す。
+\begin{verbatim}
+Matrix *matmul(Matrix *mat, Matrix *ans, int k)
+{
+   int i, j;
+
+   for (i=0; i<mat->rowsize; i++)
+     for (j=0; j<mat->columnsize; j++)
+       ans->row[i][j] = mat->row[i][j] * 5;
+
+   ans->rowsize    = mat->rowsize;
+   ans->columnsize = mat->columnsize;
+   return ans;
+}
+\end{verbatim}
+
+\subsubsection{ product }
+行列の積を求める関数。引数に演算される行列 A, 演算する行列 B, 結果を格納する
+行列 ans をとり、演算結果 ans を返す。
+\begin{verbatim}
+Matrix *product(Matrix *A, Matrix *B, Matrix *ans)
+{
+   Matrix  buffer;
+   Matrix *buf;
+   int     i, j;
+   buf = &buffer;
+
+   if (A->columnsize != B->rowsize)
+     return NIL;
+
+   buf = oppmove(B, buf);
+
+   for (i=0; i<A->rowsize; i++)
+     for (j=0; j<B->columnsize; j++)
+       ans->row[i][j] = naiseki(A->row[i], buf->row[j], A->columnsize);
+
+   ans->rowsize    = A->rowsize;
+   ans->columnsize = B->columnsize;
+   return ans;
+}
+\end{verbatim}
+
+\subsubsection{ oppmove }
+転置行列を求める関数。転置する行列 mat, 結果を格納する行列 ans を引数にとり
+演算結果 ans を返す。
+\begin{verbatim}
+Matrix *oppmove(Matrix *mat, Matrix *ans)
+{
+  int i, j, k, l;
+
+  for (i=0, l=0; i<mat->rowsize; i++, l++)
+    for (j=0, k=0; j<mat->columnsize; j++, k++)
+      ans->row[k][l] = mat->row[i][j];
+
+  ans->rowsize    = mat->columnsize;
+  ans->columnsize = mat->rowsize;
+  return ans;
+}
+\end{verbatim}
+
+以上のモジュールは、Matrix というモジュールライブラリにまとめ
+使えるようにした。
+\subsection{ ヘッダファイル }
+ヘッダファイル matrix.h の内容は以下の通りである。
+\begin{verbatim}
+#define MATRIX_SIZE  60
+#define  T    1
+#define  NIL  0
+
+typedef struct mat Matrix;
+struct mat {
+  int  rowsize, columnsize;
+  int row[MATRIX_SIZE][MATRIX_SIZE];
+};
+
+int naiseki(int *VA, int *VB, int size);
+int car(int V[]);
+int *cdr(int V[]);
+Matrix *matmul(Matrix *mat, Matrix *ans, int k);
+Matrix *matplus(Matrix *A, Matrix *B, Matrix *ans);
+Matrix *mattake(Matrix *A, Matrix *B, Matrix *ans);
+Matrix *oppmove(Matrix *mat, Matrix *ans);
+Matrix *product(Matrix *A, Matrix *B, Matrix *ans);
+\end{verbatim}
+
+%-------------------------------------------
+\section{ 積の規則の確認 }
+%-------------------------------------------
+main 関数内でデータを格納された状態の行列
+を必要な数だけ 記述し、それを用いて確認した。
+
+\subsection{ $(AB)C = A(BC)$ }
+ファイル trans.c に main 関数を記述した。
+用意したデータは以下の通りである。
+\begin{verbatim}
+  Matrix  matrixA = {4, 4, {{ 1, 2, 3, 4}, 
+                            { 5, 6, 7, 8},
+                            { 9,10,11,12},
+                            {13,14,15,16}}};
+
+  Matrix  matrixB = {4, 4, {{ 1, 2, 3, 4},
+                            { 5, 6, 7, 8},
+                            { 9,10,11,12},
+                            {13,14,15,16}}};
+
+  Matrix  matrixC = {4, 4, {{ 1, 2, 3, 4},
+                            { 5, 6, 7, 8},
+                            { 9,10,11,12},
+                            {13,14,15,16}}};
+\end{verbatim}
+また、一時的に演算結果を格納する行列 buf を使った。
+演算結果は $(AB)C$ を ans1 に、$A(BC)$ を ans2 に格納し、
+表示する。
+\subsubsection{ $(AB)C = A(BC)$ 演算 }
+$(AB)C$
+\begin{verbatim}
+   buf  = product( A, B, buf);
+   ans1 = product(buf, C, ans1);
+\end{verbatim}
+
+$A(BC)$
+\begin{verbatim}
+  buf  = product(  B, C, buf);
+  ans2 = product(buf, A, ans2);
+\end{verbatim}
+
+表示部はtrans.c の 44 行目以降にある。
+
+\newpage
+\subsubsection{ $(AB)C = A(BC)$ の演算結果 }
+\begin{verbatim}
+[spiral: ~/simulation/matrix/src]$ make abc
+gcc -Wall trans.c Matrix && \
+  a.out
+  (AB)C =
+    3140  3560  3980  4400
+    7268  8232  9196 10160
+   11396 12904 14412 15920
+   15524 17576 19628 21680
+  A(BC) =
+    3140  3560  3980  4400
+    7268  8232  9196 10160
+   11396 12904 14412 15920
+   15524 17576 19628 21680
+\end{verbatim}
+
+\subsection{ $AE = A \hspace*{5mm} EA = A$ }
+ファイル root.c に main 関数を記述した。
+用意したデータは以下の通りである。
+\begin{verbatim}
+  Matrix  matrixA = {4, 4, {{1, 2, 3, 4},
+                            {5, 6, 7, 8},
+                            {9,10,11,12},
+                            {13,14,15,16} }};
+  /* 単位行列 */
+  Matrix  matrixE = {4, 4, {{1, 0, 0, 0},
+                            {0, 1, 0, 0},
+                            {0, 0, 1, 0},
+                            {0, 0, 0, 1} }};
+\end{verbatim}
+一時的に演算結果を格納する行列 buf を使った。
+演算結果は $AE$ を ans1 に、$EA$ を ans2 に格納し、
+表示する。
+\subsubsection{ $AE=A \hspace*{5mm} EA=A$ の演算 }
+$AE$
+\begin{verbatim}
+  ans1 = product(A, E, ans1);
+\end{verbatim}
+
+$EA$
+\begin{verbatim}
+ ans2 = product(E, A, ans2);
+\end{verbatim}
+
+表示部は root.c の 36 行目以降にある。
+
+\subsubsection{ $AE=A \hspace*{5mm} EA=A$ の演算結果 }
+\begin{verbatim}
+[spiral: ~/simulation/matrix/src]$ make ae  
+gcc -Wall root.c Matrix && \
+  a.out
+  A*E =
+       1     2     3     4
+       5     6     7     8
+       9    10    11    12
+      13    14    15    16
+  E*A =
+       1     2     3     4
+       5     6     7     8
+       9    10    11    12
+      13    14    15    16
+\end{verbatim}
+
+\subsection{ $A(B+C) = AB+AC$ }
+ファイル divide1.c に main 関数を記述した。
+用意したデータは以下の通りである。
+\begin{verbatim}
+  Matrix  matrixA = {4, 4, {{ 1, 2, 3, 4},
+                            { 5, 6, 7, 8},
+                            { 9,10,11,12},
+                            {13,14,15,16}}};
+  
+  Matrix  matrixB = {4, 4, {{ 1, 2, 3, 4},
+                            { 5, 6, 7, 8},
+                            { 9,10,11,12},
+                            {13,14,15,16}}};
+
+  Matrix  matrixC = {4, 4, {{ 1, 2, 3, 4},
+                            { 5, 6, 7, 8},
+                            { 9,10,11,12},
+                            {13,14,15,16}}};
+\end{verbatim}
+一時的に演算結果を格納する行列 buf1, buf2, buf3 を使った。
+演算結果は $A(B+C)$ を ans1 に、$AB+AC$ を ans2 に格納し、
+表示する。
+
+\newpage
+\subsubsection{ $A(B+C) = AB+AC$ の演算 }
+$A(B+C)$
+\begin{verbatim}
+  buf1 = matplus( B, C, buf1);
+  ans1 = product(A, buf1, ans1);
+\end{verbatim}
+
+$AB+AC$
+\begin{verbatim}
+  buf2 = product(A, B, buf2);
+  buf3 = product(A, C, buf3);
+
+  ans2 = matplus(buf2, buf3, ans2);
+\end{verbatim}
+
+表示部は divide1.c の 48 行目以降にある。
+
+\subsubsection{ $A(B+C) = AB+AC$ の演算結果 }
+\begin{verbatim}
+[spiral: ~/simulation/matrix/src]$ make ab+c
+gcc -Wall divide1.c Matrix && \
+  a.out
+A(B+C) =
+   180   200   220   240
+   404   456   508   560
+   628   712   796   880
+   852   968  1084  1200
+AB+AC =
+   180   200   220   240
+   404   456   508   560
+   628   712   796   880
+   852   968  1084  1200
+\end{verbatim}
+
+\newpage
+\subsection{ $(A+B)C = AC+BC$ }
+ファイル divide2.c に main 関数を記述した。
+用意したデータは以下の通りである。
+\begin{verbatim}
+  Matrix  matrixA = {4, 4, {{ 1, 2, 3, 4},
+                            { 5, 6, 7, 8},
+                            { 9,10,11,12},
+                            {13,14,15,16}}};
+  
+  Matrix  matrixB = {4, 4, {{ 1, 2, 3, 4},
+                            { 5, 6, 7, 8},
+                            { 9,10,11,12},
+                            {13,14,15,16}}};
+
+  Matrix  matrixC = {4, 4, {{ 1, 2, 3, 4},
+                            { 5, 6, 7, 8},
+                            { 9,10,11,12},
+                            {13,14,15,16}}};
+\end{verbatim}
+一時的に演算結果を格納する行列 buf1, buf2, buf3 を使った。
+演算結果は $(A+B)C$ を ans1 に、$AB+AC$ を ans2 に格納し、
+表示する。
+\subsubsection{ $(A+B)C = AC+BC$ の演算 }
+$(A+B)C$
+\begin{verbatim}
+  buf1 = matplus( A, B, buf1);
+  ans1 = product(buf1, C, ans1);
+\end{verbatim}
+
+$AC+BC$
+\begin{verbatim}
+  buf2 = product(A, C, buf2);
+  buf3 = product(B, C, buf3);
+
+  ans2 = matplus(buf2, buf3, ans2);
+\end{verbatim}
+
+表示部は divide1.c の 48 行目以降にある。
+
+\newpage
+\subsubsection{ $(A+B)C = AC+BC$ の演算結果 }
+\begin{verbatim}
+[spiral: ~/simulation/matrix/src]$ make a+bc
+gcc -Wall divide2.c Matrix && \
+  a.out
+(A+B)C =
+   180   200   220   240
+   404   456   508   560
+   628   712   796   880
+   852   968  1084  1200
+AC+BC =
+   180   200   220   240
+   404   456   508   560
+   628   712   796   880
+   852   968  1084  1200
+\end{verbatim}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  感想、展望
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{まとめ・結論}
+\addcontentsline{toc}{section}{まとめ・結論}
+行列の規則は、1 年次の基礎数学でならい、計算をしたが
+プログラムでの演算結果も、期待通りのものになった。手で計算するよりも
+計算機で計算した方が、行列の規則を実感しやすいと感じた。
+行列を 2 次元配列で表現したが、転置などの演算を行う場合
+、操作する添字に規則性があった。
+
+%------------------------------------------------
+\section*{感想} 
+\addcontentsline{toc}{section}{感想}
+C 言語を久く書かなかったので非常に手間取り、 プログラムが
+書けない事を実感した。
+もう、Lisp はプロトタイピングで使っていこうと思った。その他の言語も
+Smalltalk 以外はあまり触らないようにしようと思った。
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  参考文献
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% 「関連図書」を変更する
+% jreport, jbook なら、bibname
+%\renewcommand{\bibname}{変更後の名前}
+%\renewcommand{\bibname}{参考文献}
+
+% 「参考文献」を変更する
+% jarticle なら、refname
+\renewcommand{\refname}{参考文献}
+\begin{thebibliography}{9}
+
+% 目次に参考文献をいれる
+\addcontentsline{toc}{section}{\refname}% 追加
+
+% 参考文献
+\bibitem{ hoge }
+ 線形台数 \\
+ http://www4.justnet.ne.jp/~masema/content.html \\
+ 2001/ 5/11 参照
+
+\bibitem{ piyo }
+ 入門 情報処理数学 \\
+ 野ノ山 隆幸  \\ 
+ 2000 年 4月 20日 第 9版
+\end{thebibliography}
+
+% 文書の終了
+\end{document} 

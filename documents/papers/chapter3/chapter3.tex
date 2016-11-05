@@ -1,0 +1,371 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  特殊文字 : 
+%    改行 -> \\
+% 
+%  注釈 : 
+%    \footnote[1]{ 注釈の内容 }
+%           
+%  次のページ :
+%    \pagebreak
+%
+%  整形をせずにそのまま出力 :
+%  (ソース等)
+%    \begin{verbatim}  〜内容
+%    \end{verbatim}
+%
+%  整形をせずにそのまま出力：
+%  ( 枠を付ける )
+%   まず、以下のパッケージを使う  
+%   \usepackage{eclbkbox}
+%   そのあとにソースを記述
+%   \begin{breakbox}
+%     \begin{verbatim}
+%        ソース
+%     \end{verbatim}
+%   \end{breakbox}
+%
+%  箇条書 :
+%    \begin{itemize}
+%    \item\hspace*{5mm} 箇条書の内容
+%    \end{itemize}
+%   
+%  画像を張り付ける
+%    \begin{center}
+%    \includegraphics{ 画像ファイル名.eps }
+%    \end{center}
+%
+%  数式 (数式モード)
+%   \begin{eqnarray*}
+%    式 ( = を揃える時は &=& )
+%   \end{eqnarray*}
+%
+%  セクションの作成 :
+%    \section{ 内容 }
+%
+%  サブセクションの作成 :
+%    \subsection{ 内容 }
+%
+%--------------------------------------------------
+%  番号の付いていないセクションも目次に出す:
+%    \addcontentsline{toc}{section}{目次に出す名前}
+%
+%  [ 参考文献の場合 ]
+%% (j)article クラスの場合
+%%
+%\begin{thebibliography}{99}
+%\addcontentsline{toc}{section}{\refname}% 追加
+%\bibitem{bibunsho4} 名前
+%                   本の名前
+%\end{thebibliography}
+%
+%% (j)report・(j)book クラスの場合
+%% 
+%\begin{thebibliography}{99}
+%\addcontentsline{toc}{chapter}{\bibname}% 追加
+%\bibitem{bibunsho4} 名前
+%                   本の名前
+%\end{thebibliography}
+%-----------------------------------------------
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% * 概要の書き方
+%    規定字数以内でその論文 の取り扱う範 囲，目的，内容
+%   の要点および主な結論などを記述する
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% documentclass の宣言 % @ 書式
+% \documentclass [ オプション ] { 書式 }
+%
+% [ オプションの種類 ]
+% * 二段組
+% [twocolumn]
+% * 印字の大きさ
+% [a4p]
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% レジュメに使うなら、jarticle
+%
+%\documentclass[twocolumn,a4p]{jarticle}
+
+\documentclass[a4p, epsf]{jarticle}
+\usepackage{multicol}
+% 画像を張り付ける
+\usepackage[dvips]{graphics}
+% 行列が使えるパッケージ
+\usepackage{amsmath}
+% ソースに枠をつける
+\usepackage{eclbkbox}
+\usepackage{epsf}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 余白や文字間の幅の細かい設定
+%
+% 
+%\setlength{\voffset}{65pt}
+%\setlength{\topmargin}{-170pt}
+%\setlength{\textheight}{770pt}
+%\setlength{\oddsidemargin}{-10pt}
+%\setlength{\textwidth}{480pt}
+%\setlength{\headsep}{40pt}
+
+% 文書のはじまり 
+\begin{document}
+
+%---------------------------------------------
+%
+% article の時の表紙を別ページにする
+%
+\vspace*{4cm}
+\begin{center}
+{\LARGE 第 3 章 演習  3. 水流 \\} 
+\vspace*{1cm}
+{\large 01ca0125 鈴木 藍 \\ 
+  2002年 6月 18日}
+\end{center}
+\thispagestyle{empty}
+\newpage
+%------------------------------------------------
+%========================================
+% ここから文章
+%
+% 1ページ目
+%
+%========================================
+
+%----------------------------------------
+%
+% もくじをつける
+\tableofcontents
+\newpage
+%----------------------------------------
+
+% 概要 (abstract)
+%
+\begin{abstract} 
+\addcontentsline{toc}{section}{概要}
+演習問題 を 方針を
+問題の意図を考え、 式を解き、$\alpha = \frac{1}{3}$ を当てはめ、
+定数を定めたあとに 実験データとならべてプロット するという方向で
+解く。
+
+\end{abstract}
+
+% はじめに
+% section のオプションで、数字を表示させないようにする
+%
+\section*{レポートの目的}
+\addcontentsline{toc}{section}{レポートの目的}
+式変形になれる。また、変数の意味や、式の意味にも注目する。
+
+%------------------------------------------------------
+% セクション
+%------------------------------------------------------
+\section{ 前回のまとめ }
+%------------------------------------------------------
+前回発表したところで ある程度結論付いたところを
+まとめておく。
+\subsection{ 定数 k は何か }
+これについて、自分の意見である "  「k の値が大きいほど 血中アルコール濃度が低いうちに
+    事故率が大きくなる、というモデルであるから、
+    k は、アルコールを吸収したときに、人体が受ける
+    影響の大きさなのではないか」 という 
+   に対して \\
+  * 「これは、国によって変わる値ではないか？なぜなら
+      国によって道の幅も違うし、車の量も違うから。」 \\
+  * 「それなら、時代によって違う値でもあるのではないか？」 \\
+  * 「これはただの定数で、特に意味はない変数である。」 \\
+  * 「総合的にいろいろな意味合いを含んだ変数なのではないか？」\\
+  などが出た。結論としては、\\
+  「総合的にいろいろな意味合いを含んだ変数」 \\
+  となった。私の意見の不安な点の裏付けは $b$ が $0$ の時にも 事故危険率は $0$ ではなく $1$ であるから
+必ずしも 事故危険率は 血中アルコール濃度と 関係しているとは限らないという所にある。
+
+\subsection{ データの観測方法 }
+広範なデータを観測した結果とあるが、どのように観測したかどうかは
+いろいろな憶測がついてしまうので不明のままである。
+
+\subsection{ モデルの使い方 }
+いつ、このモデルを使うのかについては 警察や裁判などで 証拠や
+資料として使えるのではないかという結論になった。
+
+%-------------------------------------------
+\section{ 演習問題 }
+%-------------------------------------------
+\subsection{ 問題 }
+3.4 節の記号で
+
+\begin{eqnarray*}
+  \frac{dh}{dt} &=& - \lambda h^{\alpha} , 0 < \alpha < 1 
+\end{eqnarray*}
+
+と仮定する。$h$ の予測される形を導け。どんな量をとれば、予測直線グラフが得られるか。
+$ \alpha = \frac{1}{3}$ のとき 3.4 節の実験データに対してモデルをテストせよ。
+
+\subsection{ 方針 }
+
+まず、問題の意図を考える。 そして 式を解き、$\alpha = \frac{1}{3}$ を当てはめ、
+定数を定めたあとに 実験データとならべてプロットしてみる。
+
+%-------------------------------------------
+\section{ 問題を解く }
+%-------------------------------------------
+\subsection{ 問題の意図 }
+教科書 59 ページで 孔から流出する水の体積速度 $v$ の式を考えている。
+ここでは 実験結果から、 $v$ が 瓶の流出孔から上の水の高さ $h$ に依存している事が
+分かっている。そこで、$h$ が減少するにつれて 流水の体積速度も減少するという $v$ の
+もっとも簡単な式を
+
+\begin{eqnarray*}
+  v &=& ah 
+\end{eqnarray*}
+
+と仮定している。ここで $a$ は 正の定数である。これは 仮定の式であり、他にも
+
+\begin{eqnarray*}
+  v &=& ah^n
+\end{eqnarray*}
+
+なども考えられる。この問題は、この仮定の式を $\frac{dh}{dt} = - \lambda h^{\alpha}, 0 < \alpha < 1$
+としたときのモデルをテストする事を意図していると考える。
+
+\subsection{ 式を解く }
+与えられた式は
+
+\begin{eqnarray*}
+\frac{dh}{dt} &=& - \lambda h^{\alpha}, 0 < \alpha < 1
+\end{eqnarray*}
+
+である。
+両辺を積分して (ここで変数分離形を使う)
+
+\begin{eqnarray*}
+\frac{dh}{dt} &=& - \lambda h^{\alpha} \cr
+\frac{dh}{dt} \frac{1}{h^{\alpha}} &=& - \lambda h^{\alpha} \frac{1}{h^{\alpha}} \cr
+\frac{dh}{dt} dt \frac{1}{h^{\alpha}} &=& - \lambda dt  \cr
+\frac{1}{h^{\alpha}} dh &=& - \lambda dt  \cr
+\int \frac{1}{h^{\alpha}} dh &=& - \int \lambda dt \cr
+\int h^{- \alpha} dh &=& - \lambda t + c \cr
+\frac{1}{- \alpha + 1} h^{- \alpha + 1} &=& - \lambda t + c \cr
+h^{- \alpha + 1} &=& - ( - \alpha + 1)\lambda t + (- \alpha + 1) c 
+\end{eqnarray*}
+
+ここで、$(- \alpha + 1) c$ は 全て定数なので $c_1$ とまとめる。
+よって、この式は
+
+\begin{eqnarray*}
+h^{- \alpha + 1} &=& - ( - \alpha + 1)\lambda t + c_1
+\end{eqnarray*}
+
+となる。
+
+\subsection{ $\alpha$に $\frac{1}{3}$ をあてはめる }
+以上の式に $\frac{1}{3}$ をあてはめると
+
+\begin{eqnarray*}
+h^{- \alpha + 1} &=& - ( - \alpha + 1)\lambda t + c_1 \cr
+h^{- \frac{1}{3} + 1} &=& - ( - \frac{1}{3} + 1)\lambda t + c_1 \cr
+h^{\frac{2}{3}} &=& - \frac{2}{3} \lambda t + c_1
+\end{eqnarray*}
+
+となる。
+
+\subsection{ 定数をどうするか }
+この式ででて来る $\lambda$ と $c$ は定数である。$\lambda$ は 
+正の定数を 断面積で割ったもの $\lambda = \frac{a}{A}$ である。また
+$c$ は 時間が $0$ の時の $h$ の初期位置である。どちらの定数も 教科書では
+値を与えられていない。未定の定数が二つある方程式を導くことが
+出来なかったので、ここでは 適当な値をいれてみて、実験結果とてらし合わせてみた。
+
+\newpage
+
+\subsection{ ソース }
+
+定数 $c$ は、時間 $t$ を 実験データがある $6.5$ から始めるとして $11$ とした。
+$h$ は 完全に あたりを付けて プロットした値と一致するまで 値を変えてみた。
+
+\begin{breakbox}
+   \begin{verbatim}
+#include <stdio.h>
+main()
+{
+  double  h, t, ti, c;
+  c = 11;
+
+  for (t=6.5; t<170; t+=0.1) {
+    h = -(2.0/3.0)*(0.7/7.0)*t+c;
+    printf("%lf %lf \n", t, h);
+  }
+}
+   \end{verbatim}
+\end{breakbox}
+
+大体ではあるが、断面積 は $7.0$, $a$ は 0.7 とした。断面積が
+$7.0$ であるので、円筒だとするならば半径が $1.5$ 位の 瓶であると
+考えられる。
+
+\subsection{ 実行結果 }
+
+\begin{center}
+\includegraphics{test.eps}
+\end{center}
+
+大体、想定されているような結果になったが、これでは
+もともとあった式 $\frac{dh}{dt} = - \lambda h$ と 区別が
+つかない。また、なぜ 教科書のグラフの縦軸が $\log$ や 指数の
+形でプロットされているのかがわからなかったので ここではそのまま
+プロットした。指数に $\frac{2}{3}$ があると 三乗根になるが その計算方法も
+分からなかった。(ニュートン法や アルゴリズムの時間に教わった 二乗根の計算を拡張
+すれば出来る?)
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  感想、展望
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{まとめ・結論}
+\addcontentsline{toc}{section}{まとめ・結論}
+問題の意図を理解する事が大切であった。
+また、仮定をいろいろ試す事も重要である。
+
+%------------------------------------------------
+\section*{感想} 
+\addcontentsline{toc}{section}{感想}
+本題を理解するのに時間がかかった。また、変数や定数
+の意味も理解に時間がかかった。しかし、考えた分だけ 進歩していれば
+いいと思う。わからないが。
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  参考文献
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% 「関連図書」を変更する
+% jreport, jbook なら、bibname
+%\renewcommand{\bibname}{変更後の名前}
+%\renewcommand{\bibname}{参考文献}
+
+% 「参考文献」を変更する
+% jarticle なら、refname
+\renewcommand{\refname}{参考文献}
+\begin{thebibliography}{9}
+
+% 目次に参考文献をいれる
+\addcontentsline{toc}{section}{\refname}% 追加
+
+% 参考文献
+\bibitem{ hoge }
+ 変数分離形 \\
+ http://www4.justnet.ne.jp/~masema/separation.html \\
+ 2002年 6月 18日 参照
+
+\end{thebibliography}
+
+% 文書の終了
+\end{document} 
